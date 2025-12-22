@@ -3,6 +3,7 @@
   "version": "0.0.0-beta.1",
   "description": "web component for verification",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "http-server -c-1 -p 8080",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -19,7 +20,11 @@
   },
   "homepage": "https://github.com/digitalcredentials/veri-good#readme",
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^16.0.3",
     "http-server": "^14.1.1",
     "rollup": "^4.54.0"
+  },
+  "dependencies": {
+    "@digitalcredentials/verifier-core": "^1.0.0-beta.11"
   }
 }
