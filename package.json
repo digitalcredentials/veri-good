@@ -1,0 +1,23 @@
+{
+  "name": "veri-good",
+  "version": "0.0.0-beta.1",
+  "description": "web component for verification",
+  "main": "index.js",
+  "scripts": {
+     "start": "http-server -c-1 -p 8080",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/digitalcredentials/veri-good.git"
+  },
+  "author": "James Chartrand",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/digitalcredentials/veri-good/issues"
+  },
+  "homepage": "https://github.com/digitalcredentials/veri-good#readme",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}
