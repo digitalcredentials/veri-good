@@ -1,29 +1,5 @@
 import * as verifierCore from '@digitalcredentials/verifier-core';
-
-const sampleVC = `{
-    "@context": [
-        "https://www.w3.org/ns/credentials/v2"
-    ],
-    "id": "urn:uuid:4636EB2F-1B73-47EA-981E-CFA85A5B13E3",
-    "type": [
-        "VerifiableCredential"
-    ],
-    "issuer": "did:key:z6MknNQD1WHLGGraFi6zcbGevuAgkVfdyCdtZnQTGWVVvR5Q",
-    "credentialSubject": {
-        "name": "James Chartrand",
-        "description": "James's article. "
-    },
-    "proof": {
-        "type": "DataIntegrityProof",
-        "created": "2025-08-25T19:28:22Z",
-        "verificationMethod": "did:key:z6MknNQD1WHLGGraFi6zcbGevuAgkVfdyCdtZnQTGWVVvR5Q#z6MknNQD1WHLGGraFi6zcbGevuAgkVfdyCdtZnQTGWVVvR5Q",
-        "cryptosuite": "eddsa-rdfc-2022",
-        "proofPurpose": "assertionMethod",
-        "proofValue": "z55KdEZMVuxVgDvhoFz8h4YC7nTqKMYuM7Fy4C1Qpff2TU9A3DMAmMM32Xkzdix6sYa5dhq7XLPHceYJz6pRz1Wmf"
-    }
-}`;
-
-console.log("in the index.js");
+import {sampleVC} from './testcred.js';
 
 const styles = new CSSStyleSheet();
 
@@ -83,13 +59,15 @@ const verifyCredential = async (credential) => {
      const response = await fetch("https://digitalcredentials.github.io/dcc-known-registries/known-did-registries.json");
       const knownDIDRegistries = await response.json();
 
-    const result = await verifierCore.verifyCredential({
+     const result = await verifierCore.verifyCredential({
       credential,
       knownDIDRegistries: knownDIDRegistries
-    });
-    console.log("the result");
-    console.log(result);
-};
+    }); 
+
+ //   const result = await vc.verifyCredential({credential, suite, documentLoader: defaultDocumentLoader});
+    console.log("the result")
+    console.log(result)
+}
 
 const render = x => `
   <div part="header" class="header">
@@ -100,11 +78,7 @@ const render = x => `
   <div part="body" class="body">
     <slot></slot>
     <textarea placeholder="paste your credential or a url pointing to it"></textarea>
-
   </div>
-
-  
-
   <div part="footer" class="footer"></div>
 `;
 
@@ -135,7 +109,7 @@ class VeriGood extends HTMLElement {
     if (!this.registryList) {
       this.registryList = 'https://digitalcredentials.github.io/dcc-known-registries/known-did-registries.json';
     }
-    verifyCredential(sampleVC);
+    verifyCredential(sampleVC)
   }
 
   attributeChangedCallback(name, oldValue, newValue) {

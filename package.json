@@ -6,8 +6,9 @@
   "type": "module",
   "scripts": {
     "start": "http-server -c-1 -p 8080",
+    "start-wp": "webpack serve",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rollup -c"
+    "build": "webpack"
   },
   "repository": {
     "type": "git",
@@ -20,9 +21,10 @@
   },
   "homepage": "https://github.com/digitalcredentials/veri-good#readme",
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "^16.0.3",
     "http-server": "^14.1.1",
-    "rollup": "^4.54.0"
+    "webpack": "^5.104.1",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.2"
   },
   "dependencies": {
     "@digitalcredentials/verifier-core": "^1.0.0-beta.11"
