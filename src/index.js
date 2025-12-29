@@ -54,18 +54,27 @@ styles.replaceSync(`
     background: var(--color, var(--default-color));
     border-radius: 0 0 var(--radius, var(--default-radius)) var(--radius, var(--default-radius));
   }
+
+  .vc-area {
+    height: 100px;
+    width: 200px;
+    }
+
+  .list {
+    list-style-type: disc;
+    padding-left: 20px;
+}
+
 `);
 
 const verifyCredential = async (credential) => {
      const response = await fetch("https://digitalcredentials.github.io/dcc-known-registries/known-did-registries.json");
       const knownDIDRegistries = await response.json();
-
     // const result = await verifierCore.verifyCredential({
      // credential,
      // knownDIDRegistries: knownDIDRegistries
     // }); 
     const result = await verify(credential)
- //   const result = await vc.verifyCredential({credential, suite, documentLoader: defaultDocumentLoader});
     console.log("the result")
     console.log(result)
 }
@@ -78,8 +87,9 @@ const render = x => `
 
   <div part="body" class="body">
     <slot></slot>
-    <textarea placeholder="paste your credential or a url pointing to it"></textarea>
+    <textarea class="vc-area" placeholder="paste your credential or a url pointing to it"></textarea>
   </div>
+  <button id="verifyBtn">Verify</button>
   <div part="footer" class="footer"></div>
 `;
 
@@ -96,6 +106,7 @@ class VeriGood extends HTMLElement {
     ...this.shadowRoot.adoptedStyleSheets,
     styles
   ];
+  
     }
 
     get registryList() {
@@ -110,12 +121,25 @@ class VeriGood extends HTMLElement {
     if (!this.registryList) {
       this.registryList = 'https://digitalcredentials.github.io/dcc-known-registries/known-did-registries.json';
     }
-    verifyCredential(sampleVC)
+    this.shadowRoot.innerHTML = render(this);
+    // Get the button element within this specific component instance
+    this.verifyBtn = this.shadowRoot.querySelector("#verifyBtn");
+
+                // Add a click event listener
+                // Using an arrow function maintains the 'this' context of the class
+                this.verifyBtn.addEventListener("click", () => {
+                    verifyCredential(sampleVC);
+                });
   }
 
-  attributeChangedCallback(name, oldValue, newValue) {
-    this.shadowRoot.innerHTML = render(this);
+  disconnectedCallback() {
+    // Remove the event listener when the component is removed from the DOM
+    this.verifyBtn.removeEventListener('click', this.handleClick);
   }
+
+  //attributeChangedCallback(name, oldValue, newValue) {
+  //  this.shadowRoot.innerHTML = render(this);
+  //}
 
 }
 
