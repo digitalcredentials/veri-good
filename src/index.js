@@ -1,6 +1,6 @@
-import * as verifierCore from '@digitalcredentials/verifier-core';
-import {sampleVC} from './testcred.js';
+import { sampleVC } from './testcred.js';
 import { verify } from './verify.js';
+import { displayResults } from './displayResults.js';
 
 const styles = new CSSStyleSheet();
 
@@ -16,6 +16,7 @@ styles.replaceSync(`
     background: var(--color, var(--default-color));
     border-radius: var(--radius, var(--default-radius));
     min-width: 325px;
+    max-width: 800px;
     text-align: center;
     box-shadow: 0 0 var(--depth, var(--default-depth)) rgba(0,0,0,.5);
   }
@@ -56,18 +57,18 @@ styles.replaceSync(`
   }
 
   .vc-area {
-    height: 100px;
-    width: 200px;
+    height: 300px;
+    width: 600px;
     }
 
-  .list {
+  .result-list {
     list-style-type: disc;
     padding-left: 20px;
 }
 
 `);
 
-const verifyCredential = async (credential) => {
+const verifyCredential = async (resultContainer, credential) => {
      const response = await fetch("https://digitalcredentials.github.io/dcc-known-registries/known-did-registries.json");
       const knownDIDRegistries = await response.json();
     // const result = await verifierCore.verifyCredential({
@@ -75,41 +76,42 @@ const verifyCredential = async (credential) => {
      // knownDIDRegistries: knownDIDRegistries
     // }); 
     const result = await verify(credential)
-    console.log("the result")
-    console.log(result)
+   displayResults(result, resultContainer)
 }
 
 const render = x => `
   <div part="header" class="header">
+  <slot></slot>
     <h3 part="greeting">${x.registryList.toUpperCase()}</h3>
     <h4 part="message">Verifiable Credential verfication</h4>
   </div>
 
   <div part="body" class="body">
-    <slot></slot>
-    <textarea class="vc-area" placeholder="paste your credential or a url pointing to it"></textarea>
+    
+    <textarea class="vc-area" placeholder="Paste your credential, or a url pointing to it."></textarea>
+    <button id="verifyBtn">Verify</button>
+    <div id="resultCnt"></div>
   </div>
-  <button id="verifyBtn">Verify</button>
+  
   <div part="footer" class="footer"></div>
 `;
 
 class VeriGood extends HTMLElement {
 
-    static get observedAttributes() {
+  static get observedAttributes() {
     return ['registry-list'];
   }
 
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-        this.shadowRoot.adoptedStyleSheets = [
-    ...this.shadowRoot.adoptedStyleSheets,
-    styles
-  ];
-  
-    }
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+    this.shadowRoot.adoptedStyleSheets = [
+      ...this.shadowRoot.adoptedStyleSheets,
+      styles
+    ];
+  }
 
-    get registryList() {
+  get registryList() {
     return this.getAttribute('registry-list');
   }
 
@@ -122,14 +124,12 @@ class VeriGood extends HTMLElement {
       this.registryList = 'https://digitalcredentials.github.io/dcc-known-registries/known-did-registries.json';
     }
     this.shadowRoot.innerHTML = render(this);
-    // Get the button element within this specific component instance
+    
     this.verifyBtn = this.shadowRoot.querySelector("#verifyBtn");
-
-                // Add a click event listener
-                // Using an arrow function maintains the 'this' context of the class
-                this.verifyBtn.addEventListener("click", () => {
-                    verifyCredential(sampleVC);
-                });
+    this.resultContainer = this.shadowRoot.querySelector("#resultCnt");
+    this.verifyBtn.addEventListener("click", () => {
+        verifyCredential(this.resultContainer, sampleVC);
+    });
   }
 
   disconnectedCallback() {
