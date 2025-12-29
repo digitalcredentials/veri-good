@@ -46,8 +46,8 @@ styles.replaceSync(`
     background: white;
     color: black;
     padding: 32px 8px;
-    font-size: 42px;
-    font-family: cursive;
+    font-size: 20px;
+    font-family: sans-serif;
   }
 
   .footer {
@@ -68,7 +68,7 @@ styles.replaceSync(`
 
 `);
 
-const verifyCredential = async (resultContainer, credential) => {
+const verifyCredential = async (resultContainer, inputContainer, credential) => {
      const response = await fetch("https://digitalcredentials.github.io/dcc-known-registries/known-did-registries.json");
       const knownDIDRegistries = await response.json();
     // const result = await verifierCore.verifyCredential({
@@ -76,21 +76,29 @@ const verifyCredential = async (resultContainer, credential) => {
      // knownDIDRegistries: knownDIDRegistries
     // }); 
     const result = await verify(credential)
-   displayResults(result, resultContainer)
+   displayResults(result, resultContainer, inputContainer)
 }
 
 const render = x => `
   <div part="header" class="header">
   <slot></slot>
-    <h3 part="greeting">${x.registryList.toUpperCase()}</h3>
-    <h4 part="message">Verifiable Credential verfication</h4>
+    <h3 part="greeting">Digital Credentials Consortium</h3>
+    <h4 part="message">Verifiable Credential Verfication</h4>
   </div>
 
   <div part="body" class="body">
-    
+    <div id="inputCont">
     <textarea class="vc-area" placeholder="Paste your credential, or a url pointing to it."></textarea>
     <button id="verifyBtn">Verify</button>
-    <div id="resultCnt"></div>
+    </div>
+    <div id="resultCont">
+      <ul id="resultList" hidden>
+        <li id="signatureResult" hidden>Signature is valid!</li>
+        <li id="expiryResult" hidden>Hasn't expired!</li>
+        <li id="statusResult" hidden>Hasn't been reovked!</li>
+        <li id="registryResult" hidden>Was signed by (issuer name from registry will go here)</li>
+      </ul>
+    </div>
   </div>
   
   <div part="footer" class="footer"></div>
@@ -126,9 +134,10 @@ class VeriGood extends HTMLElement {
     this.shadowRoot.innerHTML = render(this);
     
     this.verifyBtn = this.shadowRoot.querySelector("#verifyBtn");
-    this.resultContainer = this.shadowRoot.querySelector("#resultCnt");
+    this.resultContainer = this.shadowRoot.querySelector("#resultCont");
+    this.inputContainer = this.shadowRoot.querySelector("#inputCont");
     this.verifyBtn.addEventListener("click", () => {
-        verifyCredential(this.resultContainer, sampleVC);
+        verifyCredential(this.resultContainer, this.inputContainer, sampleVC);
     });
   }
 
