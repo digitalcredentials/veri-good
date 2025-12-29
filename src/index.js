@@ -1,5 +1,6 @@
 import * as verifierCore from '@digitalcredentials/verifier-core';
 import {sampleVC} from './testcred.js';
+import { verify } from './verify.js';
 
 const styles = new CSSStyleSheet();
 
@@ -59,11 +60,11 @@ const verifyCredential = async (credential) => {
      const response = await fetch("https://digitalcredentials.github.io/dcc-known-registries/known-did-registries.json");
       const knownDIDRegistries = await response.json();
 
-     const result = await verifierCore.verifyCredential({
-      credential,
-      knownDIDRegistries: knownDIDRegistries
-    }); 
-
+    // const result = await verifierCore.verifyCredential({
+     // credential,
+     // knownDIDRegistries: knownDIDRegistries
+    // }); 
+    const result = await verify(credential)
  //   const result = await vc.verifyCredential({credential, suite, documentLoader: defaultDocumentLoader});
     console.log("the result")
     console.log(result)
