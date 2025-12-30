@@ -7,5 +7,5 @@ const documentLoader = securityLoader({ fetchRemoteContexts: true }).build();
 const eddsaSuite = new DataIntegrityProof({ cryptosuite: eddsaRdfc2022CryptoSuite });
 const ed25519Suite = new Ed25519Signature2020();
 const suite = [ed25519Suite, eddsaSuite]
-export const verify = async (credential) => await vc.verifyCredential({credential,suite,documentLoader});
-
+const verify = async (credential) => await vc.verifyCredential({credential,suite,documentLoader});
+export default verify
