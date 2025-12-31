@@ -123,11 +123,6 @@ const componentStyles = `
   display: none;
 }
 
-.cross {
-    display: none;
-    font-size: 13px;
-}
-
 .checkmark.draw:after {
   animation-duration: 800ms;
   animation-timing-function: ease;
