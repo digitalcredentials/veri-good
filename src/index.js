@@ -9,10 +9,7 @@ const verifyCredential = async (shadowRoot, credential) => {
     const response = await fetch("https://digitalcredentials.github.io/dcc-known-registries/known-did-registries.json");
     const knownDIDRegistries = await response.json();
     const vc = await resolveVC(credential);
-
     const result = await verify(vc)
-        console.log("the result:")
-    console.log(result)
     displayResults(result, shadowRoot)
 }
 

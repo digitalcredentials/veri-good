@@ -29,22 +29,25 @@ const render = x => `
                 <div class="circle-loader">
                     <div class="checkmark draw"></div>
                 </div>
-                <div id="sigMessage" >Verifying signature...</div>
+                <div class="message" >Verifying signature...</div>
             </div>
             <div id="expiryCheck" hidden >
                 <div class="circle-loader"  >
                     <div class="checkmark draw"></div>
                 </div>
+                <div class="message" >Checking expiration...</div>
             </div>
             <div id="statusCheck" hidden>
                 <div class="circle-loader" >
                     <div class="checkmark draw"></div>
                 </div>
+                <div class="message" >Checking revocation status...</div>
             </div>
             <div id="registryCheck" hidden >
                 <div class="circle-loader">
                     <div class="checkmark draw"></div>
                 </div>
+                <div class="message" >Verifying issuer...</div>
             </div>    
         </div>
     </div>
