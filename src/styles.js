@@ -28,7 +28,6 @@ const componentStyles = `
   h3 {
     font-weight: bold;
     font-family: sans-serif;
-   
     font-size: 20px;
     margin: 0;
     padding: 0;
