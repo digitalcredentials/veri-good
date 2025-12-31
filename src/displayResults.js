@@ -10,10 +10,8 @@ const showStepResultFor = async (shadowRoot, stepId, result) => {
     circle.classList.toggle('load-complete');
     if (result.valid) {
         stepElement.querySelector('.checkmark').style.display = 'block' 
-   //     stepElement.querySelector('.draw-x-slowly').style.display = 'none' 
     } else {
-   //     stepElement.querySelector('.checkmark').style.display = 'none' 
-        stepElement.querySelector('.draw-x-slowly').style.display = 'block' 
+        stepElement.querySelector('.cross').style.display = 'block' 
         circle.style.borderColor = '#d00'
     } 
     stepElement.querySelector('.message').textContent = result.message

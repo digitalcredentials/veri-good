@@ -31,28 +31,28 @@ const render = x => `
             <div id="sigCheck" class="resultLine">
                 <div class="circle-loader">
                     <div class="checkmark draw"></div>
-                    <div class="draw-x-slowly"></div>
+                    <div class="cross"></div>
                 </div>
                 <div class="message" >Verifying signature...</div>
             </div>
             <div id="expiryCheck" class="resultLine" >
                 <div class="circle-loader"  >
                     <div class="checkmark draw"></div>
-                    <div class="draw-x-slowly"></div>
+                    <div class="cross"></div>
                 </div>
                 <div class="message" >Checking expiration...</div>
             </div>
             <div id="statusCheck" class="resultLine" >
                 <div class="circle-loader" >
                     <div class="checkmark draw"></div>
-                    <div class="draw-x-slowly"></div>
+                    <div class="cross"></div>
                 </div>
                 <div class="message" >Checking revocation status...</div>
             </div>
             <div id="registryCheck"class="resultLine"  >
                 <div class="circle-loader">
                     <div class="checkmark draw"></div>
-                    <div class="draw-x-slowly"></div>
+                    <div class="cross"></div>
                 </div>
                 <div class="message" >Verifying issuer...</div>
             </div>    

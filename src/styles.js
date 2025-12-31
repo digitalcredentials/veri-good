@@ -174,18 +174,15 @@ const componentStyles = `
 }
 `
 
-const xIconStyles = `.draw-x-slowly {
-  /* This creates a relative positioning context for the pseudo-elements */
+const crossStyles = `.cross {
   position: relative;
   height: 1.1em;
   width: 1.1em;
-  display: flex; /* Helps center the strokes */
-  justify-content: center;
-  align-items: center;
+  display: none; 
 }
 
-.draw-x-slowly::before,
-.draw-x-slowly::after {
+.cross::before,
+.cross::after {
   content: "";
   position: absolute;
   left: .2em;
@@ -195,15 +192,15 @@ const xIconStyles = `.draw-x-slowly {
   width: 0;
   height: 0; 
   /* Apply animation over a specific duration and timing function */
-  animation: drawX 5s ease-in-out forwards;
+  animation: drawX 1s ease-in-out forwards;
 }
 
 /* Rotate the two pseudo-elements to form the 'X' shape */
-.draw-x-slowly::before {
+.cross::before {
   transform: rotate(45deg);
 }
 
-.draw-x-slowly::after {
+.cross::after {
   transform: rotate(-45deg);
 }
 
@@ -225,6 +222,6 @@ const xIconStyles = `.draw-x-slowly {
   }
 }`
 
-styles.replaceSync(componentStyles + verifyingStyles + xIconStyles);
+styles.replaceSync(componentStyles + verifyingStyles + crossStyles);
 
 export default styles
