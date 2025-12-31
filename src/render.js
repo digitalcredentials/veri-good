@@ -34,18 +34,21 @@ const render = x => `
             <div id="expiryCheck" hidden >
                 <div class="circle-loader"  >
                     <div class="checkmark draw"></div>
+                    <div class="cross">&#10060;</div>
                 </div>
                 <div class="message" >Checking expiration...</div>
             </div>
             <div id="statusCheck" hidden>
                 <div class="circle-loader" >
                     <div class="checkmark draw"></div>
+                    <div class="cross">&#10060;</div>
                 </div>
                 <div class="message" >Checking revocation status...</div>
             </div>
             <div id="registryCheck" hidden >
                 <div class="circle-loader">
                     <div class="checkmark draw"></div>
+                    <div class="cross">&#10060;</div>
                 </div>
                 <div class="message" >Verifying issuer...</div>
             </div>    

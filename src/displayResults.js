@@ -10,7 +10,9 @@ const showStepResultFor = async (shadowRoot, stepId, result) => {
     // TODO put in a red X if result.valid is false.
 
     stepElement.querySelector('.circle-loader').classList.toggle('load-complete');
-    stepElement.querySelector('.checkmark').style.display = 'block';
+    const resultIndicator = result.valid ? '.checkmark' : '.cross'
+    stepElement.querySelector(resultIndicator).style.display = 'block' 
+       
     stepElement.querySelector('.message').textContent = result.message
 }
 const displayResults = async (result, shadowRoot) => {

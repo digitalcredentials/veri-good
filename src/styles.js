@@ -121,6 +121,11 @@ const componentStyles = `
 .checkmark {
   display: none;
 }
+
+.cross {
+    display: none;
+}
+
 .checkmark.draw:after {
   animation-duration: 800ms;
   animation-timing-function: ease;
