@@ -3,7 +3,7 @@ import verify from './verify.js'
 import displayResults from './displayResults.js'
 import styles from './styles.js'
 import render from './render.js'
-import resolveVC from './resolve.js'
+import resolveVC from './resolveVC.js'
 
 const verifyCredential = async (shadowRoot, credential) => {
     const response = await fetch("https://digitalcredentials.github.io/dcc-known-registries/known-did-registries.json");

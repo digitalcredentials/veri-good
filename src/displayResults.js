@@ -5,18 +5,17 @@ function sleep(ms) {
 const showStepResultFor = async (shadowRoot, stepId, result) => {
     const stepElement = shadowRoot.querySelector(stepId)
     stepElement.style.display = 'flex'; // make visible
-    await sleep(1000);
-
-    // TODO put in a red X if result.valid is false.
-
+    await sleep(2000);
     const circle = stepElement.querySelector('.circle-loader')
     circle.classList.toggle('load-complete');
-    let resultIndicator = '.checkmark'
-    if (! result.valid) {
-        resultIndicator = '.draw-x-slowly'
+    if (result.valid) {
+        stepElement.querySelector('.checkmark').style.display = 'block' 
+   //     stepElement.querySelector('.draw-x-slowly').style.display = 'none' 
+    } else {
+   //     stepElement.querySelector('.checkmark').style.display = 'none' 
+        stepElement.querySelector('.draw-x-slowly').style.display = 'block' 
         circle.style.borderColor = '#d00'
-    }
-    stepElement.querySelector(resultIndicator).style.display = 'block' 
+    } 
     stepElement.querySelector('.message').textContent = result.message
 }
 const displayResults = async (result, shadowRoot) => {
@@ -33,10 +32,10 @@ const displayResults = async (result, shadowRoot) => {
         return
      }
 
-    const resultContainer = shadowRoot.querySelector("#resultCont");
-    resultContainer.hidden = false;
+    shadowRoot.querySelector("#resultCont").hidden = false;
     await showStepResultFor(shadowRoot, '#sigCheck', result.signature)
     await showStepResultFor(shadowRoot, '#expiryCheck', result.expiry)
+    await showStepResultFor(shadowRoot, '#statusCheck', result.status)
     
 }
 
