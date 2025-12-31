@@ -4,7 +4,7 @@ const render = x => `
   <div part="header" class="header">
     <slot></slot>
     <h3 part="greeting">Digital Credentials Consortium</h3>
-    <h4 part="message">Verifiable Credential Verfication</h4>
+    <h4 part="message">Verfication</h4>
   </div>
 
   <div part="body" class="body">
@@ -31,21 +31,21 @@ const render = x => `
                 </div>
                 <div class="message" >Verifying signature...</div>
             </div>
-            <div id="expiryCheck" hidden >
+            <div id="expiryCheck" class="resultLine" >
                 <div class="circle-loader"  >
                     <div class="checkmark draw"></div>
                     <div class="draw-x-slowly"></div>
                 </div>
                 <div class="message" >Checking expiration...</div>
             </div>
-            <div id="statusCheck" hidden>
+            <div id="statusCheck" class="resultLine" >
                 <div class="circle-loader" >
                     <div class="checkmark draw"></div>
                     <div class="cross">&#10060;</div>
                 </div>
                 <div class="message" >Checking revocation status...</div>
             </div>
-            <div id="registryCheck" hidden >
+            <div id="registryCheck"class="resultLine"  >
                 <div class="circle-loader">
                     <div class="checkmark draw"></div>
                     <div class="cross">&#10060;</div>

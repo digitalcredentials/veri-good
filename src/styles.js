@@ -28,8 +28,8 @@ const componentStyles = `
   h3 {
     font-weight: bold;
     font-family: sans-serif;
-    letter-spacing: 4px;
-    font-size: 32px;
+   
+    font-size: 20px;
     margin: 0;
     padding: 0;
   }
@@ -69,7 +69,9 @@ const componentStyles = `
     .resultLine {
         display: none;
         flex-direction: row;
-        align-items: center;
+        justify-content: left;
+        padding-left: 2em;
+        padding-bottom: .5em;
     }
 
    
@@ -80,7 +82,7 @@ const componentStyles = `
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: left;
 }
 `
 
@@ -199,7 +201,7 @@ const xIconStyles = `.draw-x-slowly {
   width: 0;
   height: 0; 
   /* Apply animation over a specific duration and timing function */
-  animation: drawX 2s ease-in-out forwards;
+  animation: drawX 5s ease-in-out forwards;
 }
 
 /* Rotate the two pseudo-elements to form the 'X' shape */
