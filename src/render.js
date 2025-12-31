@@ -1,3 +1,5 @@
+const expiredVC = "https://digitalcredentials.github.io/vc-test-fixtures/verifiableCredentials/v1/bothSignatureTypes/didKey/oidf-noStatus-expired.json"
+
 const render = x => `
   <div part="header" class="header">
     <slot></slot>
@@ -8,11 +10,19 @@ const render = x => `
   <div part="body" class="body">
     <div id="inputCont">
         <div>
-            <textarea class="vc-area" placeholder="Paste your credential, or a url pointing to it."></textarea>
+            <textarea id="vc-paste" class="vc-area" placeholder="Paste your credential, or a url pointing to it.">${expiredVC}</textarea>
         </div>
         <button id="verifyBtn">Verify</button>
     </div>
   
+    <div id="errorCont" hidden>
+        <div>
+            Something went wrong. Please try again. Be sure that you are pasting in a valid Verifiable Credential or a link to
+            a valid Verifiable Credential.
+        </div>
+        <button id="retryBtn">Retry</button>
+    </div>
+
     <div id="resultCont" hidden>
         <div id="result-list">
             <div id="sigCheck" class="resultLine">

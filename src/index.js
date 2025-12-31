@@ -1,13 +1,18 @@
-import { sampleVC } from './testcred.js';
-import verify from './verify.js';
-import displayResults from './displayResults.js';
-import styles from './styles.js';
-import render from './render.js';
+import { sampleVC } from './testcred.js'
+import verify from './verify.js'
+import displayResults from './displayResults.js'
+import styles from './styles.js'
+import render from './render.js'
+import resolveVC from './resolve.js'
 
 const verifyCredential = async (shadowRoot, credential) => {
     const response = await fetch("https://digitalcredentials.github.io/dcc-known-registries/known-did-registries.json");
     const knownDIDRegistries = await response.json();
-    const result = await verify(credential)
+    const vc = await resolveVC(credential);
+
+    const result = await verify(vc)
+        console.log("the result:")
+    console.log(result)
     displayResults(result, shadowRoot)
 }
 
@@ -43,7 +48,8 @@ class VeriGood extends HTMLElement {
     this.verifyBtn = this.shadowRoot.querySelector("#verifyBtn");
 
     this.verifyBtn.addEventListener("click", () => {
-        verifyCredential(this.shadowRoot, sampleVC);
+        const vc = this.shadowRoot.querySelector("#vc-paste").value
+        verifyCredential(this.shadowRoot, vc);
     });   
   }
 

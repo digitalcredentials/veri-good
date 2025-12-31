@@ -60,7 +60,7 @@ const componentStyles = `
 }
 
   .vc-area {
-    height: 300px;
+    height: 100px;
     width: 600px;
     }
 
