@@ -34,7 +34,7 @@ const render = x => `
             <div id="expiryCheck" hidden >
                 <div class="circle-loader"  >
                     <div class="checkmark draw"></div>
-                    <div class="cross">&#10060;</div>
+                    <div class="draw-x-slowly"></div>
                 </div>
                 <div class="message" >Checking expiration...</div>
             </div>

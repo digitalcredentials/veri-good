@@ -5,14 +5,18 @@ function sleep(ms) {
 const showStepResultFor = async (shadowRoot, stepId, result) => {
     const stepElement = shadowRoot.querySelector(stepId)
     stepElement.style.display = 'flex'; // make visible
-    await sleep(1800);
+    await sleep(1000);
 
     // TODO put in a red X if result.valid is false.
 
-    stepElement.querySelector('.circle-loader').classList.toggle('load-complete');
-    const resultIndicator = result.valid ? '.checkmark' : '.cross'
+    const circle = stepElement.querySelector('.circle-loader')
+    circle.classList.toggle('load-complete');
+    let resultIndicator = '.checkmark'
+    if (! result.valid) {
+        resultIndicator = '.draw-x-slowly'
+        circle.style.borderColor = '#d00'
+    }
     stepElement.querySelector(resultIndicator).style.display = 'block' 
-       
     stepElement.querySelector('.message').textContent = result.message
 }
 const displayResults = async (result, shadowRoot) => {

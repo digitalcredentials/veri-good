@@ -124,6 +124,7 @@ const componentStyles = `
 
 .cross {
     display: none;
+    font-size: 13px;
 }
 
 .checkmark.draw:after {
@@ -177,6 +178,57 @@ const componentStyles = `
 }
 `
 
-styles.replaceSync(componentStyles + verifyingStyles);
+const xIconStyles = `.draw-x-slowly {
+  /* This creates a relative positioning context for the pseudo-elements */
+  position: relative;
+  height: 1.1em;
+  width: 1.1em;
+  display: flex; /* Helps center the strokes */
+  justify-content: center;
+  align-items: center;
+}
+
+.draw-x-slowly::before,
+.draw-x-slowly::after {
+  content: "";
+  position: absolute;
+  left: .2em;
+  top: .7em;
+  background-color: #d00; /* Color of the 'X' */
+  /* Initially set the size to 0 for the animation start point */
+  width: 0;
+  height: 0; 
+  /* Apply animation over a specific duration and timing function */
+  animation: drawX 2s ease-in-out forwards;
+}
+
+/* Rotate the two pseudo-elements to form the 'X' shape */
+.draw-x-slowly::before {
+  transform: rotate(45deg);
+}
+
+.draw-x-slowly::after {
+  transform: rotate(-45deg);
+}
+
+/* Keyframes define the animation sequence */
+@keyframes drawX {
+  0% {
+    width: 0;
+    height: 0;
+  }
+  50% {
+    /* Draw the first half (e.g., width) of both lines simultaneously */
+    width: 100%;
+    height: 2px; /* Desired thickness of the lines */
+  }
+  100% {
+    /* Draw the second half (e.g., height) after the first part is complete */
+    width: 100%;
+    height: 2px; /* Desired thickness of the lines */
+  }
+}`
+
+styles.replaceSync(componentStyles + verifyingStyles + xIconStyles);
 
 export default styles
