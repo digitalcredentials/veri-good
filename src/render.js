@@ -49,7 +49,7 @@ const render = x => `
                 </div>
                 <div class="message" >Checking revocation status...</div>
             </div>
-            <div id="registryCheck"class="resultLine"  >
+            <div id="issuerCheck" class="resultLine"  >
                 <div class="circle-loader">
                     <div class="checkmark draw"></div>
                     <div class="cross"></div>
@@ -61,7 +61,7 @@ const render = x => `
  
 </div>
   
-  <div part="footer" class="footer">BLh blhg blah</div>
+  <div part="footer" class="footer">footer can go here</div>
 `;
 
 export default render

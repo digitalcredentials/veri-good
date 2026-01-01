@@ -3,30 +3,15 @@ import { DataIntegrityProof } from '@digitalbazaar/data-integrity';
 import { cryptosuite as eddsaRdfc2022CryptoSuite } from '@digitalbazaar/eddsa-rdfc-2022-cryptosuite';
 import * as vc from '@digitalbazaar/vc';
 import { securityLoader } from '@digitalcredentials/security-document-loader';
-import getStatusChecker from './getStatusChecker.js';
+import checkStatusDirectly from './checkStatusDirectly.js';
+import lookupIssuer from './lookupIssuer.js';
 const documentLoader = securityLoader({ fetchRemoteContexts: true }).build();
 const eddsaSuite = new DataIntegrityProof({ cryptosuite: eddsaRdfc2022CryptoSuite });
 const ed25519Suite = new Ed25519Signature2020();
 const suite = [ed25519Suite, eddsaSuite]
 
-
-import {extendContextLoader} from 'jsonld-signatures';
-const {defaultDocumentLoader} = vc;
-const statusDocumentLoader = extendContextLoader(async url => {
-  if(url.startsWith('http')) {
-    const response = await fetch(url);
-    const document = await response.json();
-    return {
-      contextUrl: null,
-      documentUrl: url,
-      document
-    };
-  }
-  return defaultDocumentLoader(url);
-});
-
-const verify = async (credential) => {
-    let signature, expiry, status;
+const verify = async (credential, knownDIDRegistries) => {
+    let signature, expiry, status, issuer
     try {
         
         const checkStatus = ()=>{return {verified:true} }
@@ -56,29 +41,17 @@ const verify = async (credential) => {
             expiry = {valid: true, message: expiryMessage}
         }
 
-        status = await checkStatusSeparately(credential)
+        status = await checkStatusDirectly(credential)
+        issuer = await lookupIssuer(credential.issuer, knownDIDRegistries)
         
     } catch (e) {
         console.log(e)
     }
-    const finalResult = {signature, expiry, status};
+    const finalResult = {signature, expiry, status, issuer};
     return finalResult;
 }
 
-const checkStatusSeparately = async (credential) => {
-    if (credential.credentialStatus) {
-        const checkStatus = getStatusChecker(credential)
-        const statusResult = await checkStatus({credential, documentLoader: statusDocumentLoader, suite, verifyMatchingIssuers: false, verifyBitstringStatusListCredential: false})
-        // the result.status is 'true' if revoked
-        const isRevoked = statusResult.results.some(result=>result.status)
-        if (isRevoked) {
-            return {valid: false, message: 'Has been revoked'}
-        } else {
-            return {valid: true, message: 'Has not been revoked'}
-        }
-    } else {
-        return {valid: true, message: 'Has not been revokeddddd'}
-    }
-}
+
+
 
 export default verify

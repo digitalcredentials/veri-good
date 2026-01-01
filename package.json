@@ -33,6 +33,7 @@
     "@digitalbazaar/eddsa-rdfc-2022-cryptosuite": "^1.2.0",
     "@digitalbazaar/vc": "^7.2.0",
     "@digitalbazaar/vc-bitstring-status-list": "^2.0.1",
+    "@digitalcredentials/issuer-registry-client": "^3.2.0-beta.5",
     "@digitalcredentials/security-document-loader": "^8.0.0",
     "@digitalcredentials/verifier-core": "^1.0.0-beta.11",
     "jsonld-signatures": "^11.5.0"

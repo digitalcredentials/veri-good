@@ -1,15 +1,15 @@
-import { sampleVC } from './testcred.js'
+//import { sampleVC } from './testcred.js'
 import verify from './verify.js'
 import displayResults from './displayResults.js'
 import styles from './styles.js'
 import render from './render.js'
 import resolveVC from './resolveVC.js'
 
-const verifyCredential = async (shadowRoot, credential) => {
-    const response = await fetch("https://digitalcredentials.github.io/dcc-known-registries/known-did-registries.json");
-    const knownDIDRegistries = await response.json();
+const DEFAULT_REGISTRY_LIST = 'https://digitalcredentials.github.io/dcc-known-registries/known-did-registries.json'
+
+const verifyCredential = async (shadowRoot, credential, knownDIDRegistries) => {
     const vc = await resolveVC(credential);
-    const result = await verify(vc)
+    const result = await verify(vc, knownDIDRegistries)
     displayResults(result, shadowRoot)
 }
 
@@ -38,7 +38,7 @@ class VeriGood extends HTMLElement {
 
   connectedCallback() {
     if (!this.registryList) {
-      this.registryList = 'https://digitalcredentials.github.io/dcc-known-registries/known-did-registries.json';
+      this.registryList = DEFAULT_REGISTRY_LIST;
     }
     this.shadowRoot.innerHTML = render();
     
@@ -46,7 +46,7 @@ class VeriGood extends HTMLElement {
 
     this.verifyBtn.addEventListener("click", () => {
         const vc = this.shadowRoot.querySelector("#vc-paste").value
-        verifyCredential(this.shadowRoot, vc);
+        verifyCredential(this.shadowRoot, vc, this.registryList);
     });   
   }
 

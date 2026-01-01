@@ -21,7 +21,7 @@ const componentStyles = `
   }
 
   .header {
-    margin: 16px 0;
+    margin: 15px 0;
     position: relative;
   }
 
@@ -52,6 +52,7 @@ const componentStyles = `
     height: 16px;
     background: var(--color, var(--default-color));
     border-radius: 0 0 var(--radius, var(--default-radius)) var(--radius, var(--default-radius));
+    margin: 0 0 15px;
   }
 
   .result-cont {
@@ -59,8 +60,8 @@ const componentStyles = `
 }
 
   .vc-area {
-    height: 100px;
-    width: 600px;
+    height: 150px;
+    width: 200px;
     }
 
 

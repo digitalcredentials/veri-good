@@ -34,6 +34,7 @@ const displayResults = async (result, shadowRoot) => {
     await showStepResultFor(shadowRoot, '#sigCheck', result.signature)
     await showStepResultFor(shadowRoot, '#expiryCheck', result.expiry)
     await showStepResultFor(shadowRoot, '#statusCheck', result.status)
+    await showStepResultFor(shadowRoot, '#issuerCheck', result.issuer)
     
 }
 
