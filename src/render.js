@@ -7,7 +7,7 @@ const render = x => `
   <div part="header" class="header">
     <slot></slot>
     <h3 part="greeting">Digital Credentials Consortium</h3>
-    <h4 part="message">Verfication</h4>
+    <h4 part="message">VC Verifier</h4>
   </div>
 
   <div part="body" class="body">
@@ -61,7 +61,7 @@ const render = x => `
  
 </div>
   
-  <div part="footer" class="footer">footer can go here</div>
+  <div part="footer" class="footer"></div>
 `;
 
 export default render

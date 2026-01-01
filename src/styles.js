@@ -1,7 +1,5 @@
 const styles = new CSSStyleSheet();
 
-
-
 const componentStyles = `
   :host {
 
@@ -28,14 +26,14 @@ const componentStyles = `
   h3 {
     font-weight: bold;
     font-family: sans-serif;
-    font-size: 20px;
+    font-size: 16px;
     margin: 0;
     padding: 0;
   }
 
   h4 {
     font-family: sans-serif;
-    font-size: 18px;
+    font-size: 15px;
     margin: 0;
     padding: 0;
   }
