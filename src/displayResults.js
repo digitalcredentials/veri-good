@@ -20,7 +20,8 @@ const displayResults = async (result, shadowRoot) => {
     
     const inputContainer = shadowRoot.querySelector("#inputCont");
     inputContainer.hidden = true;
-    
+    console.log("the result:")
+    console.log(result)
     // we stop everything if either the signature is bad or the 
     // issuer is unknown
      if (! (result.signature.valid && result.issuer.valid) ) {

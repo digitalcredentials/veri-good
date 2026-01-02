@@ -21,6 +21,8 @@ const verify = async (credential, knownDIDRegistries) => {
             new Date(credential.validUntil ?? credential.expirationDate) : 
             null
 
+            console.log("verification result:")
+            console.log(verificationResult)
         if (!verificationResult.verified) {
             if (verificationResult.error?.message === 'Credential has expired.') {
                 // run verification again, but with current time set to one
@@ -34,6 +36,8 @@ const verify = async (credential, knownDIDRegistries) => {
                     // just return right away because something prevented verifying the signature
                     return {signature: {valid: false, message: "The credential couldn't be verified. Please contact the issuer."}}
                 }
+            } else {
+                return {signature: {valid: false, message: "The credential couldn't be verified. Please contact the issuer."}}
             }
         } else {
             signature = {valid: true, message: 'Signature is valid.'}
