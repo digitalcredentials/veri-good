@@ -51,7 +51,4 @@ const verify = async (credential, knownDIDRegistries) => {
     return finalResult;
 }
 
-
-
-
 export default verify

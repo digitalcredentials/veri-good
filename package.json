@@ -8,7 +8,8 @@
     "start": "http-server -c-1 -p 8080",
     "start-wp": "webpack serve --open",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack"
+    "build": "webpack",
+    "test:playwright:unit-ui": "playwright test --grep @unit-ui --workers=4 --reporter=html"
   },
   "repository": {
     "type": "git",
@@ -21,6 +22,7 @@
   },
   "homepage": "https://github.com/digitalcredentials/veri-good#readme",
   "devDependencies": {
+    "@playwright/test": "^1.57.0",
     "html-webpack-plugin": "^5.6.5",
     "http-server": "^14.1.1",
     "webpack": "^5.104.1",
