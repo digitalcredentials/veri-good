@@ -47,7 +47,7 @@ const verify = async (credential, knownDIDRegistries) => {
     } catch (e) {
         console.log(e)
     }
-    const finalResult = {signature, expiry, status, issuer};
+    const finalResult = {credential, signature, expiry, status, issuer};
     return finalResult;
 }
 

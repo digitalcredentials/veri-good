@@ -44,6 +44,7 @@ const componentStyles = `
     padding: 32px 8px;
     font-size: 20px;
     font-family: sans-serif;
+   
   }
 
   .footer {
@@ -72,7 +73,14 @@ const componentStyles = `
         padding-bottom: .5em;
     }
 
-   
+   .details-cont {
+      font: 400 14px 'Varela Round', sans-serif;
+      height: 20vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: left;
+   }
 
 #result-list {
   height: 10vh;

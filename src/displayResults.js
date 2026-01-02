@@ -5,7 +5,7 @@ function sleep(ms) {
 const showStepResultFor = async (shadowRoot, stepId, result) => {
     const stepElement = shadowRoot.querySelector(stepId)
     stepElement.style.display = 'flex'; // make visible
-    await sleep(2000);
+    await sleep(500);
     const circle = stepElement.querySelector('.circle-loader')
     circle.classList.toggle('load-complete');
     if (result.valid) {
@@ -21,20 +21,32 @@ const displayResults = async (result, shadowRoot) => {
     const inputContainer = shadowRoot.querySelector("#inputCont");
     inputContainer.hidden = true;
     
-     if (! result.signature.valid) {
+    // we stop everything if either the signature is bad or the 
+    // issuer is unknown
+     if (! (result.signature.valid && result.issuer.valid) ) {
         const errorContainer = shadowRoot.querySelector("#errorCont");
         errorContainer.hidden = false;
         const errorElem = document.createElement('div');
-        errorElem.textContent = 'The signature is not valid, and may have been tampered with.'
+        
+        errorElem.textContent = ! result.signature.valid ? 
+            result.signature.message :
+            result.issuer.message
+    
         errorContainer.appendChild(errorElem)
         return
-     }
+     }  
+     
+    // now show the credential name, recipient and issuer
+    shadowRoot.querySelector("#detailsCont").style.display = 'flex' 
+     shadowRoot.querySelector('#cred-name').textContent = result.credential.name
+     shadowRoot.querySelector('#issuer-name').textContent = result.issuer.message
+     shadowRoot.querySelector('#holder-name').textContent = result.credential.credentialSubject.name
 
     shadowRoot.querySelector("#resultCont").hidden = false;
     await showStepResultFor(shadowRoot, '#sigCheck', result.signature)
     await showStepResultFor(shadowRoot, '#expiryCheck', result.expiry)
     await showStepResultFor(shadowRoot, '#statusCheck', result.status)
-    await showStepResultFor(shadowRoot, '#issuerCheck', result.issuer)
+  //  await showStepResultFor(shadowRoot, '#issuerCheck', result.issuer)
     
 }
 

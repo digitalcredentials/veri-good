@@ -10,6 +10,12 @@ const render = x => `
     <h4 part="message">VC Verifier</h4>
   </div>
 
+   <div id="detailsCont" class="details-cont">
+        <div id="cred-name"></div>
+        <div id="holder-name"></div>
+        <div id="issuer-name"></div> 
+    </div>
+    
   <div part="body" class="body">
     <div id="inputCont">
         <div>
@@ -18,6 +24,8 @@ const render = x => `
         <button id="verifyBtn">Verify</button>
     </div>
   
+    
+
     <div id="errorCont" hidden>
         <div>
             Something went wrong. Please try again. Be sure that you are pasting in a valid Verifiable Credential or a link to
@@ -37,10 +45,10 @@ const render = x => `
             </div>
             <div id="expiryCheck" class="resultLine" >
                 <div class="circle-loader"  >
-                    <div class="checkmark draw" data-testid="expiry-checkmark"></div>
+                    <div class="checkmark draw" ></div>
                     <div class="cross"></div>
                 </div>
-                <div class="message" data-testid="expiry-message" >Checking expiration...</div>
+                <div class="message" >Checking expiration...</div>
             </div>
             <div id="statusCheck" class="resultLine" >
                 <div class="circle-loader" >
