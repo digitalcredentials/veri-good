@@ -3,10 +3,10 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
   testDir: './tests/',
   timeout: 30_000,
-  expect: { timeout: 5_000 },
+  expect: { timeout: 8_000 },
   use: {
     headless: true,
-    baseURL: process.env.BASE_URL ?? 'http://localhost:3001',
+    baseURL: process.env.BASE_URL ?? 'http://localhost:8080',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',

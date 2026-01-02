@@ -37,10 +37,10 @@ const render = x => `
             </div>
             <div id="expiryCheck" class="resultLine" >
                 <div class="circle-loader"  >
-                    <div class="checkmark draw"></div>
+                    <div class="checkmark draw" data-testid="expiry-checkmark"></div>
                     <div class="cross"></div>
                 </div>
-                <div class="message" >Checking expiration...</div>
+                <div class="message" data-testid="expiry-message" >Checking expiration...</div>
             </div>
             <div id="statusCheck" class="resultLine" >
                 <div class="circle-loader" >
