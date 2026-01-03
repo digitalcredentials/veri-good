@@ -2,14 +2,13 @@ const styles = new CSSStyleSheet();
 
 const componentStyles = `
   :host {
-
-    --default-color: grey;
+    --default-color: #c9ccc6;
     --default-radius: 6px;
     --default-depth: 5px;
 
     display: inline-block;
     contain: content;
-    color: white;
+    color: black;
     background: var(--color, var(--default-color));
     border-radius: var(--radius, var(--default-radius));
     min-width: 325px;
@@ -40,11 +39,13 @@ const componentStyles = `
 
   .body {
     text: #414856;
-    color: white;
+    color: black;
     padding: 32px 8px;
     font-size: 20px;
     font-family: sans-serif;
-   
+    display: flex; /* Use flexbox to align icon and text */
+    flex-direction: column;
+    align-items: center; 
   }
 
   .footer {
@@ -58,12 +59,51 @@ const componentStyles = `
     background: #B0BF1A;
 }
 
+#inputCont {
+     display: flex; 
+    flex-direction: column;
+    align-items: center; 
+}
+
   .vc-area {
     height: 150px;
     width: 200px;
-    }
+    padding: 10px;
+    background: #e3e8df;
+    border-radius: var(--radius, var(--default-radius));
+    box-shadow: 0 0 var(--depth, var(--default-depth)) rgba(0,0,0,.5);
+  }
 
+.btn {
+  background-color: #002147; /* Blue background */
+  border: none;
+  color: #78b13f; /* green text/icon color */
+  margin: 18px;
+  padding: 8px 20px; /* Some padding */
+  font-weight: 600;
+  font-size:15px;
+ 
+  cursor: pointer; /* Add a mouse pointer on hover */
+  border-radius: 8px; /* Rounded corners */
+  display: flex; /* Use flexbox to align icon and text */
+  align-items: center; 
+  gap: 12px; /* space between icon and text */
+}
 
+.check {
+   display: inline-block;
+  transform: rotate(45deg);
+  height: 12px;
+  width: 6px;
+  border-bottom: 3px solid;
+  border-right: 3px solid;
+  margin-bottom: 2px;
+}
+
+.btn:hover {
+  background-color: #78b13f;
+  color: #002147;
+}
 
     .resultLine {
         display: none;
@@ -75,29 +115,23 @@ const componentStyles = `
 
    .details-cont {
       font: 400 14px 'Varela Round', sans-serif;
-      height: 20vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      align-items: left;
    }
 
 #result-list {
   height: 10vh;
+  padding-top:1em;
   font: 400 16px 'Varela Round', sans-serif;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: left;
 }
-`
+`;
 
-
-
-
-
-
-   const verifyingStyles = `
+const verifyingStyles = `
 .circle-loader {
   margin-right: 2em;
   border: 1px solid rgba(0, 0, 0, 0.2);
@@ -179,7 +213,7 @@ const componentStyles = `
     opacity: 1;
   }
 }
-`
+`;
 
 const crossStyles = `.cross {
   position: relative;
@@ -227,8 +261,8 @@ const crossStyles = `.cross {
     width: 100%;
     height: 2px; /* Desired thickness of the lines */
   }
-}`
+}`;
 
 styles.replaceSync(componentStyles + verifyingStyles + crossStyles);
 
-export default styles
+export default styles;

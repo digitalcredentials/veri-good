@@ -39,7 +39,7 @@ const checkStatusDirectly = async (credential) => {
             return {valid: true, message: 'Has not been revoked'}
         }
     } else {
-        return {valid: true, message: 'Has not been revokeddddd'}
+        return {valid: true, message: 'Has not been revoked'}
     }
 }
 

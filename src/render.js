@@ -15,13 +15,14 @@ const render = x => `
         <div id="holder-name"></div>
         <div id="issuer-name"></div> 
     </div>
-    
+
   <div part="body" class="body">
+  
     <div id="inputCont">
         <div>
-            <textarea id="vc-paste" class="vc-area" placeholder="Paste your credential, or a url pointing to it.">${revoked}</textarea>
+            <textarea id="vc-paste" class="vc-area" placeholder="Paste your credential, or a url pointing to it.">${expired}</textarea>
         </div>
-        <button id="verifyBtn">Verify</button>
+        <button class="btn" id="verifyBtn"><div class="check"></div>Verify</button>
     </div>
   
     

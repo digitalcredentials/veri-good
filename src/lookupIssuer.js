@@ -13,7 +13,7 @@ const lookupIssuer = async (issuer, knownDIDRegistries) => {
     // match found
     return {
       valid: true,
-      message: `Issued by ${matchingIssuers[0].issuer.federation_entity.organization_name}`,
+      message: `${matchingIssuers[0].issuer.federation_entity.organization_name}`,
     };
   } else {
     // no match

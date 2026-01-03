@@ -19,9 +19,8 @@ const showStepResultFor = async (shadowRoot, stepId, result) => {
 const displayResults = async (result, shadowRoot) => {
     
     const inputContainer = shadowRoot.querySelector("#inputCont");
-    inputContainer.hidden = true;
-    console.log("the result:")
-    console.log(result)
+    inputContainer.style.display = 'none';
+
     // we stop everything if either the signature is bad or the 
     // issuer is unknown
      if (! (result.signature.valid && result.issuer.valid) ) {
@@ -40,8 +39,8 @@ const displayResults = async (result, shadowRoot) => {
     // now show the credential name, recipient and issuer
     shadowRoot.querySelector("#detailsCont").style.display = 'flex' 
      shadowRoot.querySelector('#cred-name').textContent = result.credential.name
-     shadowRoot.querySelector('#issuer-name').textContent = result.issuer.message
-     shadowRoot.querySelector('#holder-name').textContent = result.credential.credentialSubject.name
+     shadowRoot.querySelector('#issuer-name').textContent = 'by ' + result.issuer.message
+     shadowRoot.querySelector('#holder-name').textContent = 'Issued to ' + result.credential.credentialSubject.name
 
     shadowRoot.querySelector("#resultCont").hidden = false;
     await showStepResultFor(shadowRoot, '#sigCheck', result.signature)

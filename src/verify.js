@@ -30,7 +30,7 @@ const verify = async (credential, knownDIDRegistries) => {
                 const now = expirationDate.setSeconds(expirationDate.getSeconds() - 1); // subtract one second
                 const sigCheck = await vc.verifyCredential({credential,suite,documentLoader,checkStatus,now});
                 if (sigCheck.verified) {
-                    signature = {valid: true, message: 'Signature is valid.'}
+                    signature = {valid: true, message: 'Signature is valid'}
                     expiry = {valid: false, message: `Expired on: ${expirationDate.toDateString()}`}
                 } else {
                     // just return right away because something prevented verifying the signature
