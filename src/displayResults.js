@@ -40,7 +40,7 @@ const displayResults = async (result, shadowRoot) => {
     shadowRoot.querySelector("#detailsCont").style.display = 'flex' 
      shadowRoot.querySelector('#cred-name').textContent = result.credential.name
      shadowRoot.querySelector('#issuer-name').textContent = 'by ' + result.issuer.message
-     shadowRoot.querySelector('#holder-name').textContent = 'Issued to ' + result.credential.credentialSubject.name
+     shadowRoot.querySelector('#holder-name').textContent = 'Awarded to ' + result.credential.credentialSubject.name
 
     shadowRoot.querySelector("#resultCont").hidden = false;
     await showStepResultFor(shadowRoot, '#sigCheck', result.signature)

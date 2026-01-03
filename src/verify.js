@@ -10,6 +10,13 @@ const eddsaSuite = new DataIntegrityProof({ cryptosuite: eddsaRdfc2022CryptoSuit
 const ed25519Suite = new Ed25519Signature2020();
 const suite = [ed25519Suite, eddsaSuite]
 
+const dateOptions = {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+  // Omit the 'weekday' property to exclude it from the output
+};
+
 const verify = async (credential, knownDIDRegistries) => {
     let signature, expiry, status, issuer
     try {
@@ -21,8 +28,6 @@ const verify = async (credential, knownDIDRegistries) => {
             new Date(credential.validUntil ?? credential.expirationDate) : 
             null
 
-            console.log("verification result:")
-            console.log(verificationResult)
         if (!verificationResult.verified) {
             if (verificationResult.error?.message === 'Credential has expired.') {
                 // run verification again, but with current time set to one
@@ -31,7 +36,9 @@ const verify = async (credential, knownDIDRegistries) => {
                 const sigCheck = await vc.verifyCredential({credential,suite,documentLoader,checkStatus,now});
                 if (sigCheck.verified) {
                     signature = {valid: true, message: 'Signature is valid'}
-                    expiry = {valid: false, message: `Expired on: ${expirationDate.toDateString()}`}
+                    expiry = {
+                        valid: false, 
+                        message: `Expired ${new Intl.DateTimeFormat('en-US', dateOptions).format(expirationDate)}`}
                 } else {
                     // just return right away because something prevented verifying the signature
                     return {signature: {valid: false, message: "The credential couldn't be verified. Please contact the issuer."}}
@@ -41,7 +48,9 @@ const verify = async (credential, knownDIDRegistries) => {
             }
         } else {
             signature = {valid: true, message: 'Signature is valid.'}
-            const expiryMessage = expirationDate ? `Valid until: ${expirationDate.toDateString()}` : 'No expiry date.'
+            const expiryMessage = expirationDate ? 
+                `Valid until ${new Intl.DateTimeFormat('en-US', dateOptions).format(expirationDate)}` : 
+                'No expiry date.'
             expiry = {valid: true, message: expiryMessage}
         }
 

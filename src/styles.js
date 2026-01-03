@@ -18,7 +18,7 @@ const componentStyles = `
   }
 
   .header {
-    margin: 15px 0;
+    margin: 25px 0;
     position: relative;
   }
 
@@ -38,14 +38,7 @@ const componentStyles = `
   }
 
   .body {
-    text: #414856;
-    color: black;
     padding: 32px 8px;
-    font-size: 20px;
-    font-family: sans-serif;
-    display: flex; /* Use flexbox to align icon and text */
-    flex-direction: column;
-    align-items: center; 
   }
 
   .footer {
