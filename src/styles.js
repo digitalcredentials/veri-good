@@ -123,17 +123,18 @@ const componentStyles = `
    }
 
 #result-list {
-  height: 10vh;
-  padding-left:1.5em;
+  height: 100px;
+  padding-left:2em;
   font: 400 14px 'Varela Round', sans-serif;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: top;
   align-items: left;
 }
 `;
 
 const verifyingStyles = `
+
 .circle-loader {
   margin-right: 2em;
   border: 1px solid rgba(0, 0, 0, 0.2);
@@ -148,16 +149,13 @@ const verifyingStyles = `
 }
 
 .big-circle-loader {
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  border: 5px solid rgba(0, 0, 0, 0.2);
   border-left-color: #5cb85c;
-  animation: loader-spin 1.2s infinite linear;
-  position: relative;
-  display: inline-block;
-  vertical-align: top;
+  animation: loader-spin 3s infinite linear;
   border-radius: 50%;
   width: 5em;
   height: 5em;
-  margin: 1em;
+  margin: 2em;
 }
 
 .load-complete {

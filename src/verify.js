@@ -18,9 +18,7 @@ const dateOptions = {
   // Omit the 'weekday' property to exclude it from the output
 };
 
-const verify = async (pastedCred, knownDIDRegistries) => {
-
-    const credential = await resolveVC(pastedCred);
+const verify = async (credential, knownDIDRegistries) => {
 
     let signature, expiry, status, issuer
     try {

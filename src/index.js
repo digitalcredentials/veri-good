@@ -1,23 +1,12 @@
 //import { sampleVC } from './testcred.js'
-import verify from './verify.js'
-import displayResults from './displayResults.js'
+
 import styles from './styles.js'
 import render from './render.js'
-import showVerifyingSpinner from './showVerifyingSpinner.js'
+import { setShadowRoot} from './displayUtils.js'
+import processCredential from './processCredential.js'
 
 const DEFAULT_REGISTRY_LIST = 'https://digitalcredentials.github.io/dcc-known-registries/known-did-registries.json'
 
-const verifyCredential = async (shadowRoot, credential, knownDIDRegistries) => {
-  //  const spinner = await showVerifyingSpinner(shadowRoot);
-  //  const result = await verify(vc, knownDIDRegistries)
-    
-    const [spinnerDone, result] = await Promise.all([
-      showVerifyingSpinner(shadowRoot),
-      verify(credential, knownDIDRegistries)
-    ]);
-
-    displayResults(result, shadowRoot)
-}
 
 class VeriGood extends HTMLElement {
 
@@ -48,11 +37,13 @@ class VeriGood extends HTMLElement {
     }
     this.shadowRoot.innerHTML = render();
     
+    setShadowRoot(this.shadowRoot);
+
     this.verifyBtn = this.shadowRoot.querySelector("#verifyBtn");
 
     this.verifyBtn.addEventListener("click", () => {
-        const vc = this.shadowRoot.querySelector("#vc-paste").value
-        verifyCredential(this.shadowRoot, vc, this.registryList);
+        const pastedContent = this.shadowRoot.querySelector("#vc-paste").value
+        processCredential(pastedContent, this.registryList);
     });   
   }
 
