@@ -7,20 +7,20 @@ const render = x => `
   <div part="header" class="header">
     <slot></slot>
     <h3 part="greeting">Digital Credentials Consortium</h3>
-    <h4 part="message">VC Verifier</h4>
+    <h4 part="message">Verifier</h4>
   </div>
 
-   <div id="detailsCont" class="details-cont">
+   <div id="details-container">
         <div id="holder-name"></div>
-        <div id="was-awarded" class="cred-label">was awarded</div>
+        <div id="was-awarded" class="cred-label" >was awarded</div>
         <div id="cred-name"></div>
-        <div id="awarded-by" class="cred-label">by</div>
+        <div id="awarded-by" class="cred-label" >by</div>
         <div id="issuer-name"></div> 
     </div>
 
   <div part="body" class="body">
 
-    <div id="inputCont">
+    <div id="input-container">
         <div>
             <textarea id="vc-paste" class="vc-area" placeholder="Paste your credential, or a url pointing to it.">${expired}</textarea>
         </div>
@@ -29,15 +29,16 @@ const render = x => `
   
     
 
-    <div id="errorCont" hidden>
+    <div id="error-container">
         <div>
             Something went wrong. Please try again. Be sure that you are pasting in a valid Verifiable Credential or a link to
             a valid Verifiable Credential.
         </div>
+        <div id="error-message"></div>
         <button id="retryBtn">Retry</button>
     </div>
 
-    <div id="resultCont" hidden>
+    <div id="result-container">
         <div id="result-list">
             <div id="sigCheck" class="resultLine">
                 <div class="circle-loader">

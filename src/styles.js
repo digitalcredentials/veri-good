@@ -38,6 +38,14 @@ const componentStyles = `
     padding: 0;
   }
 
+  .cred-label {
+    font-style: italic;
+    font-size: 12px;
+    font-weight: 400;
+    padding:.2em;
+    text-decoration: italic;
+  }
+
   .body {
     padding: 32px 8px;
   }
@@ -49,19 +57,17 @@ const componentStyles = `
     margin: 0 0 15px;
   }
 
-  .result-cont {
-    background: #B0BF1A;
-}
 
-#inputCont {
+#input-container {
     display: flex; 
     flex-direction: column;
     align-items: center; 
 }
 
-.cred-label {
+#result-container, #error-container {
   display: none;
   }
+
 
   .vc-area {
     height: 150px;
@@ -112,9 +118,10 @@ const componentStyles = `
         padding-bottom: .5em;
     }
 
-   .details-cont {
-      font: 400 14px 'Varela Round', sans-serif;
-      display: flex;
+   #details-container {
+      font: 700 14px 'Varela Round', sans-serif;
+      display: none;
+      padding: 1em;
       flex-direction: column;
       justify-content: center;
    }

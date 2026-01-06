@@ -10,6 +10,10 @@ const hideElement = (selector, ancestor) => {
     ancestor.querySelector(selector).style.display = 'none'
 }
 
+const showText = (selector, ancestor, text) => {
+    ancestor.querySelector(selector).textContent = text
+}
+
 const showStepResultFor = async (shadowRoot, stepId, result) => {
     const stepElement = shadowRoot.querySelector(stepId)
     stepElement.style.display = 'flex'; // make visible
@@ -25,32 +29,25 @@ const showStepResultFor = async (shadowRoot, stepId, result) => {
     stepElement.querySelector('.message').textContent = result.message
 }
 const displayResults = async (result, shadowRoot) => {
-    hideElement("#inputCont", shadowRoot)
-    // we stop everything if either the signature is bad or the 
-    // issuer is unknown
+    hideElement("#input-container", shadowRoot)
+    // stop everything if either the signature is bad or the 
+    // issuer is unknown, and show an error
      if (! (result.signature.valid && result.issuer.valid) ) {
-        const errorContainer = shadowRoot.querySelector("#errorCont");
-        errorContainer.hidden = false;
-        const errorElem = document.createElement('div');
-        
-        errorElem.textContent = ! result.signature.valid ? 
+        showElement("#error-container", shadowRoot)
+        shadowRoot.querySelector('#error-message').textContent = ! result.signature.valid ? 
             result.signature.message :
             result.issuer.message
-    
-        errorContainer.appendChild(errorElem)
         return
      }  
      
-    // now show the credential name, recipient and issuer
-    
-    showElement("#detailsCont", shadowRoot, 'flex')
-     shadowRoot.querySelector('#holder-name').textContent = result.credential.credentialSubject.name
-     showElement("#was-awarded", shadowRoot)
-     shadowRoot.querySelector('#cred-name').textContent = result.credential.name
-     showElement("#awarded-by", shadowRoot)
-     shadowRoot.querySelector('#issuer-name').textContent = result.issuer.message
-
-    shadowRoot.querySelector("#resultCont").hidden = false;
+    // now show the credential recipient, credential name, and issuer   
+    showElement("#details-container", shadowRoot, 'flex')
+    showText('#holder-name', shadowRoot, result.credential.credentialSubject.name)
+    showText('#cred-name', shadowRoot, result.credential.name)
+    showText('#issuer-name', shadowRoot, result.issuer.message)
+  
+   // show the results, step by step
+    showElement("#result-container", shadowRoot)
     await showStepResultFor(shadowRoot, '#sigCheck', result.signature)
     await showStepResultFor(shadowRoot, '#expiryCheck', result.expiry)
     await showStepResultFor(shadowRoot, '#statusCheck', result.status)
