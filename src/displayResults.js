@@ -1,18 +1,4 @@
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-const showElement = (selector, ancestor,displayType='block') => {
-    ancestor.querySelector(selector).style.display = displayType
-}
-
-const hideElement = (selector, ancestor) => {
-    ancestor.querySelector(selector).style.display = 'none'
-}
-
-const showText = (selector, ancestor, text) => {
-    ancestor.querySelector(selector).textContent = text
-}
+import { sleep, showElement, hideElement, showText } from "./displayUtils.js";
 
 const showStepResultFor = async (shadowRoot, stepId, result) => {
     const stepElement = shadowRoot.querySelector(stepId)
@@ -26,10 +12,10 @@ const showStepResultFor = async (shadowRoot, stepId, result) => {
         showElement('.cross', stepElement) 
         circle.style.borderColor = '#d00'
     } 
-    stepElement.querySelector('.message').textContent = result.message
+    showText('.message', stepElement, result.message)
 }
 const displayResults = async (result, shadowRoot) => {
-    hideElement("#input-container", shadowRoot)
+    hideElement("#verify-spinner", shadowRoot)
     // stop everything if either the signature is bad or the 
     // issuer is unknown, and show an error
      if (! (result.signature.valid && result.issuer.valid) ) {

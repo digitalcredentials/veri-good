@@ -4,12 +4,15 @@ import displayResults from './displayResults.js'
 import styles from './styles.js'
 import render from './render.js'
 import resolveVC from './resolveVC.js'
+import showVerifyingSpinner from './showVerifyingSpinner.js'
 
 const DEFAULT_REGISTRY_LIST = 'https://digitalcredentials.github.io/dcc-known-registries/known-did-registries.json'
 
 const verifyCredential = async (shadowRoot, credential, knownDIDRegistries) => {
+    showVerifyingSpinner(shadowRoot);
     const vc = await resolveVC(credential);
     const result = await verify(vc, knownDIDRegistries)
+    
     displayResults(result, shadowRoot)
 }
 

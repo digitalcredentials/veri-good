@@ -11,9 +11,8 @@ const componentStyles = `
     color: black;
     background: var(--color, var(--default-color));
     border-radius: var(--radius, var(--default-radius));
-    min-width: 400px;
-    max-width: 800px;
-    max-height: 380px;
+    width: 400px;
+    height: 340px;
     text-align: center;
     box-shadow: 0 0 var(--depth, var(--default-depth)) rgba(0,0,0,.5);
   }
@@ -84,7 +83,7 @@ const componentStyles = `
         
     }
 
-#result-container, #error-container, #details-container {
+#result-container, #error-container, #details-container, #verify-spinner {
   display: none;
 }
 
@@ -98,6 +97,13 @@ const componentStyles = `
     box-shadow: 0 0 var(--depth, var(--default-depth)) rgba(0,0,0,.5);
   }
 
+#verify-spinner {
+    flex-direction: column;
+    align-items: center; 
+    justify-content: center;
+    height: 200px;
+}
+
 #input-container {
     display: flex; 
     flex-direction: column;
@@ -106,7 +112,7 @@ const componentStyles = `
 
    #details-container {
       font: 700 14px 'Varela Round', sans-serif;
-      margin: 15px 0 30px 0;
+      margin: 25px 0 40px 0;
       flex-direction: column;
       justify-content: center;
    }
@@ -140,15 +146,20 @@ const verifyingStyles = `
   width: 1.5em;
   height: 1.5em;
 }
-.btn-success {
-  background: #08c42e;
-  border: none;
-  color: #fff;
-  font-size: 16px;
-  padding: 10px 15px;
-  border-radius: 5px;
-	cursor: pointer;
+
+.big-circle-loader {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-left-color: #5cb85c;
+  animation: loader-spin 1.2s infinite linear;
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  border-radius: 50%;
+  width: 5em;
+  height: 5em;
+  margin: 1em;
 }
+
 .load-complete {
   -webkit-animation: none;
   animation: none;

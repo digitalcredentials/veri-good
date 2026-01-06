@@ -26,6 +26,11 @@ const render = x => `
         <button class="btn" id="verifyBtn"><div class="check"></div>Verify</button>
     </div>
   
+     <div id="verify-spinner">
+                <div class="big-circle-loader"></div>
+                <div>Verifying your credential...</div>    
+    </div>
+
     <div id="error-container">
         <div>
             Something went wrong. Please try again. Be sure that you are pasting in a valid Verifiable Credential or a link to
@@ -58,13 +63,6 @@ const render = x => `
                 </div>
                 <div class="message" >Checking revocation status...</div>
             </div>
-            <div id="issuerCheck" class="resultLine"  >
-                <div class="circle-loader">
-                    <div class="checkmark draw"></div>
-                    <div class="cross"></div>
-                </div>
-                <div class="message" >Verifying issuer...</div>
-            </div>    
         </div>
     </div>
  
