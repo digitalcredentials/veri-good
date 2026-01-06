@@ -46,7 +46,7 @@ const displayResults = async (result, shadowRoot) => {
     showText('#cred-name', shadowRoot, result.credential.name)
     showText('#issuer-name', shadowRoot, result.issuer.message)
   
-   // show the results, step by step
+   // now show the results, step by step
     showElement("#result-container", shadowRoot)
     await showStepResultFor(shadowRoot, '#sigCheck', result.signature)
     await showStepResultFor(shadowRoot, '#expiryCheck', result.expiry)

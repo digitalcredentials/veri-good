@@ -11,31 +11,23 @@ const componentStyles = `
     color: black;
     background: var(--color, var(--default-color));
     border-radius: var(--radius, var(--default-radius));
-    min-width: 325px;
+    min-width: 400px;
     max-width: 800px;
+    max-height: 400px;
     text-align: center;
     box-shadow: 0 0 var(--depth, var(--default-depth)) rgba(0,0,0,.5);
   }
 
   .header {
-    margin-top: 50px;
+    margin-top: 1.5em;
     position: relative;
   }
 
-  h3 {
+  .title {
     font-weight: bold;
     font-family: sans-serif;
     font-size: 16px;
-    margin: 0;
-    padding: 0;
     color: #002147;
-  }
-
-  h4 {
-    font-family: sans-serif;
-    font-size: 15px;
-    margin: 0;
-    padding: 0;
   }
 
   .cred-label {
@@ -46,10 +38,6 @@ const componentStyles = `
     text-decoration: italic;
   }
 
-  .body {
-    padding: 32px 8px;
-  }
-
   .footer {
     height: 16px;
     background: var(--color, var(--default-color));
@@ -57,23 +45,11 @@ const componentStyles = `
     margin: 0 0 15px;
   }
 
-
-#input-container {
-    display: flex; 
-    flex-direction: column;
-    align-items: center; 
-}
-
-#result-container, #error-container {
-  display: none;
-  }
-
-
   .vc-area {
     height: 150px;
     width: 200px;
     padding: 10px;
-    margin: 30px;
+    margin: 20px;
     background: #e3e8df;
     border-radius: var(--radius, var(--default-radius));
     box-shadow: 0 0 var(--depth, var(--default-depth)) rgba(0,0,0,.5);
@@ -83,11 +59,9 @@ const componentStyles = `
   background-color: #002147; /* Blue background */
   border: none;
   color: #78b13f; /* green text/icon color */
-  margin: 18px;
   padding: 8px 20px; /* Some padding */
   font-weight: 600;
   font-size:15px;
- 
   cursor: pointer; /* Add a mouse pointer on hover */
   border-radius: 8px; /* Rounded corners */
   display: flex; /* Use flexbox to align icon and text */
@@ -114,14 +88,31 @@ const componentStyles = `
         display: none;
         flex-direction: row;
         justify-content: left;
-        padding-left: 2em;
-        padding-bottom: .5em;
+        padding: 0 4em .5em 4em;
+        
     }
+
+#result-container, #error-container, #details-container {
+  display: none;
+}
+
+#input-container {
+    display: flex; 
+    flex-direction: column;
+    align-items: center; 
+}
+
+
 
    #details-container {
       font: 700 14px 'Varela Round', sans-serif;
-      display: none;
-      padding: 1em;
+      padding: 1.5em;
+      flex-direction: column;
+      justify-content: center;
+   }
+
+   #result-container {
+      padding: 1.5em;
       flex-direction: column;
       justify-content: center;
    }
@@ -129,7 +120,7 @@ const componentStyles = `
 #result-list {
   height: 10vh;
   padding-top:1em;
-  font: 400 16px 'Varela Round', sans-serif;
+  font: 400 14px 'Varela Round', sans-serif;
   display: flex;
   flex-direction: column;
   justify-content: center;

@@ -6,8 +6,8 @@ const notRevoked = "https://digitalcredentials.github.io/vc-test-fixtures/verifi
 const render = x => `
   <div part="header" class="header">
     <slot></slot>
-    <h3 part="greeting">Digital Credentials Consortium</h3>
-    <h4 part="message">Verifier</h4>
+    <div class="title">Digital Credentials Consortium</div>
+    <div class="title">Verification</div>
   </div>
 
    <div id="details-container">
@@ -18,7 +18,6 @@ const render = x => `
         <div id="issuer-name"></div> 
     </div>
 
-  <div part="body" class="body">
 
     <div id="input-container">
         <div>
@@ -27,8 +26,6 @@ const render = x => `
         <button class="btn" id="verifyBtn"><div class="check"></div>Verify</button>
     </div>
   
-    
-
     <div id="error-container">
         <div>
             Something went wrong. Please try again. Be sure that you are pasting in a valid Verifiable Credential or a link to
@@ -71,7 +68,7 @@ const render = x => `
         </div>
     </div>
  
-</div>
+
   
   <div part="footer" class="footer"></div>
 `;
