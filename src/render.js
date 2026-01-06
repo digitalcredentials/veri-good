@@ -11,13 +11,15 @@ const render = x => `
   </div>
 
    <div id="detailsCont" class="details-cont">
-        <div id="cred-name"></div>
         <div id="holder-name"></div>
+        <div id="was-awarded" class="cred-label">was awarded</div>
+        <div id="cred-name"></div>
+        <div id="awarded-by" class="cred-label">by</div>
         <div id="issuer-name"></div> 
     </div>
 
   <div part="body" class="body">
-  
+
     <div id="inputCont">
         <div>
             <textarea id="vc-paste" class="vc-area" placeholder="Paste your credential, or a url pointing to it.">${expired}</textarea>

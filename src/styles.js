@@ -18,7 +18,7 @@ const componentStyles = `
   }
 
   .header {
-    margin: 25px 0;
+    margin-top: 50px;
     position: relative;
   }
 
@@ -28,6 +28,7 @@ const componentStyles = `
     font-size: 16px;
     margin: 0;
     padding: 0;
+    color: #002147;
   }
 
   h4 {
@@ -53,15 +54,20 @@ const componentStyles = `
 }
 
 #inputCont {
-     display: flex; 
+    display: flex; 
     flex-direction: column;
     align-items: center; 
 }
+
+.cred-label {
+  display: none;
+  }
 
   .vc-area {
     height: 150px;
     width: 200px;
     padding: 10px;
+    margin: 30px;
     background: #e3e8df;
     border-radius: var(--radius, var(--default-radius));
     box-shadow: 0 0 var(--depth, var(--default-depth)) rgba(0,0,0,.5);
