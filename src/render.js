@@ -28,7 +28,7 @@ const render = x => `
   
      <div id="verify-spinner">
                 <div class="big-circle-loader"></div>
-                <div>Verifying your credential...</div>    
+                <div>Preparing to verify your credential...</div>    
     </div>
 
     <div id="error-container">
