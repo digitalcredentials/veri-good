@@ -1,8 +1,9 @@
+import {VERIFYING_SIG_MSG, VERIFYING_EXP_MSG, VERIFYING_REV_MSG} from './constants.js'
+
 const expired = "https://digitalcredentials.github.io/vc-test-fixtures/verifiableCredentials/v1/bothSignatureTypes/didKey/oidf-noStatus-expired.json"
 const expiredAndRevoked = "https://digitalcredentials.github.io/vc-test-fixtures/verifiableCredentials/v1/bothSignatureTypes/didKey/oidf-revokedStatus-expired.json"
 const revoked = "https://digitalcredentials.github.io/vc-test-fixtures/verifiableCredentials/v1/bothSignatureTypes/didWeb/legacy-revokedStaus-noExpiry.json"
 const notRevoked = "https://digitalcredentials.github.io/vc-test-fixtures/verifiableCredentials/v1/ed25519/didWeb/legacy-validStatus-noExpiry.json"
-
 const render = x => `
   <div class="header">
     <slot></slot>
@@ -10,16 +11,16 @@ const render = x => `
     <div class="title">Verification</div>
   </div>
 
-   <div id="details-container">
-        <div id="holder-name"></div>
+   <div id="details-container" class="hide-on-reset">
+        <div id="holder-name" class="to-clear"></div>
         <div id="was-awarded" class="cred-label" >was awarded</div>
-        <div id="cred-name"></div>
+        <div id="cred-name" class="to-clear"></div>
         <div id="awarded-by" class="cred-label" >by</div>
-        <div id="issuer-name"></div> 
+        <div id="issuer-name" class="to-clear"></div> 
     </div>
 
 
-    <div id="input-container">
+    <div id="input-container" class="show-on-reset">
         <div>
             <textarea id="vc-paste" class="vc-area" placeholder="Paste your credential, or a url pointing to it.">${expired}</textarea>
         </div>
@@ -34,36 +35,36 @@ const render = x => `
                 <div id="spinner-message">Preparing to verify your credential...</div>    
     </div>
 
-    <div id="error-container">
+    <div id="error-container" class="hide-on-reset">
         <div class='error-lines'>Something went wrong - please try again. </div>
         <div class='error-lines'>Be sure that you are pasting in a valid Verifiable Credential or a link to
             a valid Verifiable Credential.</div>
         </div>
-        <div id="error-message"></div>
+        <div id="error-message" class="to-clear hide-on-reset"></div>
     </div>
 
-    <div id="result-container">
+    <div id="result-container" class="hide-on-reset hide-on-reset">
         <div id="result-list">
             <div id="sigCheck" class="resultLine">
                 <div class="circle-loader">
                     <div class="checkmark draw"></div>
                     <div class="cross"></div>
                 </div>
-                <div class="message" >Verifying signature...</div>
+                <div id="sig-message" class="message" >${VERIFYING_SIG_MSG}</div>
             </div>
-            <div id="expiryCheck" class="resultLine" >
+            <div id="expiryCheck" class="resultLine hide-on-reset" >
                 <div class="circle-loader"  >
                     <div class="checkmark draw" ></div>
                     <div class="cross"></div>
                 </div>
-                <div class="message" >Checking expiration...</div>
+                <div id="exp-message" class="message" >${VERIFYING_EXP_MSG}</div>
             </div>
-            <div id="statusCheck" class="resultLine" >
+            <div id="statusCheck" class="resultLine hide-on-reset" >
                 <div class="circle-loader" >
                     <div class="checkmark draw"></div>
                     <div class="cross"></div>
                 </div>
-                <div class="message" >Checking revocation status...</div>
+                <div id="rev-message" class="message" >${VERIFYING_REV_MSG}</div>
             </div>
         </div>
     </div>
@@ -73,8 +74,8 @@ const render = x => `
 
   
   <div id="button-container">
-    <button class="btn" id="verifyBtn"><div class="check"></div>Verify</button>
-    <button class="btn" id="verifyAnotherBtn"><div class="check"></div>Verify Another</button>
+    <button class="btn show-on-reset" id="verifyBtn"><div class="check"></div>Verify</button>
+    <button class="btn hide-on-reset" id="verifyAnotherBtn"><div class="check"></div>Verify Another</button>
   </div>
 `;
 

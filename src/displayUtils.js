@@ -1,3 +1,4 @@
+import {VERIFYING_SIG_MSG, VERIFYING_EXP_MSG, VERIFYING_REV_MSG} from './constants.js'
 let shadowRoot;
 
 export const setShadowRoot = (element) => {
@@ -34,11 +35,19 @@ export const displayError = (message) => {
 }
 
 export const reset = () => {
-    ['#error-container', '#error-message', "#verifyAnotherBtn", "#result-container", '#details-container'].forEach(element=>
-        hideElement(element)
+ 
+     shadowRoot.querySelectorAll('.show-on-reset').forEach(element=>
+        element.style.display = 'flex'
     );
+     shadowRoot.querySelectorAll('.hide-on-reset').forEach(element=>
+        element.style.display = 'none'
+    );
+    shadowRoot.querySelectorAll('.toClear').forEach(element=>
+        element.textContent = ''
+    );
+    showText('#sig-message', VERIFYING_SIG_MSG)
+    showText('#rev-message', VERIFYING_REV_MSG)
+    showText('#exp-message', VERIFYING_EXP_MSG)
     getElement('#vc-paste').value = '';
-    ['#input-container', "#verifyBtn"].forEach(element=>
-        showElement(element, 'flex')
-    )
+
 }

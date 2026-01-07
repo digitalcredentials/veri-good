@@ -3,7 +3,7 @@ import { sleep, showElement, hideElement, getElement, showText, displayError } f
 const showStepResultFor = async (stepId, result) => {
     const stepElement = getElement(stepId)
     stepElement.style.display = 'flex'; 
-    await sleep(1500);
+    await sleep(200);
     const circle = getElement('.circle-loader', stepElement)
     circle.classList.toggle('load-complete');
     if (result.valid) {
