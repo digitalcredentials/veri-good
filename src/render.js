@@ -35,9 +35,9 @@ const render = x => `
     </div>
 
     <div id="error-container">
-        <div>
-            Something went wrong. Please try again. Be sure that you are pasting in a valid Verifiable Credential or a link to
-            a valid Verifiable Credential.
+        <div class='error-lines'>Something went wrong - please try again. </div>
+        <div class='error-lines'>Be sure that you are pasting in a valid Verifiable Credential or a link to
+            a valid Verifiable Credential.</div>
         </div>
         <div id="error-message"></div>
     </div>

@@ -1,5 +1,6 @@
 
 import processCredential from './processCredential.js'
+import {reset} from './displayUtils.js'
 
 const listeners = []
 
@@ -100,10 +101,7 @@ const initializeVerifyBtn = (shadowRoot, registryList) => {
 const initializeVerifyAnotherBtn = (shadowRoot) => {
     const eventName = 'click'
     const element = shadowRoot.querySelector("#verifyAnotherBtn")
-    const handler = () => {
-      // need to reset here
-      //set display to none for whatever should be hidden, but also need to clear out any prior result
-    }
+    const handler = () => { reset() }
     element.addEventListener(eventName, handler);
     listeners.push({element, handler, eventName});
 }

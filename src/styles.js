@@ -120,7 +120,7 @@ const componentStyles = `
     
 }
 
-#result-container, #error-container, #details-container, #verify-spinner, #verifyAnotherBtn {
+#result-container, #error-container, #details-container, #verify-spinner, #verifyAnotherBtn, #error-message {
   display: none;
 }
 
@@ -160,6 +160,19 @@ const componentStyles = `
       flex-direction: column;
       justify-content: center;
    }
+
+   #error-container {
+    margin:3em;
+  }
+
+  .error-lines {
+    padding-bottom: .5em;}
+
+     #error-message {
+      margin:1em;
+      padding: 1em;
+      background: #e3e8df;
+    }
 
     #button-container {
       display: flex; 

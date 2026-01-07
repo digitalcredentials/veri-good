@@ -17,7 +17,9 @@ export const hideElement = (selector, ancestor=shadowRoot) => {
 }
 
 export const showText = (selector, text, ancestor=shadowRoot) => {
-    getElement(selector, ancestor).textContent = text
+    const element = getElement(selector, ancestor)
+    element.style.display = 'block'
+    element.textContent = text
 }
 
 export const getElement = (selector, ancestor=shadowRoot) => {
@@ -29,4 +31,14 @@ export const displayError = (message) => {
     showElement("#error-container")
     showText('#error-message', message)
     showElement("#verifyAnotherBtn", 'flex')
+}
+
+export const reset = () => {
+    ['#error-container', '#error-message', "#verifyAnotherBtn", "#result-container", '#details-container'].forEach(element=>
+        hideElement(element)
+    );
+    getElement('#vc-paste').value = '';
+    ['#input-container', "#verifyBtn"].forEach(element=>
+        showElement(element, 'flex')
+    )
 }

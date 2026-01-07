@@ -2,7 +2,7 @@ import verify from './verify.js'
 import displayStepResults from './displayStepResults.js'
 import resolveVC from './resolveVC.js'
 import {showVerifyingSpinner, hideVerifyingSpinner, setSpinnerMessage} from './verifyingSpinner.js'
-import { sleep } from './displayUtils.js'
+import { sleep, displayError } from './displayUtils.js'
 
 const processCredential = async (credential, knownDIDRegistries) => {
 
