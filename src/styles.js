@@ -45,6 +45,8 @@ const dialogStyles = `
   position: relative;
 }
 
+dialog:focus {outline:none;}
+
 dialog {
   
   background: grey;
