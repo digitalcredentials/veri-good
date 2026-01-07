@@ -37,7 +37,7 @@ class VeriGood extends HTMLElement {
     }
     this.shadowRoot.innerHTML = render();
     setShadowRoot(this.shadowRoot);
-    initializeListeners(this);
+    initializeListeners(this.shadowRoot, this.registryList);
   }
 
   disconnectedCallback() {

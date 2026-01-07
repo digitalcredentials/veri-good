@@ -1,7 +1,7 @@
 
 import processCredential from './processCredential.js'
 
-const listeners = {}
+const listeners = []
 
 const initializeDragNDrop = (shadowRoot) => {
   const dropArea = shadowRoot.getElementById("drop-zone");
@@ -10,6 +10,8 @@ const initializeDragNDrop = (shadowRoot) => {
   ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
     dropArea.addEventListener(eventName, preventDefaults, false);
     shadowRoot.addEventListener(eventName, preventDefaults, false); 
+    listeners.push({element: dropArea, handler: preventDefaults, eventName})
+    listeners.push({element: shadowRoot, handler: preventDefaults, eventName})
   });
 
   function preventDefaults(e) {
@@ -17,37 +19,52 @@ const initializeDragNDrop = (shadowRoot) => {
     e.stopPropagation();
   }
 
+  function addDropZoneOverClass() {
+    dropArea.classList.add("drop-zone--over")
+  }
+
   ["dragenter", "dragover"].forEach((eventName) => {
     dropArea.addEventListener(
       eventName,
-      () => dropArea.classList.add("drop-zone--over"),
+      addDropZoneOverClass,
       false
     );
+    listeners.push({element: dropArea, handler: addDropZoneOverClass, eventName})
   });
+
+  function removeDropZoneOverClass() {
+    dropArea.classList.remove("drop-zone--over")
+  }
 
   ["dragleave", "drop"].forEach((eventName) => {
     dropArea.addEventListener(
       eventName,
-      () => dropArea.classList.remove("drop-zone--over"),
+      removeDropZoneOverClass,
       false
     );
+    listeners.push({element: dropArea, handler: removeDropZoneOverClass, eventName})
   });
 
-  dropArea.addEventListener("drop", handleDrop, false);
-
-  function handleDrop(e) {
+  function handleDrop() {
     const dt = e.dataTransfer;
     const files = dt.files; 
     handleFiles(files);
   }
+  dropArea.addEventListener("drop", handleDrop, false);
+  listeners.push({element: dropArea, handler: handleDrop, eventName: "drop"})
 
-  dropArea.addEventListener("click", () => {
+
+  function handleDropAreaClick() {
     fileInput.click();
-  });
+  };
+  dropArea.addEventListener("click", handleDropAreaClick)
+  listeners.push({element: dropArea, handler: handleDropAreaClick, eventName: "click"})
 
-  fileInput.addEventListener("change", (e) => {
+  function handleFileInputChange(e) {
     handleFiles(e.target.files);
-  });
+  }
+  fileInput.addEventListener("change", handleFileInputChange);
+  listeners.push({element: fileInput, handler: handleFileInputChange, eventName: "change"})
 
   function handleFiles(files) {
     // TODO show error message if more than one file
@@ -69,20 +86,37 @@ const initializeDragNDrop = (shadowRoot) => {
   }
 };
 
-const initializeVerifyBtn = (component) => {
-    component.verifyBtn = component.shadowRoot.querySelector("#verifyBtn");
-    component.verifyBtn.addEventListener("click", () => {
-        const pastedContent = component.shadowRoot.querySelector("#vc-paste").value
-        processCredential(pastedContent, component.registryList);
-    });  
+const initializeVerifyBtn = (shadowRoot, registryList) => {
+    const eventName = 'click'
+    const element = shadowRoot.querySelector("#verifyBtn")
+    const handler = () => {
+        const pastedContent = shadowRoot.querySelector("#vc-paste").value
+        processCredential(pastedContent, registryList);
+    }
+    element.addEventListener(eventName, handler);
+    listeners.push({element, handler, eventName});
 }
 
-export const initializeListeners = (component) => {
-    initializeVerifyBtn(component)
-    initializeDragNDrop(component.shadowRoot)
+const initializeVerifyAnotherBtn = (shadowRoot) => {
+    const eventName = 'click'
+    const element = shadowRoot.querySelector("#verifyAnotherBtn")
+    const handler = () => {
+      // need to reset here
+      //set display to none for whatever should be hidden, but also need to clear out any prior result
+    }
+    element.addEventListener(eventName, handler);
+    listeners.push({element, handler, eventName});
+}
+
+export const initializeListeners = (shadowRoot, registryList) => {
+    initializeVerifyAnotherBtn(shadowRoot)
+    initializeVerifyBtn(shadowRoot, registryList)
+    initializeDragNDrop(shadowRoot)
 }
 
 export const removeListeners = () => {
-  listeners.verifyBtn.removeEventListener('click', this.handleClick);
-  // TODO add other listeners
+  listeners.forEach(listener=>
+    listener.element.removeEventListener(listener.type, listener.handler)
+  )
+  listeners = null;
 }

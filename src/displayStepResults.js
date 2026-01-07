@@ -38,6 +38,8 @@ const displayStepResults = async (result) => {
     await showStepResultFor('#expiryCheck', result.expiry)
     await showStepResultFor('#statusCheck', result.status)
     
+    // and now show the 'Verify Another' button
+    showElement("#verifyAnotherBtn", 'flex')
 }
 
 export default displayStepResults

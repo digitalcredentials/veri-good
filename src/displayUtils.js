@@ -28,4 +28,5 @@ export const displayError = (message) => {
     hideElement("#verify-spinner")
     showElement("#error-container")
     showText('#error-message', message)
+    showElement("#verifyAnotherBtn", 'flex')
 }

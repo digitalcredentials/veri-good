@@ -2,6 +2,7 @@ import { showElement, hideElement, showText } from "./displayUtils.js";
 
 export const showVerifyingSpinner = async () => {
     hideElement("#input-container")
+    hideElement("#verifyBtn")
     showElement("#verify-spinner", 'flex')
 }
 

@@ -27,7 +27,6 @@ const render = x => `
             <span class="drop-zone__prompt">Drag file here or click to upload</span>
             <input type="file" name="myFile" class="drop-zone__input">
         </div>
-        <button class="btn" id="verifyBtn"><div class="check"></div>Verify</button>
     </div>
   
      <div id="verify-spinner">
@@ -41,7 +40,6 @@ const render = x => `
             a valid Verifiable Credential.
         </div>
         <div id="error-message"></div>
-        <button id="retryBtn">Retry</button>
     </div>
 
     <div id="result-container">
@@ -69,10 +67,15 @@ const render = x => `
             </div>
         </div>
     </div>
+
+    
  
 
   
-  <div part="footer" class="footer"></div>
+  <div id="button-container">
+    <button class="btn" id="verifyBtn"><div class="check"></div>Verify</button>
+    <button class="btn" id="verifyAnotherBtn"><div class="check"></div>Verify Another</button>
+  </div>
 `;
 
 export default render
