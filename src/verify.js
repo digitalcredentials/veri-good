@@ -5,7 +5,6 @@ import * as vc from '@digitalbazaar/vc';
 import { securityLoader } from '@digitalcredentials/security-document-loader';
 import checkStatusDirectly from './checkStatusDirectly.js';
 import lookupIssuer from './lookupIssuer.js';
-import resolveVC from './resolveVC.js'
 const documentLoader = securityLoader({ fetchRemoteContexts: true }).build();
 const eddsaSuite = new DataIntegrityProof({ cryptosuite: eddsaRdfc2022CryptoSuite });
 const ed25519Suite = new Ed25519Signature2020();

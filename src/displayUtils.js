@@ -1,11 +1,15 @@
 import {VERIFYING_SIG_MSG, VERIFYING_EXP_MSG, VERIFYING_REV_MSG} from './constants.js'
-let shadowRoot;
 
-export const setShadowRoot = (element) => {
-    shadowRoot = element;
+let shadowRoot;
+let hostElement;
+
+export const setHostElement = (element) => {
+    hostElement = element;
+    // also set the shadowRoot for convenience
+    shadowRoot = element.shadowRoot
 }
 
-export const sleep = (ms) => {
+export const sleep = (ms=100) => {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
@@ -21,6 +25,17 @@ export const showText = (selector, text, ancestor=shadowRoot) => {
     const element = getElement(selector, ancestor)
     element.style.display = 'block'
     element.textContent = text
+}
+
+export const showDialog = (id) => {
+    const dialog = getElement(id);
+    dialog.style.left = `${hostElement.offsetLeft + 40}px`;
+    dialog.style.top = `${hostElement.offsetTop + 40}px`;
+    dialog.showModal()
+}
+
+export const closeDialog = (id) => {
+    getElement(id).close()
 }
 
 export const getElement = (selector, ancestor=shadowRoot) => {
@@ -51,3 +66,4 @@ export const reset = () => {
     getElement('#vc-paste').value = '';
 
 }
+

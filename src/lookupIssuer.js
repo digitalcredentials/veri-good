@@ -6,6 +6,7 @@ const lookupIssuer = async (issuer, knownDIDRegistries) => {
   const issuerDid = typeof issuer === "string" ? issuer : issuer.id;
   const response = await fetch(knownDIDRegistries);
   const registries = await response.json();
+  
   await registryClient.use({ registries });
   const { matchingIssuers, uncheckedRegistries } =
     await registryClient.lookupIssuersFor(issuerDid);

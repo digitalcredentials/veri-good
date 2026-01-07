@@ -3,7 +3,7 @@ import { sleep, showElement, hideElement, getElement, showText, displayError } f
 const showStepResultFor = async (stepId, result) => {
     const stepElement = getElement(stepId)
     stepElement.style.display = 'flex'; 
-    await sleep(200);
+    await sleep();
     const circle = getElement('.circle-loader', stepElement)
     circle.classList.toggle('load-complete');
     if (result.valid) {
@@ -38,7 +38,9 @@ const displayStepResults = async (result) => {
     await showStepResultFor('#expiryCheck', result.expiry)
     await showStepResultFor('#statusCheck', result.status)
     
-    // and now show the 'Verify Another' button
+    // and now show the 'Verify Another' button,
+    // after a short pause
+    await sleep(500)
     showElement("#verifyAnotherBtn", 'flex')
 }
 

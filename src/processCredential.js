@@ -10,7 +10,7 @@ const processCredential = async (credential, knownDIDRegistries) => {
 
     const [{vc,error}] = await Promise.all([
       resolveVC(credential),
-      sleep(1500)
+      sleep()
     ]);
 
     if (error) {
@@ -22,7 +22,7 @@ const processCredential = async (credential, knownDIDRegistries) => {
 
      const [verificationResult] = await Promise.all([
       verify(vc, knownDIDRegistries),
-      sleep(1500)
+      sleep()
     ]);
 
     hideVerifyingSpinner()

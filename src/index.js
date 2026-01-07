@@ -2,7 +2,7 @@
 
 import styles from './styles.js'
 import render from './render.js'
-import { setShadowRoot} from './displayUtils.js'
+import { setHostElement } from './displayUtils.js'
 import {initializeListeners, removeListeners} from './listeners.js'
 
 const DEFAULT_REGISTRY_LIST = 'https://digitalcredentials.github.io/dcc-known-registries/known-did-registries.json'
@@ -36,7 +36,7 @@ class VeriGood extends HTMLElement {
       this.registryList = DEFAULT_REGISTRY_LIST;
     }
     this.shadowRoot.innerHTML = render();
-    setShadowRoot(this.shadowRoot);
+    setHostElement(this);
     initializeListeners(this.shadowRoot, this.registryList);
   }
 

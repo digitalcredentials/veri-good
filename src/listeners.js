@@ -1,12 +1,12 @@
 
 import processCredential from './processCredential.js'
-import {reset} from './displayUtils.js'
+import {reset, showDialog, getElement} from './displayUtils.js'
 
 const listeners = []
 
 const initializeDragNDrop = (shadowRoot) => {
-  const dropArea = shadowRoot.getElementById("drop-zone");
-  const fileInput = dropArea.querySelector(".drop-zone__input");
+  const dropArea = getElement("#drop-zone");
+  const fileInput = getElement(".drop-zone__input", dropArea);
 
   ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
     dropArea.addEventListener(eventName, preventDefaults, false);
@@ -78,8 +78,8 @@ const initializeDragNDrop = (shadowRoot) => {
       const reader = new FileReader();
       reader.readAsText(file);
       reader.onloadend = function () {
-       shadowRoot.querySelector("#vc-paste").value = reader.result; 
-       shadowRoot.querySelector('#verifyBtn').click()
+       getElement("#vc-paste").value = reader.result; 
+       getElement('#verifyBtn').click()
       };
     } else {
       // TODO: show error about this having to be json.
@@ -87,28 +87,61 @@ const initializeDragNDrop = (shadowRoot) => {
   }
 };
 
-const initializeVerifyBtn = (shadowRoot, registryList) => {
+const initializeVerifyBtn = (registryList) => {
     const eventName = 'click'
-    const element = shadowRoot.querySelector("#verifyBtn")
+    const element = getElement("#verifyBtn")
     const handler = () => {
-        const pastedContent = shadowRoot.querySelector("#vc-paste").value
+        const pastedContent = getElement("#vc-paste").value
         processCredential(pastedContent, registryList);
     }
     element.addEventListener(eventName, handler);
     listeners.push({element, handler, eventName});
 }
 
-const initializeVerifyAnotherBtn = (shadowRoot) => {
+const initializeVerifyAnotherBtn = () => {
     const eventName = 'click'
-    const element = shadowRoot.querySelector("#verifyAnotherBtn")
-    const handler = () => { reset() }
+    const element = getElement("#verifyAnotherBtn")
+    const handler = () => { 
+        reset() 
+    }
     element.addEventListener(eventName, handler);
     listeners.push({element, handler, eventName});
 }
 
+const initializeMoreLink = () => {
+    const eventName = 'click'
+    const element = getElement("#more-link")
+    const handler = () => {
+      showDialog('#more-dialog', '#details-container')
+     }
+    element.addEventListener(eventName, handler);
+    listeners.push({element, handler, eventName});
+}
+
+const initializeMoreDialogClose = () => {
+  const eventName = 'click'
+  const element = getElement("#more-dialog")
+  const handler = () => element.close()
+  /* const handler = e => {
+    const dialogDimensions = element.getBoundingClientRect()
+    if (
+      e.clientX < dialogDimensions.left ||
+      e.clientX > dialogDimensions.right ||
+      e.clientY < dialogDimensions.top ||
+      e.clientY > dialogDimensions.bottom
+    ) {
+      element.close()
+    }
+  } */
+  element.addEventListener(eventName, handler);
+  listeners.push({element, handler, eventName});
+}
+
 export const initializeListeners = (shadowRoot, registryList) => {
+    initializeMoreLink()
+    initializeMoreDialogClose()
     initializeVerifyAnotherBtn(shadowRoot)
-    initializeVerifyBtn(shadowRoot, registryList)
+    initializeVerifyBtn(registryList)
     initializeDragNDrop(shadowRoot)
 }
 

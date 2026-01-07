@@ -31,7 +31,37 @@ const dragNDropStyles = `
   display: none; /* Hide the actual file input */
 }
 `
+const dialogStyles = `
 
+#more-link {
+    font-style: italic;
+    font-size: 12px;    
+    font-weight: 400;
+    padding-top:.5em;
+    text-decoration: underline;
+}
+
+#dialog-wrapper {
+  position: relative;
+}
+
+dialog {
+  
+  background: grey;
+  border: none;
+  border-radius: .5rem;
+  margin: 0;
+  position: absolute;
+  height: 340px;
+  width: 270px;
+  
+}
+  
+dialog::backdrop {
+  background-color: hsl(90, 5.56%, 78.82%, 0.5);
+}
+
+`
 
 const componentStyles = `
   :host {
@@ -67,7 +97,6 @@ const componentStyles = `
     font-size: 12px;
     font-weight: 400;
     padding:.2em;
-    text-decoration: italic;
   }
 
   .footer {
@@ -327,6 +356,6 @@ const crossStyles = `.cross {
   }
 }`;
 
-styles.replaceSync(componentStyles + verifyingStyles + crossStyles + dragNDropStyles);
+styles.replaceSync(componentStyles + verifyingStyles + crossStyles + dragNDropStyles + dialogStyles);
 
 export default styles;
