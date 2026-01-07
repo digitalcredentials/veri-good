@@ -4,7 +4,7 @@ const revoked = "https://digitalcredentials.github.io/vc-test-fixtures/verifiabl
 const notRevoked = "https://digitalcredentials.github.io/vc-test-fixtures/verifiableCredentials/v1/ed25519/didWeb/legacy-validStatus-noExpiry.json"
 
 const render = x => `
-  <div part="header" class="header">
+  <div class="header">
     <slot></slot>
     <div class="title">Digital Credentials Consortium</div>
     <div class="title">Verification</div>
@@ -22,6 +22,10 @@ const render = x => `
     <div id="input-container">
         <div>
             <textarea id="vc-paste" class="vc-area" placeholder="Paste your credential, or a url pointing to it.">${expired}</textarea>
+        </div>
+        <div class="drop-zone" id="drop-zone">
+            <span class="drop-zone__prompt">Drag file here or click to upload</span>
+            <input type="file" name="myFile" class="drop-zone__input">
         </div>
         <button class="btn" id="verifyBtn"><div class="check"></div>Verify</button>
     </div>

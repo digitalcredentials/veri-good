@@ -1,5 +1,38 @@
 const styles = new CSSStyleSheet();
 
+const dragNDropStyles = `
+.drop-zone {
+  height: 10px;
+  width: 200px;
+  margin: 0 0 25px;
+  padding: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  border: 2px dashed grey;
+  border-radius: 10px;
+  font-family: sans-serif;
+  transition: background-color 0.3s; 
+}
+
+.drop-zone:hover {
+  background-color: #f1f1f1;
+}
+
+/* Style applied when a file is being dragged over the zone */
+.drop-zone--over {
+  border-style: solid;
+  background-color: #e9e9e9;
+}
+
+.drop-zone__input {
+  display: none; /* Hide the actual file input */
+}
+`
+
+
 const componentStyles = `
   :host {
     --default-color: #c9ccc6;
@@ -11,8 +44,8 @@ const componentStyles = `
     color: black;
     background: var(--color, var(--default-color));
     border-radius: var(--radius, var(--default-radius));
-    width: 400px;
-    height: 340px;
+    width: 380px;
+    height: 450px;
     text-align: center;
     box-shadow: 0 0 var(--depth, var(--default-depth)) rgba(0,0,0,.5);
   }
@@ -90,6 +123,8 @@ const componentStyles = `
   .vc-area {
     height: 150px;
     width: 200px;
+    max-height: 180px;
+    max-width: 250px;
     padding: 10px;
     margin: 20px;
     background: #e3e8df;
@@ -268,6 +303,6 @@ const crossStyles = `.cross {
   }
 }`;
 
-styles.replaceSync(componentStyles + verifyingStyles + crossStyles);
+styles.replaceSync(componentStyles + verifyingStyles + crossStyles + dragNDropStyles);
 
 export default styles;

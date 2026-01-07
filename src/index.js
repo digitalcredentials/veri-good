@@ -3,7 +3,7 @@
 import styles from './styles.js'
 import render from './render.js'
 import { setShadowRoot} from './displayUtils.js'
-import processCredential from './processCredential.js'
+import {initializeListeners, removeListeners} from './listeners.js'
 
 const DEFAULT_REGISTRY_LIST = 'https://digitalcredentials.github.io/dcc-known-registries/known-did-registries.json'
 
@@ -36,19 +36,12 @@ class VeriGood extends HTMLElement {
       this.registryList = DEFAULT_REGISTRY_LIST;
     }
     this.shadowRoot.innerHTML = render();
-    
     setShadowRoot(this.shadowRoot);
-
-    this.verifyBtn = this.shadowRoot.querySelector("#verifyBtn");
-
-    this.verifyBtn.addEventListener("click", () => {
-        const pastedContent = this.shadowRoot.querySelector("#vc-paste").value
-        processCredential(pastedContent, this.registryList);
-    });   
+    initializeListeners(this);
   }
 
   disconnectedCallback() {
-    this.verifyBtn.removeEventListener('click', this.handleClick);
+    removeListeners()
   }
 
   //attributeChangedCallback(name, oldValue, newValue) {
