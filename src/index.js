@@ -1,9 +1,9 @@
-//import { sampleVC } from './testcred.js'
-
 import styles from './styles.js'
 import render from './render.js'
+import { getElement } from './displayUtils.js'
 import { setHostElement } from './displayUtils.js'
-import {initializeListeners, removeListeners} from './listeners.js'
+import { initializeListeners, removeListeners } from './listeners.js'
+import { fireExternalReadyEvent } from './events.js'
 
 const DEFAULT_REGISTRY_LIST = 'https://digitalcredentials.github.io/dcc-known-registries/known-did-registries.json'
 
@@ -42,6 +42,7 @@ class VeriGood extends HTMLElement {
     this.shadowRoot.innerHTML = render();
     setHostElement(this);
     initializeListeners(this.shadowRoot, this.registryList);
+    fireExternalReadyEvent(this);
   }
 
   disconnectedCallback() {
