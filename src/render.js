@@ -17,7 +17,7 @@ const render = x => `
         <div id="cred-name" class="to-clear"></div>
         <div id="awarded-by" class="cred-label" >by</div>
         <div id="issuer-name" class="to-clear"></div>
-        <div id="more-link">More details..</div>
+        <div id="more-link">More..</div>
         <dialog id="more-dialog">Show some stuff here like the criteria, validFrom</div>
     </div>
 

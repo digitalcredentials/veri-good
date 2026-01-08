@@ -39,6 +39,11 @@ const dialogStyles = `
     font-weight: 400;
     padding-top:.5em;
     text-decoration: underline;
+    cursor: pointer;
+}
+
+#more-link:hover {
+  color: #78b13f;
 }
 
 #dialog-wrapper {
@@ -129,7 +134,7 @@ const componentStyles = `
 }
 
 .check {
-   display: inline-block;
+  display: inline-block;
   transform: rotate(45deg);
   height: 12px;
   width: 6px;
@@ -148,7 +153,8 @@ const componentStyles = `
     flex-direction: row;
     justify-content: left;
     padding: 0 4em .5em 4em;
-    
+    font-weight: 600;
+    align-items: center;
 }
 
 #result-container, #error-container, #details-container, #verify-spinner, #verifyAnotherBtn, #error-message {
@@ -172,6 +178,10 @@ const componentStyles = `
     align-items: center; 
     justify-content: center;
     height: 200px;
+}
+
+#spinner-message {
+  font: 600 16px 'Varela Round', sans-serif;
 }
 
 #input-container {
