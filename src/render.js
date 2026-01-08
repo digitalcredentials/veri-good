@@ -7,8 +7,6 @@ const notRevoked = "https://digitalcredentials.github.io/vc-test-fixtures/verifi
 const render = x => `
   <div class="header">
     <slot></slot>
-    <div class="title">Digital Credentials Consortium</div>
-    <div class="title">Verification</div>
   </div>
 
    <div id="details-container" class="hide-on-reset">
