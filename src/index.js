@@ -7,7 +7,6 @@ import {initializeListeners, removeListeners} from './listeners.js'
 
 const DEFAULT_REGISTRY_LIST = 'https://digitalcredentials.github.io/dcc-known-registries/known-did-registries.json'
 
-
 class VeriGood extends HTMLElement {
 
   static get observedAttributes() {
@@ -21,6 +20,11 @@ class VeriGood extends HTMLElement {
       ...this.shadowRoot.adoptedStyleSheets,
       styles
     ];
+  }
+
+  verify(vc) { 
+    getElement("#vc-paste").value = vc; 
+    getElement('#verifyBtn').click()
   }
 
   get registryList() {
