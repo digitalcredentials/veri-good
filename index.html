@@ -13,5 +13,14 @@
       </veri-good>
     </div>
     <script type="module" src="./dist/bundle.js"></script>
+      <script>
+      const verifier = document.querySelector('veri-good')
+      verifier.addEventListener('veri-good-is-ready', (e) => {
+          const queryString = window.location.search;
+          const urlParams = new URLSearchParams(queryString);
+          const vc = urlParams.get('vc'); 
+          if (vc) {verifier.verify(vc)}      
+      });
+    </script>
   </body>
 </html>

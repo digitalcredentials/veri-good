@@ -139,13 +139,14 @@ const componentStyles = `
   }
 
   .error-lines {
-    padding-bottom: .5em;}
+    padding-bottom: .5em;
+  }
 
-     #error-message {
+  #error-message {
       margin:1em;
       padding: 1em;
       background: #e3e8df;
-    }
+  }
 
     #button-container {
       display: flex; 
@@ -207,6 +208,7 @@ const verifyingStyles = `
   animation-name: checkmark;
   transform: scaleX(-1) rotate(135deg);
 }
+  
 .checkmark:after {
   opacity: 1;
   height: .8em;
