@@ -65,5 +65,17 @@ export const reset = () => {
     showText('#exp-message', VERIFYING_EXP_MSG)
     getElement('#vc-paste').value = '';
 
+    shadowRoot.querySelectorAll('.circle-loader').forEach(element=>
+     {
+        element.classList.remove('load-complete', 'circle-loader');
+        element.classList.add('circle-loader');
+        hideElement('.checkmark', element);
+        hideElement('.cross', element);
+        //element.style.borderColor = 'make this original color'
+     }
+    );
+        
+    
+
 }
 
