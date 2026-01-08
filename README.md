@@ -4,6 +4,7 @@ A [Web Component](https://developer.mozilla.org/en-US/docs/Web/API/Web_component
 
 Web components are basically custom HTML tags and can be dropped into any HTML page, which you'd do like so for the veri-good element:
 
+```
 <!DOCTYPE html>
 <html>
   <head>
@@ -18,14 +19,19 @@ Web components are basically custom HTML tags and can be dropped into any HTML p
     <script type="module" src="=bundle.js"></script>
   </body>
 </html>
+```
 
  You'll therefore need to have saved that bundle.js (which is in the dist directory of this repository) to your server.
 
 ### Issuer Registry
 
- The registry-list is a list of registries against which to check the signing DID for each credential. For the moment it defaults to the above list, which you can also use an example of how to build your own.
+ The registry-list is a list of registries against which to check the signing DID for each credential. For the moment it defaults to the above list, i.e.,
+ 
+ ```https://digitalcredentials.github.io/dcc-known-registries/known-did-registries.json```
+ 
+You can look at that list as an example of how to build your own.
 
- You can also instead programmatically set a simple list of DIDs like so:
+You can instead programmatically set a simple list of DIDs like so:
 
   ```
  <body>
@@ -47,7 +53,7 @@ Web components are basically custom HTML tags and can be dropped into any HTML p
 </body>
  ```
 
-The issuerName name and url are displayed when verying a credential issued by that DID.
+The issuerName and url are displayed when verifying a credential issued by that DID.
 
 ### Programmatic Verification
 
@@ -55,13 +61,20 @@ You can programmatically set the VC to be verified by calling the 'verify' metho
  
  ```
  <body>
-    <veri-good id="someID" registry-list="https://digitalcredentials.github.io/dcc-known-registries/known-did-registries.json"></veri-good>
+    <veri-good registry-list="https://digitalcredentials.github.io/dcc-known-registries/known-did-registries.json"></veri-good>
     <script type="module" src="=bundle.js"></script>
-    <script>document.getElementById('someID').verify()</script>
+    <script>
+      const verifier = document.querySelector('veri-good')
+        verifier.addEventListener('veri-good-is-ready', (e) => {
+          verifier.verify("https://digitalcredentials.github.io/vc-test-fixtures/verifiableCredentials/v1/bothSignatureTypes/didKey/legacy-noStatus-noExpiry-basicOBv3.json")
+      });
+    </script>
 </body>
  ```
 
-You can of course also (and more likely) directly include that in your own javascript that you bundle up with webpack or the like. More on bundling below.
+Notice that we have to wait for the web component to finish intializing, and fire the 'veri-good-is-ready' event before we can call the 'verify' method on it.
+
+You can of course also (and more likely) directly use the call in your own javascript that you bundle up with webpack or the like. More on bundling below.
 
 You might use the 'verify' call for cases like:
 
@@ -86,7 +99,7 @@ and some boolean valued attributes, all of which default to false:
 You can replace the default header by including the html for your header as the content of the <veri-good> tag, like so:
 
 ```
-<veri-good id="someID" registry-list="registry.json">
+<veri-good registry-list="https://example.com/registry.json">
     <div style="margin:.2em">University of Wonderful</div>
     <div style="font-size:1.2em">Course Credential Verification</div>
 </veri-good>
