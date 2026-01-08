@@ -12,5 +12,11 @@
       </veri-good>
     </div>
     <script type="module" src="./bundle.js"></script>
+     <script>
+      const verifier = document.querySelector('veri-good')
+        verifier.addEventListener('veri-good-is-ready', (e) => {
+          verifier.verify("https://digitalcredentials.github.io/vc-test-fixtures/verifiableCredentials/v1/bothSignatureTypes/didKey/legacy-noStatus-noExpiry-basicOBv3.json")
+      });
+    </script>
   </body>
 </html>
