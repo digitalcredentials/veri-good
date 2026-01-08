@@ -1,74 +1,6 @@
 const styles = new CSSStyleSheet();
 
-const dragNDropStyles = `
-.drop-zone {
-  height: 10px;
-  width: 200px;
-  margin: 0 0 25px;
-  padding: 25px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  cursor: pointer;
-  border: 2px dashed grey;
-  border-radius: 10px;
-  font-family: sans-serif;
-  transition: background-color 0.3s; 
-}
 
-.drop-zone:hover {
-  background-color: #f1f1f1;
-}
-
-/* Style applied when a file is being dragged over the zone */
-.drop-zone--over {
-  border-style: solid;
-  background-color: #e9e9e9;
-}
-
-.drop-zone__input {
-  display: none; /* Hide the actual file input */
-}
-`
-const dialogStyles = `
-
-#more-link {
-    font-style: italic;
-    font-size: 12px;    
-    font-weight: 400;
-    padding-top:.5em;
-    text-decoration: underline;
-    cursor: pointer;
-}
-
-#more-link:hover {
-  color: #78b13f;
-}
-
-#dialog-wrapper {
-  position: relative;
-}
-
-dialog:focus {outline:none;}
-
-dialog {
-  
-  background: grey;
-  border: none;
-  border-radius: .5rem;
-  margin: 0;
-  position: absolute;
-  height: 340px;
-  width: 270px;
-  
-}
-  
-dialog::backdrop {
-  background-color: hsl(90, 5.56%, 78.82%, 0.5);
-}
-
-`
 
 const componentStyles = `
   :host {
@@ -367,6 +299,75 @@ const crossStyles = `.cross {
     height: 2px; /* Desired thickness of the lines */
   }
 }`;
+
+const dragNDropStyles = `
+.drop-zone {
+  height: 10px;
+  width: 200px;
+  margin: 0 0 25px;
+  padding: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  border: 2px dashed grey;
+  border-radius: 10px;
+  font-family: sans-serif;
+  transition: background-color 0.3s; 
+}
+
+.drop-zone:hover {
+  background-color: #f1f1f1;
+}
+
+/* Style applied when a file is being dragged over the zone */
+.drop-zone--over {
+  border-style: solid;
+  background-color: #e9e9e9;
+}
+
+.drop-zone__input {
+  display: none; /* Hide the actual file input */
+}
+`
+const dialogStyles = `
+
+#more-link {
+    font-style: italic;
+    font-size: 12px;    
+    font-weight: 400;
+    padding-top:.5em;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+#more-link:hover {
+  color: #78b13f;
+}
+
+#dialog-wrapper {
+  position: relative;
+}
+
+dialog:focus {outline:none;}
+
+dialog {
+  
+  background: grey;
+  border: none;
+  border-radius: .5rem;
+  margin: 0;
+  position: absolute;
+  height: 340px;
+  width: 270px;
+  
+}
+  
+dialog::backdrop {
+  background-color: hsl(90, 5.56%, 78.82%, 0.5);
+}
+`
 
 styles.replaceSync(componentStyles + verifyingStyles + crossStyles + dragNDropStyles + dialogStyles);
 
