@@ -16,7 +16,10 @@
       const verifier = document.querySelector('veri-good')
       const sampleVC = "https://digitalcredentials.github.io/vc-test-fixtures/verifiableCredentials/v1/bothSignatureTypes/didWeb/legacy-validStatus-noExpiry.json"
         verifier.addEventListener('veri-good-is-ready', (e) => {
-          verifier.verify(sampleVC)
+          const queryString = window.location.search;
+          const urlParams = new URLSearchParams(queryString);
+          const vc = urlParams.get('vc'); 
+          if (vc) {verifier.verify(vc)} //else {verifier.verify(sampleVC)}        
       });
     </script>
   </body>
