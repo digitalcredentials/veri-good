@@ -9,7 +9,7 @@ export const setHostElement = (element) => {
     shadowRoot = element.shadowRoot
 }
 
-export const sleep = (ms=100) => {
+export const sleep = (ms=1500) => {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
