@@ -4,9 +4,17 @@ import { getElement } from "./displayUtils.js";
 See the index.html for an example.
 If no did list is passed in, the default value, set below, is used.
 */
+
+
+
+
 let didList = {
             "did:web:digitalcredentials.github.io:testDID": {
                 "issuerName": "Department of Chemistry",
+                "url": "https://chemistry.uni.edu"
+            },
+            "did:web:digitalcredentials.github.io:vc-test-fixtures:dids:legacy": {
+                "issuerName": "Department of Biology",
                 "url": "https://chemistry.uni.edu"
             },
             "did:key:z6MkjoriXdbyWD25YXTed114F8hdJrLXQ567xxPHAUKxpKkS": {
