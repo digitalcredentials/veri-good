@@ -1,22 +1,19 @@
 import { getElement } from "./displayUtils.js";
 
-/* A did list looks like so:
-{
-    "did:web:digitalcredentials.github.io:testDID": {
-        "issuerName": "Department of Chemistry",
-        "url": "https://chemistry.uni.edu"
-    },
-    "did:key:z6Mki7DqKQswPsjqMVhP4W3n2ABFb5wBegZC5erEVg5qcgEw": {
-        "name": "Department of Economics",
-        "url": "https://econ.uni.edu"
-    }
-}
-
-and is passed into the web component as a template with id set to issuer-dids
-
-See the index.html for an example
+/* The did list is passed into the web component as a template with id set to issuer-dids.
+See the index.html for an example.
+If no did list is passed in, the default value, set below, is used.
 */
-let didList;
+let didList = {
+            "did:web:digitalcredentials.github.io:testDID": {
+                "issuerName": "Department of Chemistry",
+                "url": "https://chemistry.uni.edu"
+            },
+            "did:key:z6MkjoriXdbyWD25YXTed114F8hdJrLXQ567xxPHAUKxpKkS": {
+                "name": "Department of Economics",
+                "url": "https://econ.uni.edu"
+            }
+          };
 
 
 export const processDIDList = (component) => {
