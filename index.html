@@ -7,11 +7,23 @@
   <body>
     <div style="font-size: 20px"></div>
     <div style="padding: 5em">
-      <veri-good id="someID" registry-list="https://digitalcredentials.github.io/dcc-known-registries/known-did-registries.json">
+      <veri-good id="someID">
         <div slot="header">
           <div style="margin:.2em">University of Wonderful</div>
           <div style="font-size:1.2em">Course Credential Verification</div>
         </div>
+        <template id="issuer-dids">
+          {
+            "did:web:digitalcredentials.github.io:testDID": {
+                "issuerName": "Department of Chemistry",
+                "url": "https://chemistry.uni.edu"
+            },
+            "did:key:z6Mki7DqKQswPsjqMVhP4W3n2ABFb5wBegZC5erEVg5qcgEw": {
+                "name": "Department of Economics",
+                "url": "https://econ.uni.edu"
+            }
+          }
+        </template>
       </veri-good>
     </div>
     <script type="module" src="./dist/bundle.js"></script>
