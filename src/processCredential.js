@@ -4,7 +4,7 @@ import resolveVC from './resolveVC.js'
 import {showVerifyingSpinner, hideVerifyingSpinner, setSpinnerMessage} from './verifyingSpinner.js'
 import { sleep, displayError } from './displayUtils.js'
 
-const processCredential = async (credential, knownDIDRegistries) => {
+const processCredential = async (credential) => {
 
     showVerifyingSpinner()
 
@@ -21,7 +21,7 @@ const processCredential = async (credential, knownDIDRegistries) => {
     setSpinnerMessage("Verifying...")
 
      const [verificationResult] = await Promise.all([
-      verify(vc, knownDIDRegistries),
+      verify(vc),
       sleep()
     ]);
 

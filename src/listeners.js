@@ -87,12 +87,12 @@ const initializeDragNDrop = (shadowRoot) => {
   }
 };
 
-const initializeVerifyBtn = (registryList) => {
+const initializeVerifyBtn = () => {
     const eventName = 'click'
     const element = getElement("#verifyBtn")
     const handler = () => {
         const pastedContent = getElement("#vc-paste").value
-        processCredential(pastedContent, registryList);
+        processCredential(pastedContent);
     }
     element.addEventListener(eventName, handler);
     listeners.push({element, handler, eventName});
@@ -137,11 +137,11 @@ const initializeMoreDialogClose = () => {
   listeners.push({element, handler, eventName});
 }
 
-export const initializeListeners = (shadowRoot, registryList) => {
+export const initializeListeners = (shadowRoot) => {
     initializeMoreLink()
     initializeMoreDialogClose()
     initializeVerifyAnotherBtn(shadowRoot)
-    initializeVerifyBtn(registryList)
+    initializeVerifyBtn()
     initializeDragNDrop(shadowRoot)
 }
 

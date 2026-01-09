@@ -4,7 +4,7 @@ import { cryptosuite as eddsaRdfc2022CryptoSuite } from '@digitalbazaar/eddsa-rd
 import * as vc from '@digitalbazaar/vc';
 import { securityLoader } from '@digitalcredentials/security-document-loader';
 import checkStatusDirectly from './checkStatusDirectly.js';
-import lookupIssuer from './lookupIssuer.js';
+import {lookupIssuer} from './didList.js';
 const documentLoader = securityLoader({ fetchRemoteContexts: true }).build();
 const eddsaSuite = new DataIntegrityProof({ cryptosuite: eddsaRdfc2022CryptoSuite });
 const ed25519Suite = new Ed25519Signature2020();
@@ -17,7 +17,7 @@ const dateOptions = {
   // Omit the 'weekday' property to exclude it from the output
 };
 
-const verify = async (credential, knownDIDRegistries) => {
+const verify = async (credential) => {
 
     let signature, expiry, status, issuer
     try {
@@ -56,7 +56,7 @@ const verify = async (credential, knownDIDRegistries) => {
         }
 
         status = await checkStatusDirectly(credential)
-        issuer = await lookupIssuer(credential.issuer, knownDIDRegistries)
+        issuer = await lookupIssuer(credential.issuer)
         
     } catch (e) {
         console.log(e)
