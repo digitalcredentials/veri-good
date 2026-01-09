@@ -2,7 +2,7 @@
 
 A [Web Component](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) for verifying [Verifiable Credentials](https://www.w3.org/TR/vc-data-model-2.0/).
 
-Web components are basically custom HTML tags and can be dropped into any HTML page, which you'd do like so for the veri-good element:
+Web components are custom HTML tags that work natively with all modern browsers, and can therefore be dropped into any HTML page, which you'd do like so for the veri-good element:
 
 ```
 <!DOCTYPE html>
@@ -14,7 +14,7 @@ Web components are basically custom HTML tags and can be dropped into any HTML p
   <body>
     <div style="font-size: 20px"></div>
     <div style="padding: 5em">
-      <veri-good registry-list="https://digitalcredentials.github.io/dcc-known-registries/known-did-registries.json"></veri-good>
+      <veri-good></veri-good>
     </div>
     <script type="module" src="=bundle.js"></script>
   </body>
@@ -35,37 +35,39 @@ import { VeriGood } from '@digitalcredentials/veri-good'
 
 and then use like any other react element. 
 
-More on the available props is in the [React Component](#react-component) section.
+The react element and its props are described in the [React Component](#react-component) section.
 
-### Issuer Registry
+### Issuer List
 
- The registry-list is a list of registries against which to check the signing DID for each credential. For the moment it defaults to the above list, i.e.,
+ The signing DID for each credential is looked up in the issuer list. For the moment it defaults to the above list, i.e.,
  
  ```https://digitalcredentials.github.io/dcc-known-registries/known-did-registries.json```
  
 You can look at that list as an example of how to build your own.
 
-You can instead programmatically set a simple list of DIDs like so:
+You set the issuer list in a template inside the `veri-good` tag like so:
 
   ```
  <body>
-    <veri-good id="someID"></veri-good>
-    <script type="module" src="=bundle.js"></script>
-    <script>
-        const listOfDIDs = {
+    <veri-good>
+        <template id="issuer-dids">
+          {
             "did:web:digitalcredentials.github.io:testDID": {
                 "issuerName": "Department of Chemistry",
                 "url": "https://chemistry.uni.edu"
             },
-            "did:key:z6Mki7DqKQswPsjqMVhP4W3n2ABFb5wBegZC5erEVg5qcgEw": {
-                "name": "Departement of Economics",
+            "did:key:z6MkjoriXdbyWD25YXTed114F8hdJrLXQ567xxPHAUKxpKkS": {
+                "issuerName": "Department of Economics",
                 "url": "https://econ.uni.edu"
             }
-        };
-        document.getElementById('someID').setIssuerDIDs(listOfDIDs)
-    </script>
+          }
+        </template>
+    </veri-good>
+    <script type="module" src="=bundle.js"></script>
 </body>
  ```
+
+Use the same json structure for your own list.
 
 The issuerName and url are displayed when verifying a credential issued by that DID.
 
@@ -97,20 +99,9 @@ You might use the 'verify' call for cases like:
 
 The react wrapper compoent provides a verify prop that invokes the verify call under the covers. More on the available props is in the [React Component](#react-component) section.
 
-### Attributes
-
-There are a few attributes that you can set on the element:
-
-* registry-list - which we talked about above
-
-and some boolean valued attributes, all of which default to false:
-
-* showMore - set true to show the 'more..' link that opens a dialog showing more detail about the credential.
-* showIssuer - set true to show details about the issuer, which are taken from the registry-list you pass in.
-* showDate - set true to show the awardedOn date from the credential
-* bigger - set true to display a larger version of the verifier (600 x 800) rather than the default 380 X 450
-
 ### Customization
+
+#### Slots
 
 There are three 'slots' in the web component into which you can place custom html content:
 
@@ -140,6 +131,33 @@ You'll of course likely have to play with the css to fit with everything else in
 If you don't provide content for the slots, the defaults will be used which look like so:
 
 TODO: add image with default content.
+
+#### show/hide
+
+There are three sections that you can choose to show or hide:
+
+* name - the issuer name
+* date - the date the credential was issued
+* more - the 'more details...' link and associated modal
+
+These are hidden by default and shown by including the option names (separated by a single space) in the the 'show' attribute on the element like so:
+
+`<veri-good show="issuer date more" registry="etc."></veri-good>
+
+That example will show all three options. To show just the issuer name and the 'more details...' link:
+
+`<veri-good show="issuer more" registry="etc."></veri-good>
+
+and so on.
+
+You might choose to hide the issuer name if your verifier only verifies credentials from a single issuer, and that issuer
+is obvious from context (the verifier appears on the university degree information web page). Or maybe you provide the name of the issuer in the html around the web component.
+
+Conversely, you might choose to show the issuer if your verifier verifies course credentials, and you'd like to indicate which department issued the course credential. You'll have to, though, have a separate entry in your issuer registry for each department, and sign the credentials using the DID assigned to the department.
+
+If you do want to show the date issued, your credential will need to include a validFrom (for version 2 of the Verifiable Credential specification) or issuanceDate (for version 1 of the Verifiable Credentials specification).
+
+
 
 ### React Element
 
