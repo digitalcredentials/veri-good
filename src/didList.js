@@ -1,9 +1,6 @@
-import { getElement } from "./displayUtils";
-
-let didList;
+import { getElement } from "./displayUtils.js";
 
 /* A did list looks like so:
-
 {
     "did:web:digitalcredentials.github.io:testDID": {
         "issuerName": "Department of Chemistry",
@@ -15,12 +12,15 @@ let didList;
     }
 }
 
-and is passed into the web component as a template with id set to did-list
+and is passed into the web component as a template with id set to issuer-dids
 
 See the index.html for an example
 */
-export const processDIDList = () => {
-    const didListTemplate = getElement('#did-list');
+let didList;
+
+
+export const processDIDList = (component) => {
+    const didListTemplate = component.querySelector('#issuer-dids');
     if (didListTemplate) {
       try {
         didList = JSON.parse(didListTemplate.content.textContent.trim());
@@ -31,6 +31,7 @@ export const processDIDList = () => {
 }
 
 export const lookupIssuer = (issuer) => {
+    console.log("the did list:", didList)
     const did = typeof issuer === "string" ? issuer : issuer.id;
     if (didList[did]) {
         return {
