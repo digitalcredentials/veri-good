@@ -15,11 +15,11 @@ const render = x => `
    <div id="details-container" class="hide-on-reset">
         <div id="holder-name" class="to-clear"></div>
         <slot name="wasAwarded">
-            <div class="cred-label" >was awarded</div>
+            <div class="cred-label" >was awarded a</div>
         </slot>
         <div id="cred-name" class="to-clear"></div>
         <slot name="awardedBy">
-            <div class="cred-label" >by</div>
+            <div class="cred-label" >by the/div>
         </slot>
         <div id="issuer-name" class="to-clear"></div>
         <div id="more-link">More..</div>

@@ -12,12 +12,16 @@
           <div style="margin:.2em">University of Wonderful</div>
           <div style="font-size:1.2em">Course Credential Verification</div>
         </div>
-        <div slot="awardedBy">awarded by</div>
-        <div slot="wasAwarded">earned</div>
+        <div slot="awardedBy">by the</div>
+        <div slot="wasAwarded">awarded a</div>
         <template id="issuer-dids">
           {
             "did:web:digitalcredentials.github.io:testDID": {
                 "issuerName": "Department of Chemistry",
+                "url": "https://chemistry.uni.edu"
+            },
+            "did:web:digitalcredentials.github.io:vc-test-fixtures:dids:legacy": {
+                "issuerName": "Department of Biology",
                 "url": "https://chemistry.uni.edu"
             },
             "did:key:z6MkjoriXdbyWD25YXTed114F8hdJrLXQ567xxPHAUKxpKkS": {
