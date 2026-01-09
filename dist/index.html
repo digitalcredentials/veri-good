@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>veri-good!</title>
   </head>
   <body>
     <div style="font-size: 20px"></div>
     <div style="padding: 2em">
       <veri-good registry-list="https://digitalcredentials.github.io/dcc-known-registries/known-did-registries.json">
-        <div style="margin:.2em">University of Wonderful</div>
-        <div style="font-size:1.2em">Course Credential Verification</div>
+        <div slot="header">
+          <div style="margin:.2em">University of Wonderful</div>
+          <div style="font-size:1.2em">Course Credential Verification</div>
+        </div>
+        <div slot="awardedBy">awarded byyyy</div>
+        <div slot="wasAwarded">earned</div>
       </veri-good>
     </div>
     <script type="module" src="./bundle.js"></script>

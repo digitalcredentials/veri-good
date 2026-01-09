@@ -21,7 +21,21 @@ Web components are basically custom HTML tags and can be dropped into any HTML p
 </html>
 ```
 
- You'll therefore need to have saved that bundle.js (which is in the dist directory of this repository) to your server.
+You'll therefore need to have saved that bundle.js (which is in the dist directory of this repository) to your server.
+
+If you are using a bundler (webpack,rollup,next,react,etc.) import the module which we've published to npm:
+
+import '@digitalcredentials/veri-good'
+
+The import automagically registers the component with the browser. Use the tag wherever you like.
+
+We also provide a react wrapper around the tag which you also can import from the npm module:
+
+import { VeriGood } from '@digitalcredentials/veri-good'
+
+and then use like any other react element. 
+
+More on the available props is in the [React Component](#react-component) section.
 
 ### Issuer Registry
 
@@ -81,6 +95,8 @@ You might use the 'verify' call for cases like:
 * immediately verifying a credential whose url has been passed in as a request parameter on your html page.
 * verifying a credential that the end user selects from a list of credentials on the page, like say in a web wallet
 
+The react wrapper compoent provides a verify prop that invokes the verify call under the covers. More on the available props is in the [React Component](#react-component) section.
+
 ### Attributes
 
 There are a few attributes that you can set on the element:
@@ -94,14 +110,47 @@ and some boolean valued attributes, all of which default to false:
 * showDate - set true to show the awardedOn date from the credential
 * bigger - set true to display a larger version of the verifier (600 x 800) rather than the default 380 X 450
 
-### Custom Header
+### Customization
 
-You can replace the default header by including the html for your header as the content of the <veri-good> tag, like so:
+There are three 'slots' in the web component into which you can place custom html content:
+
+* header
+* wasAwarded
+* awardedBy
+
+Use them by including your custom content inside the `<veri-good>` tag like so:
 
 ```
-<veri-good registry-list="https://example.com/registry.json">
-    <div style="margin:.2em">University of Wonderful</div>
-    <div style="font-size:1.2em">Course Credential Verification</div>
+<veri-good registry-list="https://digitalcredentials.github.io/dcc-known-registries/known-did-registries.json">
+    <div slot="header">
+        <div style="margin:.2em">University of Wonderful</div>
+        <div style="font-size:1.2em">Course Credential Verification</div>
+    </div>
+    <div slot="wasAwarded">earned</div>
+    <div slot="awardedBy">awarded byyyy</div>
 </veri-good>
+```
+
+The slots map into the verifier like so:
+
+TODO: add image of verifier with slots circled, arrows pointing to each with a label.
 
 You'll of course likely have to play with the css to fit with everything else in the verifier.
+
+If you don't provide content for the slots, the defaults will be used which look like so:
+
+TODO: add image with default content.
+
+### React Element
+
+We provide a react element that wraps the web componet. You can use the react element like any other react element.
+
+The web component attributes all map to react props. The web component public methods also map to react props.
+
+The react props are therefore:
+
+TODO add props here
+
+Use the element like so:
+
+TODO show example of using the props on the element, in particular the 'verify' prop.
