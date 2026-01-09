@@ -10,7 +10,7 @@ let didList = {
                 "url": "https://chemistry.uni.edu"
             },
             "did:key:z6MkjoriXdbyWD25YXTed114F8hdJrLXQ567xxPHAUKxpKkS": {
-                "name": "Department of Economics",
+                "issuerName": "Department of Economics",
                 "url": "https://econ.uni.edu"
             }
           };
@@ -28,12 +28,12 @@ export const processDIDList = (component) => {
 }
 
 export const lookupIssuer = (issuer) => {
-    console.log("the did list:", didList)
     const did = typeof issuer === "string" ? issuer : issuer.id;
-    if (didList[did]) {
+    const matchingEntry = didList[did]
+    if (matchingEntry) {
         return {
             valid: true,
-            message: didList.issuerName
+            message: matchingEntry.issuerName
         };
     } else {
         return {
