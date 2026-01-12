@@ -7,7 +7,7 @@ const notRevoked = "https://digitalcredentials.github.io/vc-test-fixtures/verifi
 const render = x => `
   <div class="header">
     <slot name="header">
-        <div style="margin:.3em">University of Wonderful</div>
+        <div style="margin:1em">University of Wonderful</div>
         <div style="font-size:1.2em">Course Credential Verification</div>
     </slot>
   </div>
@@ -36,7 +36,7 @@ const render = x => `
                 <div id="more-issued-date" class="dialog-lines to-clear"> </div>
             </div>  
             <div id="more-criteria-section" class="hide-on-reset">
-                <div class="dialog-heading">Criteria</div>
+                <div id="criteria-heading">Criteria</div>
                 <div id="more-criteria" > </div>
             </div>   
              

@@ -36,16 +36,18 @@ const displayStepResults = async (result) => {
     // also populate the fields in the 'more...' dialog
     // - if we have data
     showText('#more-title', result.credential.credentialSubject.achievement.name)
+    showText('#more-issued-date', result.credential.issuanceDate || result.credential.validFrom)
     showText('#more-description', result.credential.credentialSubject.achievement.description)
+
     if (result.credential.credentialSubject.achievement?.criteria?.narrative) {
         const html = marked.parse(result.credential.credentialSubject.achievement.criteria.narrative);
         console.log(html)
         getElement('#more-criteria').innerHTML = html
-        
     }
     
-    showText('#more-issued-date', result.credential.issuanceDate || result.credential.validFrom)
-  
+    //scroll back to top of the div
+    getElement('#more-dialog').scrollTo(0, 0);
+
    // now show the results, step by step
     showElement("#result-container")
     await showStepResultFor('#sigCheck', result.signature)

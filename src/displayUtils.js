@@ -1,6 +1,6 @@
 import {VERIFYING_SIG_MSG, VERIFYING_EXP_MSG, VERIFYING_REV_MSG} from './constants.js'
 
-const DEFAULT_SLEEP_TIME = 1500
+const DEFAULT_SLEEP_TIME = 15
 
 let shadowRoot;
 let hostElement;
@@ -34,6 +34,9 @@ export const showDialog = (id) => {
     dialog.style.left = `${hostElement.offsetLeft + 40}px`;
     dialog.style.top = `${hostElement.offsetTop + 40}px`;
     dialog.showModal()
+    //scroll to top of the dialog
+    dialog.scrollTo(0, 0);
+
 }
 
 export const closeDialog = (id) => {

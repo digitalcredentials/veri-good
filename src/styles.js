@@ -161,7 +161,7 @@ const verifyingStyles = `
 
 .circle-loader {
   margin-right: 2em;
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  border: 3px solid rgba(0, 0, 0, 0.2);
   border-left-color: #5cb85c;
   animation: loader-spin 1.2s infinite linear;
   position: relative;
@@ -358,7 +358,6 @@ dialog {
   position: absolute;
   height: 340px;
   width: 270px;
-  
 }
 
 #dialog-button {
@@ -380,6 +379,9 @@ dialog {
 .dialog-heading {
   font: 550 14px 'Varela Round', sans-serif;
   margin: .2em;
+}
+
+#criteria-heading {
 }
 
 dialog::backdrop {
