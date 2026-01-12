@@ -360,6 +360,12 @@ dialog {
   width: 270px;
 }
 
+#more-criteria p {
+  font: 400 13px 'Varela Round', sans-serif;
+  padding: 0;
+  margin: 0 0 .3em 0;
+}
+
 #dialog-button {
   font-size:13px;
   padding: 7px 12px;
@@ -382,6 +388,7 @@ dialog {
 }
 
 #criteria-heading {
+  margin-bottom: .1em;
 }
 
 dialog::backdrop {
