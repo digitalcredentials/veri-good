@@ -10,10 +10,12 @@ const showStepResultFor = async (stepId, result) => {
     const stepElement = getElement(stepId)
     stepElement.style.display = 'flex'; 
     await sleep();
-    const circle = getElement('.circle-loader', stepElement)
-    circle.classList.toggle('load-complete');
+    const circle = getElement('.circle-loader', stepElement);
+    circle.classList.add('load-complete');
+   // circle.classList.toggle('load-complete');
     if (result.valid) {
-        showElement('.checkmark', 'block', stepElement) 
+        showElement('.checkmark', 'block', stepElement)
+        circle.style.borderColor = '#5cb85c'
     } else {
         showElement('.cross', 'block', stepElement) 
         circle.style.borderColor = '#d00'

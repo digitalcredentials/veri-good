@@ -1,6 +1,6 @@
 import {VERIFYING_SIG_MSG, VERIFYING_EXP_MSG, VERIFYING_REV_MSG} from './constants.js'
 
-const DEFAULT_SLEEP_TIME = 15
+const DEFAULT_SLEEP_TIME = 1000
 
 let shadowRoot;
 let hostElement;
@@ -81,7 +81,12 @@ export const reset = () => {
         element.classList.add('circle-loader');
         hideElement('.checkmark', element);
         hideElement('.cross', element);
-        //element.style.borderColor = 'make this original color'
+
+      //  border: 3px solid rgba(0, 0, 0, 0.2);
+       //  border-left-color: #5cb85c;
+
+       element.style.border = '3px solid rgba(0, 0, 0, 0.2)'
+       element.style.borderLeftColor = '#5cb85c'
      }
     );
         
