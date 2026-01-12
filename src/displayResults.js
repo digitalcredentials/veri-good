@@ -1,4 +1,5 @@
 import { sleep, showElement, hideElement, getElement, showText, displayError } from "./displayUtils.js";
+import { marked } from "marked";
 
 const showStepResultFor = async (stepId, result) => {
     const stepElement = getElement(stepId)
@@ -31,6 +32,19 @@ const displayStepResults = async (result) => {
     showText('#holder-name', result.credential.credentialSubject.name)
     showText('#cred-name', result.credential.name)
     showText('#issuer-name', result.issuer.message)
+
+    // also populate the fields in the 'more...' dialog
+    // - if we have data
+    showText('#more-title', result.credential.credentialSubject.achievement.name)
+    showText('#more-description', result.credential.credentialSubject.achievement.description)
+    if (result.credential.credentialSubject.achievement?.criteria?.narrative) {
+        const html = marked.parse(result.credential.credentialSubject.achievement.criteria.narrative);
+        console.log(html)
+        getElement('#more-criteria').innerHTML = html
+        
+    }
+    
+    showText('#more-issued-date', result.credential.issuanceDate || result.credential.validFrom)
   
    // now show the results, step by step
     showElement("#result-container")

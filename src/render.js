@@ -23,7 +23,23 @@ const render = x => `
         </slot>
         <div id="issuer-name" class="to-clear"></div>
         <div id="more-link">More..</div>
-        <dialog id="more-dialog">Show some stuff here like the criteria, validFrom</div>
+        <dialog id="more-dialog">
+            <div id="more-title-section" class="hide-on-rest">
+                <div id="more-title" class="class="dialog-heading to-clear"></div>
+            </div>
+            <div id="more-description-section" class="hide-on-reset">
+                <div class="dialog-heading">Description</div>
+                <div id="more-description" class="dialog-lines to-clear"></div>
+            </div>
+            <div id="more-criteria-section" class="hide-on-reset">
+                <div class="dialog-heading">Criteria</div>
+                <div id="more-criteria" > </div>
+            </div>   
+            <div id="more-issued-date-section" class="hide-on-reset">
+                <div class="dialog-heading">Date Issued</div>
+                <div id="more-issued-date" class="dialog-lines to-clear"> </div>
+            </div>    
+        </dialog>
     </div>
 
 

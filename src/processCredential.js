@@ -1,5 +1,5 @@
 import verify from './verify.js'
-import displayStepResults from './displayStepResults.js'
+import displayResults from './displayResults.js'
 import resolveVC from './resolveVC.js'
 import {showVerifyingSpinner, hideVerifyingSpinner, setSpinnerMessage} from './verifyingSpinner.js'
 import { sleep, displayError } from './displayUtils.js'
@@ -27,7 +27,7 @@ const processCredential = async (credential) => {
 
     hideVerifyingSpinner()
 
-    displayStepResults(verificationResult)
+    displayResults(verificationResult)
 }
 
 export default processCredential

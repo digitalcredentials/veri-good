@@ -60,6 +60,11 @@ export const reset = () => {
     shadowRoot.querySelectorAll('.toClear').forEach(element=>
         element.textContent = ''
     );
+
+    // criteria shows html rendered from markdown,
+    // rather than plain text, so have to clear separately
+    getElement('more-criteria').innerHTML = ''
+
     showText('#sig-message', VERIFYING_SIG_MSG)
     showText('#rev-message', VERIFYING_REV_MSG)
     showText('#exp-message', VERIFYING_EXP_MSG)
