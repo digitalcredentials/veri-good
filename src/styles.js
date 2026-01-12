@@ -4,19 +4,19 @@ const styles = new CSSStyleSheet();
 
 const componentStyles = `
   :host {
-    --default-color: #c9ccc6;
     --default-radius: 6px;
     --default-depth: 5px;
+    --default-blue: #002147;
 
     display: inline-block;
     contain: content;
-    color: black;
-    background: var(--color, var(--default-color));
-    border-radius: var(--radius, var(--default-radius));
+    color: var(--default-blue);
+    background: #c9ccc6;
+    border-radius: var(--default-radius);
     width: 380px;
     height: 450px;
     text-align: center;
-    box-shadow: 0 0 var(--depth, var(--default-depth)) rgba(0,0,0,.5);
+    box-shadow: 0 0 var(--default-depth) rgba(0,0,0,.5);
   }
 
   .header {
@@ -26,9 +26,7 @@ const componentStyles = `
 
   .title {
     font-weight: bold;
-    font-family: sans-serif;
     font-size: 16px;
-    color: #002147;
   }
 
   .cred-label {
@@ -38,17 +36,8 @@ const componentStyles = `
     padding:.2em;
   }
 
-  .footer {
-    height: 16px;
-    background: var(--color, var(--default-color));
-    border-radius: 0 0 var(--radius, var(--default-radius)) var(--radius, var(--default-radius));
-    margin: 0 0 15px;
-  }
-
-
-
 .btn {
-  background-color: #002147; /* Blue background */
+  background-color: var(--default-blue); /* Blue background */
   border: none;
   color: #78b13f; /* green text/icon color */
   padding: 8px 20px; /* Some padding */
@@ -77,7 +66,7 @@ const componentStyles = `
 
 .btn:hover {
   background-color: #78b13f;
-  color: #002147;
+  color: var(--default-blue);
 }
 
 .resultLine {
@@ -85,7 +74,7 @@ const componentStyles = `
     flex-direction: row;
     justify-content: left;
     padding: 0 4em .5em 4em;
-    font-weight: 600;
+    font-weight: 500;
     align-items: center;
 }
 
@@ -102,7 +91,7 @@ const componentStyles = `
   margin: 20px;
   background: #e3e8df;
   border-radius: var(--radius, var(--default-radius));
-  box-shadow: 0 0 var(--depth, var(--default-depth)) rgba(0,0,0,.5);
+  box-shadow: 0 0 var(--default-depth) rgba(0,0,0,.5);
 }
 
 #verify-spinner {
@@ -123,7 +112,7 @@ const componentStyles = `
 }
 
    #details-container {
-      font: 700 14px 'Varela Round', sans-serif;
+      font: 550 14px 'Varela Round', sans-serif;
       margin: 25px 0 40px 0;
       flex-direction: column;
       justify-content: center;
