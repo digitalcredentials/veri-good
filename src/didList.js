@@ -24,6 +24,10 @@ let didList = {
             "did:key:z6MkqBcwQ7qnRBRpgtsJQviLFeYxExMUE2k9nwKkMTF3DdRZ": {
                 "issuerName": "Department of Computer Science",
                 "url": "https://compsci.uni.edu"
+            },
+            "did:key:z6MknNQD1WHLGGraFi6zcbGevuAgkVfdyCdtZnQTGWVVvR5Q": {
+                "issuerName": "Department of History",
+                "url": "https://history.uni.edu"
             }
 
             
