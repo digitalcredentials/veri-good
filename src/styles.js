@@ -50,6 +50,8 @@ const componentStyles = `
   gap: 12px; /* space between icon and text */
 }
 
+
+
 #verifyAnotherBtn {
   margin-top: 2em;
 }
@@ -343,9 +345,13 @@ const dialogStyles = `
 
 dialog:focus {outline:none;}
 
+button:focus {outline:none;}
+
 dialog {
-  
-  background: grey;
+  font: 550 14px 'Varela Round', sans-serif;
+  flex-direction: column;
+  justify-content: center;
+  background: lightgrey;
   border: none;
   border-radius: .5rem;
   margin: 0;
@@ -354,10 +360,32 @@ dialog {
   width: 270px;
   
 }
+
+#dialog-button {
+  font-size:13px;
+  padding: 7px 12px;
+  margin-top:1em;
+}
+
+.dialog-lines {
+  font: 400 13px 'Varela Round', sans-serif;
+  margin-bottom: 1em;
+}
   
+#more-title {
+  font: 550 15px 'Varela Round', sans-serif;
+  margin-bottom: 1em;
+}
+
+.dialog-heading {
+  font: 550 14px 'Varela Round', sans-serif;
+  margin: .2em;
+}
+
 dialog::backdrop {
   background-color: hsl(90, 5.56%, 78.82%, 0.5);
 }
+
 `
 
 styles.replaceSync(componentStyles + verifyingStyles + crossStyles + dragNDropStyles + dialogStyles);

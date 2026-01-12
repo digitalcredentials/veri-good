@@ -1,5 +1,7 @@
 import {VERIFYING_SIG_MSG, VERIFYING_EXP_MSG, VERIFYING_REV_MSG} from './constants.js'
 
+const DEFAULT_SLEEP_TIME = 1500
+
 let shadowRoot;
 let hostElement;
 
@@ -9,7 +11,7 @@ export const setHostElement = (element) => {
     shadowRoot = element.shadowRoot
 }
 
-export const sleep = (ms=1500) => {
+export const sleep = (ms=DEFAULT_SLEEP_TIME) => {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
@@ -63,7 +65,7 @@ export const reset = () => {
 
     // criteria shows html rendered from markdown,
     // rather than plain text, so have to clear separately
-    getElement('more-criteria').innerHTML = ''
+    getElement('#more-criteria').innerHTML = ''
 
     showText('#sig-message', VERIFYING_SIG_MSG)
     showText('#rev-message', VERIFYING_REV_MSG)
