@@ -24,7 +24,7 @@ const render = x => `
         <div id="issuer-name" class="to-clear"></div>
         <div id="more-link">More..</div>
         <dialog id="more-dialog">
-            <div id="more-title-section" class="hide-on-rest">
+            <div id="more-title-section" class="hide-on-reset">
                 <div id="more-title" class="dialog-heading to-clear"></div>
             </div>
             <div id="more-description-section" class="hide-on-reset">

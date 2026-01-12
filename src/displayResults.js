@@ -42,15 +42,19 @@ const displayStepResults = async (result) => {
     // - if we have data
     
      if (result.credential.credentialSubject.achievement?.name) {
+        showElement('#more-title-section')
         showText('#more-title', result.credential.credentialSubject.achievement?.name)
     }
-    if (result.credential.issuanceDate || result.credential.validFrom) {
-        showText('#more-issued-date', result.credential.issuanceDate || result.credential.validFrom)
-    }
     if (result.credential.credentialSubject.achievement?.description) {
+        showElement('#more-description-section')
         showText('#more-description', result.credential.credentialSubject.achievement.description)
     }
+    if (result.credential.issuanceDate || result.credential.validFrom) {
+        showElement('#more-issued-date-section')
+        showText('#more-issued-date', result.credential.issuanceDate || result.credential.validFrom)
+    }
     if (result.credential.credentialSubject.achievement?.criteria?.narrative) {
+        showElement('#more-criteria-section')
         const html = marked.parse(result.credential.credentialSubject.achievement.criteria.narrative);
         getElement('#more-criteria').innerHTML = html
     }

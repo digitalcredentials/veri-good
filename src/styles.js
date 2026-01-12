@@ -107,26 +107,30 @@ const componentStyles = `
   font: 600 16px 'Varela Round', sans-serif;
 }
 
+.hide-on-reset {
+  display: none;
+}
+  
 #input-container {
     display: flex; 
     flex-direction: column;
     align-items: center; 
 }
 
-   #details-container {
-      font: 550 14px 'Varela Round', sans-serif;
-      margin: 25px 0 40px 0;
-      flex-direction: column;
-      justify-content: center;
-   }
+  #details-container {
+    font: 550 14px 'Varela Round', sans-serif;
+    margin: 25px 0 40px 0;
+    flex-direction: column;
+    justify-content: center;
+  }
 
-   #result-container {
-      flex-direction: column;
-      justify-content: center;
-   }
+  #result-container {
+    flex-direction: column;
+    justify-content: center;
+  }
 
-   #error-container {
-    margin:3em;
+  #error-container {
+  margin:3em;
   }
 
   .error-lines {
@@ -139,22 +143,22 @@ const componentStyles = `
       background: #e3e8df;
   }
 
-    #button-container {
-      display: flex; 
-      flex-direction: column;
-      justify-content: center;
-      align-items: center; 
-   }
+  #button-container {
+    display: flex; 
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; 
+  }
 
-#result-list {
-  height: 100px;
-  padding-left:2em;
-  font: 400 14px 'Varela Round', sans-serif;
-  display: flex;
-  flex-direction: column;
-  justify-content: top;
-  align-items: left;
-}
+  #result-list {
+    height: 100px;
+    padding-left:2em;
+    font: 400 14px 'Varela Round', sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: top;
+    align-items: left;
+  }
 `;
 
 const verifyingStyles = `
