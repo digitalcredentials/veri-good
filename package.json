@@ -1,9 +1,9 @@
 {
-  "name": "veri-good",
-  "version": "0.0.0-beta.1",
+  "name": "@digitalcredentials/veri-good",
+  "version": "0.0.0-beta.2",
   "description": "web component for verification",
-  "module": "./dist/bundle.js",
-  "main": "./dist/bundle.js",
+  "module": "dist/bundle.js",
+  "main": "dist/bundle.js",
   "type": "module",
   "scripts": {
     "start": "http-server -c-1 -p 8080",
