@@ -81,10 +81,6 @@ export const reset = () => {
         element.classList.add('circle-loader');
         hideElement('.checkmark', element);
         hideElement('.cross', element);
-
-      //  border: 3px solid rgba(0, 0, 0, 0.2);
-       //  border-left-color: #5cb85c;
-
        element.style.border = '3px solid rgba(0, 0, 0, 0.2)'
        element.style.borderLeftColor = '#5cb85c'
      }

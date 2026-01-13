@@ -13,8 +13,7 @@ const suite = [ed25519Suite, eddsaSuite]
 const dateOptions = {
   year: 'numeric',
   month: 'short',
-  day: 'numeric',
-  // Omit the 'weekday' property to exclude it from the output
+  day: 'numeric'
 };
 
 const verify = async (credential) => {

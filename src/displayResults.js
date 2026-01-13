@@ -6,6 +6,12 @@ marked.setOptions({
   gfm: true // The 'breaks' option requires GFM (GitHub Flavored Markdown) to be true
 });
 
+const dateOptions = {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric'
+};
+
 const showStepResultFor = async (stepId, result) => {
     const stepElement = getElement(stepId)
     stepElement.style.display = 'flex'; 
@@ -52,8 +58,12 @@ const displayStepResults = async (result) => {
         showText('#more-description', result.credential.credentialSubject.achievement.description)
     }
     if (result.credential.issuanceDate || result.credential.validFrom) {
-        showElement('#more-issued-date-section')
-        showText('#more-issued-date', result.credential.issuanceDate || result.credential.validFrom)
+        const issuanceDate = (result.credential.issuanceDate || result.credential.validFrom) ?
+            new Date(result.credential.issuanceDate || result.credential.validFrom) : 
+            null
+        const formattedDate = new Intl.DateTimeFormat('en-US', dateOptions).format(issuanceDate);
+        showElement('#more-issued-date-section');
+        showText('#more-issued-date', formattedDate);
     }
     if (result.credential.credentialSubject.achievement?.criteria?.narrative) {
         showElement('#more-criteria-section')
