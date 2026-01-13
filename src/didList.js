@@ -2,12 +2,8 @@ import { getElement } from "./displayUtils.js";
 
 /* The did list is passed into the web component as a template with id set to issuer-dids.
 See the index.html for an example.
-If no did list is passed in, the default value, set below, is used.
+If a did list is passed in to the component (via a template), it overrides the values set here.
 */
-
-
-
-
 let didList = {
             "did:web:digitalcredentials.github.io:testDID": {
                 "issuerName": "Department of Chemistry",
@@ -29,10 +25,6 @@ let didList = {
                 "issuerName": "Department of History",
                 "url": "https://history.uni.edu"
             }
-
-            
-
-
           };
 
 
