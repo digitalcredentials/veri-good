@@ -79,7 +79,7 @@ const displayStepResults = async (result) => {
     
     // and now show the 'Verify Another' button,
     // after a short pause
-    await sleep(500)
+    await sleep(1000)
     showElement("#verifyAnotherBtn", 'flex')
 }
 
