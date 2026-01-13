@@ -13,6 +13,7 @@ const dateOptions = {
 };
 
 const showStepResultFor = async (stepId, result) => {
+    await sleep(500); // and a short pause before starting the next spinner
     const stepElement = getElement(stepId)
     stepElement.style.display = 'flex'; 
     await sleep();
@@ -26,7 +27,9 @@ const showStepResultFor = async (stepId, result) => {
         showElement('.cross', 'block', stepElement) 
         circle.style.borderColor = '#d00'
     } 
+    await sleep(200); // and a short pause before showing the success message
     showText('.message', result.message, stepElement)
+    
 }
 const displayStepResults = async (result) => {
     hideElement("#verify-spinner")
@@ -79,7 +82,7 @@ const displayStepResults = async (result) => {
     
     // and now show the 'Verify Another' button,
     // after a short pause
-    await sleep(1000)
+    await sleep(500)
     showElement("#verifyAnotherBtn", 'flex')
 }
 
