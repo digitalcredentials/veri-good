@@ -2,7 +2,7 @@
 import processCredential from './processCredential.js'
 import {reset, showDialog, getElement} from './displayUtils.js'
 
-const listeners = []
+let listeners = []
 
 const initializeDragNDrop = (shadowRoot) => {
   const dropArea = getElement("#drop-zone");
