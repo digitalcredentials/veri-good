@@ -6,7 +6,8 @@ import { setHostElement } from './displayUtils.js'
 import { initializeListeners, removeListeners } from './listeners.js'
 import { fireExternalReadyEvent } from './events.js'
 
-class VeriGood extends HTMLElement {
+ 
+export default class VeriGood extends HTMLElement {
 
   static get observedAttributes() {
     return ['show'];
