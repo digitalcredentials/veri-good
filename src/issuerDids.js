@@ -4,7 +4,7 @@ import { getElement } from "./displayUtils.js";
 See the index.html for an example.
 If a did list is passed in to the component (via a template), it overrides the values set here.
 */
-let didList = {
+let issuerDids = {
             "did:web:digitalcredentials.github.io:testDID": {
                 "issuerName": "Department of Chemistry",
                 "url": "https://chemistry.uni.edu"
@@ -28,20 +28,35 @@ let didList = {
           };
 
 
-export const processDIDList = (component) => {
+export const processDIDTemplateList = (component) => {
     const didListTemplate = component.querySelector('#issuer-dids');
     if (didListTemplate) {
       try {
-        didList = JSON.parse(didListTemplate.content.textContent.trim());
-      }catch (e) {
+        issuerDids = JSON.parse(didListTemplate.content.textContent.trim());
+      } catch (e) {
         console.error(`Bad, or no <template id="did-list"> See the readme.`, e);
       }
     }
 }
 
+
+export const setIssuerDidList = (list) => {
+    if ( typeof list === 'string' || myVar instanceof String ) {
+        try {
+            issuerDids = JSON.parse(didListTemplate.content.textContent.trim());
+        } catch (e) {
+            console.error(`The did list seems not to be either an object or a parseable string of json.`, e);
+        }
+    } else if (list instanceof 'object') {
+        issuerDids = list;
+    }
+    
+    
+}
+
 export const lookupIssuer = (issuer) => {
     const did = typeof issuer === "string" ? issuer : issuer.id;
-    const matchingEntry = didList[did]
+    const matchingEntry = issuerDids[did]
     if (matchingEntry) {
         return {
             valid: true,

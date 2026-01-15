@@ -1,7 +1,7 @@
 import styles from './styles.js'
 import render from './render.js'
-import { getElement } from './displayUtils.js'
-import { processDIDList } from './didList.js'
+import { getElement, setTemplate } from './displayUtils.js'
+import { processDIDTemplateList, setIssuerDidList } from './issuerDids.js'
 import { setHostElement } from './displayUtils.js'
 import { initializeListeners, removeListeners } from './listeners.js'
 import { fireExternalReadyEvent } from './events.js'
@@ -9,9 +9,9 @@ import { fireExternalReadyEvent } from './events.js'
  
 export default class VeriGood extends HTMLElement {
 
-  static get observedAttributes() {
+  /* static get observedAttributes() {
     return ['show'];
-  }
+  } */
 
   constructor() {
     super();
@@ -27,10 +27,14 @@ export default class VeriGood extends HTMLElement {
     getElement('#verifyBtn').click()
   }
 
+  setIssuerDids(list) {
+    setIssuerDidList(list)
+  }
+
   connectedCallback() {
     this.shadowRoot.innerHTML = render();
     setHostElement(this);
-    processDIDList(this);
+    processDIDTemplateList(this);
     initializeListeners(this.shadowRoot);
     fireExternalReadyEvent(this);
   }
