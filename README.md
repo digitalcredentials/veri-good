@@ -23,19 +23,18 @@ Web components are custom HTML tags that work natively with all modern browsers,
 
 You'll therefore need to have saved that bundle.js (which is in the dist directory of this repository) to your server.
 
-If you are using a bundler (webpack,rollup,next,react,etc.) import the module which we've published to npm:
+If you are using a bundler (webpack, rollup, etc.) import the module which we've published to npm:
 
-import '@digitalcredentials/veri-good'
+`import '@digitalcredentials/veri-good'`
 
 The import automagically registers the component with the browser. Use the tag wherever you like.
 
-We also provide a react wrapper around the tag which you also can import from the npm module:
+We also provide a separate package that wraps the web component in a react element:
 
-import { VeriGood } from '@digitalcredentials/veri-good'
+* [@digitalcredentials/veri-good-react github repo](https://github.com/digitalcredentials/veri-good-react)
+* [@digitalcredentials/veri-good-react npm package](https://github.com/digitalcredentials/veri-good-react)
 
-and then use like any other react element. 
-
-The react element and its props are described in the [React Component](#react-component) section.
+TODO: fix above links to react packages once published
 
 ### Issuer List
 
@@ -90,14 +89,12 @@ You can programmatically set the VC to be verified by calling the 'verify' metho
 
 Notice that we have to wait for the web component to finish intializing, and fire the 'veri-good-is-ready' event before we can call the 'verify' method on it.
 
-You can of course also (and more likely) directly use the call in your own javascript that you bundle up with webpack or the like. More on bundling below.
+You can of course also (and more likely) directly use the call in your own javascript that you bundle up with webpack or the like.
 
 You might use the 'verify' call for cases like:
 
 * immediately verifying a credential whose url has been passed in as a request parameter on your html page.
 * verifying a credential that the end user selects from a list of credentials on the page, like say in a web wallet
-
-The react wrapper compoent provides a verify prop that invokes the verify call under the covers. More on the available props is in the [React Component](#react-component) section.
 
 ### Customization
 
@@ -126,49 +123,10 @@ The slots map into the verifier like so:
 
 TODO: add image of verifier with slots circled, arrows pointing to each with a label.
 
-You'll of course likely have to play with the css to fit with everything else in the verifier.
+You'll of course likely have to play with the css on your slots.
 
 If you don't provide content for the slots, the defaults will be used which look like so:
 
 TODO: add image with default content.
 
-#### show/hide
 
-There are three sections that you can choose to show or hide:
-
-* name - the issuer name
-* date - the date the credential was issued
-* more - the 'more details...' link and associated modal
-
-These are hidden by default and shown by including the option names (separated by a single space) in the the 'show' attribute on the element like so:
-
-`<veri-good show="issuer date more" registry="etc."></veri-good>
-
-That example will show all three options. To show just the issuer name and the 'more details...' link:
-
-`<veri-good show="issuer more" registry="etc."></veri-good>
-
-and so on.
-
-You might choose to hide the issuer name if your verifier only verifies credentials from a single issuer, and that issuer
-is obvious from context (the verifier appears on the university degree information web page). Or maybe you provide the name of the issuer in the html around the web component.
-
-Conversely, you might choose to show the issuer if your verifier verifies course credentials, and you'd like to indicate which department issued the course credential. You'll have to, though, have a separate entry in your issuer registry for each department, and sign the credentials using the DID assigned to the department.
-
-If you do want to show the date issued, your credential will need to include a validFrom (for version 2 of the Verifiable Credential specification) or issuanceDate (for version 1 of the Verifiable Credentials specification).
-
-
-
-### React Element
-
-We provide a react element that wraps the web componet. You can use the react element like any other react element.
-
-The web component attributes all map to react props. The web component public methods also map to react props.
-
-The react props are therefore:
-
-TODO add props here
-
-Use the element like so:
-
-TODO show example of using the props on the element, in particular the 'verify' prop.
