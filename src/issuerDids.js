@@ -41,9 +41,10 @@ export const processDIDTemplateList = (component) => {
 
 
 export const setIssuerDidList = (list) => {
-    if ( typeof list === 'string' || myVar instanceof String ) {
+    console.log('set the did list: ', list)
+    if ( typeof list === 'string' || list instanceof String ) {
         try {
-            issuerDids = JSON.parse(didListTemplate.content.textContent.trim());
+            issuerDids = JSON.parse(list);
         } catch (e) {
             console.error(`The did list seems not to be either an object or a parseable string of json.`, e);
         }
