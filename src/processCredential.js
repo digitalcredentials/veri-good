@@ -2,10 +2,13 @@ import verify from './verify.js'
 import displayResults from './displayResults.js'
 import resolveVC from './resolveVC.js'
 import {showVerifyingSpinner, hideVerifyingSpinner, setSpinnerMessage} from './verifyingSpinner.js'
-import { sleep, displayError } from './displayUtils.js'
+import { sleep, displayError, reset } from './displayUtils.js'
 
 const processCredential = async (credential) => {
 
+    // reset all fields in case we've already verified another vc
+    reset()
+    
     showVerifyingSpinner()
 
     const [{vc,error}] = await Promise.all([
