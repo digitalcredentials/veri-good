@@ -70,6 +70,29 @@ Use the same json structure for your own list.
 
 The issuerName and url are displayed when verifying a credential issued by that DID.
 
+You can also programmatically set the did list like so:
+
+ ```
+ <body>
+    <veri-good registry-list="https://digitalcredentials.github.io/dcc-known-registries/known-did-registries.json"></veri-good>
+    <script type="module" src="=bundle.js"></script>
+    <script>
+      const verifier = document.querySelector('veri-good')
+        verifier.addEventListener('veri-good-is-ready', (e) => {
+          verifier.setIssuerDids(`{
+            "did:web:digitalcredentials.github.io:testDID": {
+                "issuerName": "Department of Chemistry",
+                "url": "https://chemistry.uni.edu"
+            }}`)
+      });
+    </script>
+</body>
+ ```
+
+Notice that we have to wait for the web component to finish intializing, and fire the 'veri-good-is-ready' event before we can call the 'setIssuerDids' method on it.
+
+You can of course also (and more likely) use the call in your own javascript that you bundle up with webpack or the like. In other words, you don't have to call 'setIssuerDids' from a script tag in the html.
+
 ### Programmatic Verification
 
 You can programmatically set the VC to be verified by calling the 'verify' method on the element, like so:
@@ -89,7 +112,7 @@ You can programmatically set the VC to be verified by calling the 'verify' metho
 
 Notice that we have to wait for the web component to finish intializing, and fire the 'veri-good-is-ready' event before we can call the 'verify' method on it.
 
-You can of course also (and more likely) directly use the call in your own javascript that you bundle up with webpack or the like.
+As with the `setIssuerDids` method, you can of course also call `verify` in your own javascript that you bundle up with webpack or the like. 
 
 You might use the 'verify' call for cases like:
 
