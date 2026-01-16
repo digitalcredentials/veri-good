@@ -41,18 +41,16 @@ export const processDIDTemplateList = (component) => {
 
 
 export const setIssuerDidList = (list) => {
-    console.log('set the did list: ', list)
     if ( typeof list === 'string' || list instanceof String ) {
         try {
             issuerDids = JSON.parse(list);
         } catch (e) {
             console.error(`The did list seems not to be either an object or a parseable string of json.`, e);
         }
-    } else if (list instanceof 'object') {
+    } else if (list) {
+        // otherwise we assume the list is an object
         issuerDids = list;
-    }
-    
-    
+    } 
 }
 
 export const lookupIssuer = (issuer) => {
