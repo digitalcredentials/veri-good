@@ -1,6 +1,6 @@
 # veri-good
 
-A [Web Component](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) for verifying [Verifiable Credentials](https://www.w3.org/TR/vc-data-model-2.0/).
+A [Web Component](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) providing entirely in-browser verification of [Verifiable Credentials](https://www.w3.org/TR/vc-data-model-2.0/).
 
 Web components are custom HTML tags that work natively with all modern browsers, and can therefore be dropped into any HTML page, which you'd do like so for the veri-good element:
 
