@@ -1,6 +1,15 @@
 const styles = new CSSStyleSheet();
 
-
+// DCC branding - creamy yellow
+const dccCreamyYellow = '#DDD78D'
+// DCC branding - blue
+const backgroundColor = '#234467'
+// old background color
+//const backgroundColor = '#c9ccc6'
+// old blue color
+//const defaultTextColor = '#002147'
+const defaultTextColor = 'white'
+const dccRegalPurple = '#320E3B'
 
 const componentStyles = `
   :host {
@@ -10,8 +19,8 @@ const componentStyles = `
 
     display: inline-block;
     contain: content;
-    color: var(--default-blue);
-    background: #c9ccc6;
+    color: ${defaultTextColor};
+    background: ${backgroundColor};
     border-radius: var(--default-radius);
     width: 380px;
     height: 450px;
@@ -91,7 +100,7 @@ const componentStyles = `
   max-width: 250px;
   padding: 10px;
   margin: 20px;
-  background: #e3e8df;
+  background: lightgrey;        /* old background #e3e8df; */
   border-radius: var(--radius, var(--default-radius));
   box-shadow: 0 0 var(--default-depth) rgba(0,0,0,.5);
 }
@@ -118,10 +127,11 @@ const componentStyles = `
 }
 
   #details-container {
-    font: 550 14px 'Varela Round', sans-serif;
-    margin: 25px 0 40px 0;
+    font: 400 13px 'Varela Round', sans-serif;
+    margin: 25px 0 20px 0;
     flex-direction: column;
     justify-content: center;
+    line-height: 1.5;
   }
 
   #result-container {
