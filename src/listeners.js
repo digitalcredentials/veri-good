@@ -46,7 +46,7 @@ const initializeDragNDrop = (shadowRoot) => {
     listeners.push({element: dropArea, handler: removeDropZoneOverClass, eventName})
   });
 
-  function handleDrop() {
+  function handleDrop(e) {
     const dt = e.dataTransfer;
     const files = dt.files; 
     handleFiles(files);
