@@ -49,7 +49,7 @@ const componentStyles = `
 
 .btn {
   color: #78b13f;
-  background-color:  var(--default-blue);
+  background-color:  black; /* var(--default-blue); */
   
   border: none;
   
@@ -336,6 +336,7 @@ const dragNDropStyles = `
 .drop-zone--over {
   border-style: solid;
   background-color: #e9e9e9;
+  color: ${dccDarkGrey};
 }
 
 .drop-zone__input {
