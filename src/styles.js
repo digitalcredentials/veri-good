@@ -7,7 +7,7 @@ const dccBlue = '#234467'
 // old background color
 //const backgroundColor = '#c9ccc6'
 // old blue color
-//const defaultTextColor = '#002147'
+const defaultBlueColor = '#002147'
 const defaultTextColor = 'white'
 const dccRegalPurple = '#320E3B'
 const dccLightGrey = '#626a73'
@@ -17,7 +17,6 @@ const componentStyles = `
   :host {
     --default-radius: 6px;
     --default-depth: 5px;
-    --default-blue: #002147;
 
     display: inline-block;
     contain: content;
@@ -49,7 +48,7 @@ const componentStyles = `
 
 .btn {
   color: #78b13f;
-  background-color:  black; /* var(--default-blue); */
+  background-color:  black; 
   
   border: none;
   
@@ -80,8 +79,8 @@ const componentStyles = `
 }
 
 .btn:hover {
-  background-color: #78b13f; /* var(--default-blue);  Blue background */
-  color:  var(--default-blue);/*   green text/icon color */
+  background-color: #78b13f; 
+  color:  ${defaultBlueColor};
 }
 
 .resultLine {
@@ -105,8 +104,14 @@ const componentStyles = `
   padding: 10px;
   margin: 15px 0 20px;
   background: lightgrey;        /* old background #e3e8df; */
+  color: ${dccDarkGrey};
   border-radius: var(--radius, var(--default-radius));
   box-shadow: 0 0 var(--default-depth) rgba(0,0,0,.5);
+}
+  
+textarea::placeholder {
+  color: ${dccDarkGrey};
+  opacity: 1;    /* Fixes Firefox's default lower opacity */
 }
 
 #verify-spinner {
