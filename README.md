@@ -2,49 +2,45 @@
 
 A [Web Component](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) providing entirely in-browser verification of [Verifiable Credentials](https://www.w3.org/TR/vc-data-model-2.0/).
 
-Web components are custom HTML tags that work natively with all modern browsers, and can therefore be dropped into any HTML page, which you'd do like so for the veri-good element:
+'In-browser' means that the credential is not sent to the server. It never leaves the web browser, and so remains entirely private.
+
+Web components are custom HTML tags that work natively with all modern browsers, and can therefore be dropped into any HTML page, like this simple example:
 
 ```
-<!DOCTYPE html>
 <html>
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>veri-good!</title>
-  </head>
   <body>
-    <div style="font-size: 20px"></div>
-    <div style="padding: 5em">
-      <veri-good></veri-good>
-    </div>
+    <div> put whatever you want around the veri-good tag, like this div </div>
+
+    <veri-good></veri-good>
     <script type="module" src="=bundle.js"></script>
+
   </body>
 </html>
 ```
 
-You'll therefore need to have saved that bundle.js (which is in the dist directory of this repository) to your server.
+You'll need to have saved that bundle.js (which is in the dist directory of this repository) to your server.
 
-If you are using a bundler (webpack, rollup, etc.) import the module which we've published to npm:
+If you are using a bundler (webpack, rollup, etc.) install from npm:
+
+`npm i @digitalcredentials/veri-good`
+
+and import in somewhere like your main entry file (to ensure it gets imported and run):
 
 `import '@digitalcredentials/veri-good'`
 
-The import automagically registers the component with the browser. Use the tag wherever you like.
+Note that we aren't importing anything that gets assigned to a variable. We simply want the import to pull in the code
+and run it, which builds the component and registers it with the web browser.
 
 We also provide a separate package that wraps the web component in a react element:
 
-* [@digitalcredentials/veri-good-react github repo](https://github.com/digitalcredentials/veri-good-react)
-* [@digitalcredentials/veri-good-react npm package](https://github.com/digitalcredentials/veri-good-react)
-
-TODO: fix above links to react packages once published
+* [@digitalcredentials/veri-good-react github repo](http://github.com/digitalcredentials/veri-good-react)
+* [@digitalcredentials/veri-good-react npm package](https://www.npmjs.com/package/@digitalcredentials/veri-good-react)
 
 ### Issuer List
 
- The signing DID for each credential is looked up in the issuer list. For the moment it defaults to the above list, i.e.,
- 
- ```https://digitalcredentials.github.io/dcc-known-registries/known-did-registries.json```
- 
-You can look at that list as an example of how to build your own.
+The signing [DID (Decentralized Identifier)](https://w3c.github.io/did/) for each credential is looked up in a list of DIDs that you register with the veri-good component. The lookup confirms that the credential was signed by someone you recognize (like yourself).
 
-You set the issuer list in a template inside the `veri-good` tag like so:
+You can set your issuer list in a template inside the `veri-good` tag like so:
 
   ```
  <body>
@@ -68,7 +64,7 @@ You set the issuer list in a template inside the `veri-good` tag like so:
 
 Use the same json structure for your own list.
 
-The issuerName and url are displayed when verifying a credential issued by that DID.
+The issuerName is displayed when verifying a credential issued by that DID.
 
 You can also programmatically set the did list like so:
 
@@ -91,7 +87,7 @@ You can also programmatically set the did list like so:
 
 Notice that we have to wait for the web component to finish intializing, and fire the 'veri-good-is-ready' event before we can call the 'setIssuerDids' method on it.
 
-You can of course also (and more likely) use the call in your own javascript that you bundle up with webpack or the like. In other words, you don't have to call 'setIssuerDids' from a script tag in the html.
+You can of course also (and more likely) call setIssuerDids in your own javascript that you bundle up with webpack or the like. In other words, you don't have to call 'setIssuerDids' from a script tag in the html.
 
 ### Programmatic Verification
 
@@ -110,7 +106,7 @@ You can programmatically set the VC to be verified by calling the 'verify' metho
 </body>
  ```
 
-Notice that we have to wait for the web component to finish intializing, and fire the 'veri-good-is-ready' event before we can call the 'verify' method on it.
+Notice that we again (as with the setIssuerDids method) have to wait for the web component to finish intializing and fire the 'veri-good-is-ready' event before we can call the 'verify' method on it.
 
 As with the `setIssuerDids` method, you can of course also call `verify` in your own javascript that you bundle up with webpack or the like. 
 
@@ -138,18 +134,16 @@ Use them by including your custom content inside the `<veri-good>` tag like so:
         <div style="font-size:1.2em">Course Credential Verification</div>
     </div>
     <div slot="wasAwarded">earned</div>
-    <div slot="awardedBy">awarded byyyy</div>
+    <div slot="awardedBy">awarded by</div>
 </veri-good>
 ```
 
 The slots map into the verifier like so:
 
-TODO: add image of verifier with slots circled, arrows pointing to each with a label.
+![slot mapping](docs/slots.png)
 
-You'll of course likely have to play with the css on your slots.
+You'll of course likely have to play with the css for your slots.
 
-If you don't provide content for the slots, the defaults will be used which look like so:
-
-TODO: add image with default content.
+If you don't provide content for the slots, they default to the values show in the screenshot.
 
 
