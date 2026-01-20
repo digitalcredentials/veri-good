@@ -2,7 +2,7 @@
 
 A [Web Component](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) providing entirely in-browser verification of [Verifiable Credentials](https://www.w3.org/TR/vc-data-model-2.0/).
 
-'In-browser' means that the credential is not sent to the server. It never leaves the web browser, and so remains entirely private.
+'In-browser' meaning that the credential is not sent to the server. It never leaves the web browser, and so remains entirely private.
 
 Web components are custom HTML tags that work natively with all modern browsers, and can therefore be dropped into any HTML page, like this simple example:
 
@@ -12,19 +12,21 @@ Web components are custom HTML tags that work natively with all modern browsers,
     <div> put whatever you want around the veri-good tag, like this div </div>
 
     <veri-good></veri-good>
+    
     <script type="module" src="=bundle.js"></script>
 
   </body>
 </html>
 ```
 
-You'll need to have saved that bundle.js (which is in the dist directory of this repository) to your server.
+You'll need to have saved that bundle.js (which is in the dist directory of this repository) to your server so it 
+can be downloaded by the web browser.
 
 If you are using a bundler (webpack, rollup, etc.) install from npm:
 
 `npm i @digitalcredentials/veri-good`
 
-and import in somewhere like your main entry file (to ensure it gets imported and run):
+and import somewhere like your main entry file (to ensure it gets imported and run):
 
 `import '@digitalcredentials/veri-good'`
 
@@ -39,6 +41,9 @@ We also provide a separate package that wraps the web component in a react eleme
 ### Issuer List
 
 The signing [DID (Decentralized Identifier)](https://w3c.github.io/did/) for each credential is looked up in a list of DIDs that you register with the veri-good component. The lookup confirms that the credential was signed by someone you recognize (like yourself).
+
+> [!IMPORTANT]
+> Providing this list is critical. The verifier outright rejects any credentials that aren't in the list.
 
 You can set your issuer list in a template inside the `veri-good` tag like so:
 
@@ -85,7 +90,7 @@ You can also programmatically set the did list like so:
 </body>
  ```
 
-Notice that we have to wait for the web component to finish intializing, and fire the 'veri-good-is-ready' event before we can call the 'setIssuerDids' method on it.
+Notice that we have to wait for the web component to finish intializing and fire the 'veri-good-is-ready' event before we can call the 'setIssuerDids' method on it.
 
 You can of course also (and more likely) call setIssuerDids in your own javascript that you bundle up with webpack or the like. In other words, you don't have to call 'setIssuerDids' from a script tag in the html.
 
@@ -138,7 +143,9 @@ Use them by including your custom content inside the `<veri-good>` tag like so:
 </veri-good>
 ```
 
-The slots map into the verifier like so:
+Note the `slot=` attributes. They must be specified with the given values (header, wasAwarded, awardedBy), just as they are used above. They can, however, be used with elements other than divs. The web component basically takes an element with a 'slot' attribute and drops that element, including its children, into a matching predefined slot in the veri-good component.
+
+The three slots map into the verifier like so:
 
 ![slot mapping](docs/slots.png)
 
