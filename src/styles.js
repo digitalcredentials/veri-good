@@ -49,7 +49,7 @@ const componentStyles = `
 
 .btn {
   color: #78b13f;
-  background-color: var(--default-blue);
+  background-color:  var(--default-blue);
   
   border: none;
   
@@ -154,7 +154,7 @@ const componentStyles = `
   #error-message {
       margin:1em;
       padding: 1em;
-      background: #e3e8df;
+      background: ${dccRegalPurple} /* #e3e8df; */
   }
 
   #button-container {
