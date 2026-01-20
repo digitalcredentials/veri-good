@@ -3,13 +3,14 @@ const styles = new CSSStyleSheet();
 // DCC branding - creamy yellow
 const dccCreamyYellow = '#DDD78D'
 // DCC branding - blue
-const backgroundColor = '#234467'
+const dccBlue = '#234467'
 // old background color
 //const backgroundColor = '#c9ccc6'
 // old blue color
 //const defaultTextColor = '#002147'
 const defaultTextColor = 'white'
 const dccRegalPurple = '#320E3B'
+const dccLightGrey = '#626a73'
 
 const componentStyles = `
   :host {
@@ -20,7 +21,7 @@ const componentStyles = `
     display: inline-block;
     contain: content;
     color: ${defaultTextColor};
-    background: ${backgroundColor};
+    background: ${dccBlue};
     border-radius: var(--default-radius);
     width: 380px;
     height: 450px;
@@ -46,9 +47,11 @@ const componentStyles = `
   }
 
 .btn {
-  background-color: var(--default-blue); /* Blue background */
+  color: #78b13f;
+  background-color: var(--default-blue);
+  
   border: none;
-  color: #78b13f; /* green text/icon color */
+  
   padding: 8px 20px; /* Some padding */
   font-weight: 600;
   font-size:15px;
@@ -76,8 +79,8 @@ const componentStyles = `
 }
 
 .btn:hover {
-  background-color: #78b13f;
-  color: var(--default-blue);
+  background-color: #78b13f; /* var(--default-blue);  Blue background */
+  color:  var(--default-blue);/*   green text/icon color */
 }
 
 .resultLine {
@@ -99,7 +102,7 @@ const componentStyles = `
   max-height: 180px;
   max-width: 250px;
   padding: 10px;
-  margin: 20px;
+  margin: 15px 0 20px;
   background: lightgrey;        /* old background #e3e8df; */
   border-radius: var(--radius, var(--default-radius));
   box-shadow: 0 0 var(--default-depth) rgba(0,0,0,.5);
