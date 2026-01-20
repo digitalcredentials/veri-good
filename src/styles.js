@@ -11,6 +11,7 @@ const dccBlue = '#234467'
 const defaultTextColor = 'white'
 const dccRegalPurple = '#320E3B'
 const dccLightGrey = '#626a73'
+const dccDarkGrey = '#40464c'
 
 const componentStyles = `
   :host {
@@ -328,7 +329,7 @@ const dragNDropStyles = `
 }
 
 .drop-zone:hover {
-  background-color: #f1f1f1;
+  background-color: #40464c; /* old #f1f1f1; */
 }
 
 /* Style applied when a file is being dragged over the zone */
