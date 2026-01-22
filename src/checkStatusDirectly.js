@@ -31,6 +31,9 @@ const checkStatusDirectly = async (credential) => {
     if (credential.credentialStatus) {
         const checkStatus = getStatusChecker(credential)
         const statusResult = await checkStatus({credential, documentLoader: statusDocumentLoader, suite, verifyMatchingIssuers: false, verifyBitstringStatusListCredential: false})
+        if (! statusResult.verified) {
+            return {valid: false, message: "Status unavailable.", error: "The status couldn't be checked."}
+        }
         // the result.status is 'true' if revoked
         const isRevoked = statusResult.results.some(result=>result.status)
         if (isRevoked) {
