@@ -38,7 +38,7 @@ test.describe('correct messages show for', () => {
     await page.goto(`${baseUrl}`);
     await page.locator('#vc-paste').fill(expiredAndRevoked);
     await page.getByRole('button', { name: 'Verify' }).click();
-    await expect(page.getByText('Expired on:')).toBeVisible()
+    await expect(page.getByText('Expired Jan 9, 2025')).toBeVisible()
     await expect(page.getByText('Has been revoked')).toBeVisible()
   });
 
