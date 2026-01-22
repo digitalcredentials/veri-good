@@ -154,3 +154,14 @@ You'll of course likely have to play with the css for your slots.
 If you don't provide content for the slots, they default to the values show in the screenshot.
 
 
+## Development
+
+### disable-pauses
+
+To make the playwright tests faster, set the atttribute 'disable-pauses' like so:
+
+```
+    <veri-good disable-pauses></veri-good>
+```
+
+This removes all pauses on the spinners and messages.
