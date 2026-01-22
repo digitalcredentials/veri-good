@@ -1,6 +1,6 @@
 import styles from './styles.js'
 import render from './render.js'
-import { getElement, setTemplate } from './displayUtils.js'
+import { getElement, setDisablePauses } from './displayUtils.js'
 import { processDIDTemplateList, setIssuerDidList } from './issuerDids.js'
 import { setHostElement } from './displayUtils.js'
 import { initializeListeners, removeListeners } from './listeners.js'
@@ -9,9 +9,9 @@ import { fireExternalReadyEvent } from './events.js'
  
 export default class VeriGood extends HTMLElement {
 
-  /* static get observedAttributes() {
-    return ['show'];
-  } */
+  static get observedAttributes() {
+    return ['disable-pauses'];
+  } 
 
   constructor() {
     super();
@@ -32,6 +32,7 @@ export default class VeriGood extends HTMLElement {
   }
 
   connectedCallback() {
+    console.log("connected callback")
     this.shadowRoot.innerHTML = render();
     setHostElement(this);
     processDIDTemplateList(this);
@@ -43,9 +44,13 @@ export default class VeriGood extends HTMLElement {
     removeListeners()
   }
 
-  //attributeChangedCallback(name, oldValue, newValue) {
-  //  this.shadowRoot.innerHTML = render(this);
-  //}
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (name === 'disable-pauses') {
+     // if it is present, it is true
+      setDisablePauses(true);
+    }
+  }
+
 
 }
 

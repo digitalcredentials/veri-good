@@ -1,6 +1,7 @@
 import {VERIFYING_SIG_MSG, VERIFYING_EXP_MSG, VERIFYING_REV_MSG} from './constants.js'
 
 const DEFAULT_SLEEP_TIME = 1000
+let shouldDisablePauses = false;
 
 let shadowRoot;
 let hostElement;
@@ -11,7 +12,13 @@ export const setHostElement = (element) => {
     shadowRoot = element.shadowRoot
 }
 
+export const setDisablePauses = (newValue) => {
+    shouldDisablePauses = newValue;
+}
+
 export const sleep = (ms=DEFAULT_SLEEP_TIME) => {
+    // pauses can be disabled for faster automated testing
+    if (shouldDisablePauses) return Promise.resolve();
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
