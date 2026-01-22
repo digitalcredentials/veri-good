@@ -7,7 +7,7 @@ const validStatusNoExpiry = "https://digitalcredentials.github.io/vc-test-fixtur
 const badDIDWeb = "https://digitalcredentials.github.io/vc-test-fixtures/verifiableCredentials/v2/ed25519/didWeb/badDidWeb.json"
 const tamperedStatus = "https://digitalcredentials.github.io/vc-test-fixtures/verifiableCredentials/v2/ed25519/didKey/legacy-tamperedStatus-noExpiry.json";
 const invalidURL = "https://yodidodido.example.org/notAFile.json"
-const tampered = ""
+const tampered = "https://digitalcredentials.github.io/vc-test-fixtures/verifiableCredentials/v2/ed25519/didKey/legacy-noStatus-noExpiry-tampered.json"
 const baseUrl = process.env.BASE_URL ?? 'http://localhost:8080';
 
 test.describe('correct messages show for', () => {
@@ -20,7 +20,14 @@ test('invalid credential', async ({ page }) => {
     await expect(page.getByText("The credential you provided couldn't be processed.")).toBeVisible()
   });
 
+  test('tampered credential', async ({ page }) => {
+    await page.goto(`${baseUrl}`);
+    await page.locator('#vc-paste').fill(tampered);
+    await page.getByRole('button', { name: 'Verify' }).click();
+    await expect(page.getByText('Something went wrong - please try again.')).toBeVisible()
+    await expect(page.getByText("The credential couldn't be verified.")).toBeVisible()
 
+  });
 
   test('tampered status', async ({ page }) => {
     await page.goto(`${baseUrl}`);
