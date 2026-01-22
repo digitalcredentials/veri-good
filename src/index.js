@@ -32,7 +32,6 @@ export default class VeriGood extends HTMLElement {
   }
 
   connectedCallback() {
-    console.log("connected callback")
     this.shadowRoot.innerHTML = render();
     setHostElement(this);
     processDIDTemplateList(this);
