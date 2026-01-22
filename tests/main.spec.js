@@ -20,6 +20,14 @@ test('invalid credential', async ({ page }) => {
     await expect(page.getByText("The credential you provided couldn't be processed.")).toBeVisible()
   });
 
+  test('invalid pasted url', async ({ page }) => {
+    await page.goto(`${baseUrl}`);
+    await page.locator('#vc-paste').fill(invalidURL);
+    await page.getByRole('button', { name: 'Verify' }).click();
+    await expect(page.getByText('Something went wrong - please try again.')).toBeVisible()
+    await expect(page.getByText("The url you provided couldn't be retrieved.")).toBeVisible()
+  });
+
   test('tampered credential', async ({ page }) => {
     await page.goto(`${baseUrl}`);
     await page.locator('#vc-paste').fill(tampered);
