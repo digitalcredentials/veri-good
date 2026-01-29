@@ -149,7 +149,7 @@ textarea::placeholder {
   }
 
   #error-container {
-  margin:3em;
+    margin:3em;
   }
 
   .error-lines {
@@ -362,14 +362,41 @@ const dialogStyles = `
 #more-link:hover {
   color: #78b13f;
 }
+  
+.alignment-link {
+    padding: 0;
+    font-style: italic;
+    font-size: 13px;    
+    font-weight: 400;
+    color: black;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+#alignment-heading {
+  margin-bottom: .1em;
+}
+
+#more-alignment-list { 
+  text-align:left;
+  max-width: fit-content;
+  margin: 0 auto;
+  padding: 0;
+}
+
+#more-alignment-section { 
+  margin-bottom: .9em;
+}
+
+
 
 #dialog-wrapper {
   position: relative;
 }
 
 dialog:focus {outline:none;}
-
 button:focus {outline:none;}
+a:focus {outline:none;}
 
 dialog {
   font: 550 14px 'Varela Round', sans-serif;
