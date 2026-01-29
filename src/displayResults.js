@@ -68,6 +68,31 @@ const displayStepResults = async (result) => {
         showElement('#more-issued-date-section');
         showText('#more-issued-date', formattedDate);
     }
+
+   /*   "targetName": "Requirements Analysis",
+        "targetUrl": "https://credentialfinder.org/credential/20229/Requirements_Analysis",
+        "targetDescription": "This is a description" 
+    */
+
+    if (result.credential.credentialSubject.achievement?.alignment) {
+        showElement('#more-alignment-section')
+        const listElement = getElement('#more-alignment-list')
+        // make an array if not already
+        const alignments = [].concat(result.credential.credentialSubject.achievement.alignment);
+        alignments.forEach(alignment=>{ 
+            const newLink = document.createElement('a');
+            newLink.href = alignment.targetUrl;
+            newLink.title = 'Go to alignment page.';
+            newLink.target = '_blank'; 
+            newLink.textContent = alignment.targetName;
+            newLink.classList.add('alignment-link');
+
+            const newListItem = document.createElement('li');
+            newListItem.appendChild(newLink);
+            listElement.appendChild(newListItem);
+        })
+    }
+
     if (result.credential.credentialSubject.achievement?.criteria?.narrative) {
         showElement('#more-criteria-section')
         const html = marked.parse(result.credential.credentialSubject.achievement.criteria.narrative);
