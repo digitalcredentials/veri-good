@@ -35,6 +35,10 @@ const render = x => `
                 <div class="dialog-heading">Date Issued</div>
                 <div id="more-issued-date" class="dialog-lines to-clear"> </div>
             </div>  
+             <div id="more-alignment-section" class="hide-on-reset">
+                <div id="alignment-heading">Alignments</div>
+                <ul id="more-alignment-list"> </ul>
+            </div>   
             <div id="more-criteria-section" class="hide-on-reset">
                 <div id="criteria-heading">Criteria</div>
                 <div id="more-criteria" > </div>
