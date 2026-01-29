@@ -43,7 +43,6 @@ export const showDialog = (id) => {
     dialog.showModal()
     //scroll to top of the dialog
     dialog.scrollTo(0, 0);
-
 }
 
 export const closeDialog = (id) => {
@@ -76,6 +75,9 @@ export const reset = () => {
     // criteria shows html rendered from markdown,
     // rather than plain text, so have to clear separately
     getElement('#more-criteria').innerHTML = ''
+
+    // clear any alignment list items
+    getElement('#more-alignment-list').innerHTML = ''
 
     showText('#sig-message', VERIFYING_SIG_MSG)
     showText('#rev-message', VERIFYING_REV_MSG)
