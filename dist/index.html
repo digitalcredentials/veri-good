@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>veri-good!</title>
+  </head>
+  <body>
+    <div style="font-size: 20px"></div>
+    <div style="padding: 2em">
+      <veri-good disable-pauses>
+        <div slot="header">
+          <div style="margin-bottom:.5em;"><img style="display: block; margin-left: auto;margin-right: auto; width: 130px;" src="https://digitalcredentials.github.io/badge-assets/dcc-logo-white.png"/></div>
+          <div style="font-size:1em;font-family: sans-serif;">Credential Verification</div>
+        </div>
+        <div slot="awardedBy">by the</div>
+        <div slot="wasAwarded">was awarded a</div>
+        <template id="issuer-dids">
+          {
+            "did:web:digitalcredentials.github.io:testDID": {
+                "issuerName": "Department of Chemistry",
+                "url": "https://chemistry.uni.edu"
+            },
+            "did:web:digitalcredentials.github.io:vc-test-fixtures:dids:legacy": {
+                "issuerName": "Department of Biology",
+                "url": "https://chemistry.uni.edu"
+            },
+            "did:key:z6MkjoriXdbyWD25YXTed114F8hdJrLXQ567xxPHAUKxpKkS": {
+                "issuerName": "Department of Economics",
+                "url": "https://econ.uni.edu"
+            },
+            "did:key:z6MkqBcwQ7qnRBRpgtsJQviLFeYxExMUE2k9nwKkMTF3DdRZ": {
+                "issuerName": "Department of Computer Science",
+                "url": "https://compsci.uni.edu"
+            },
+            "did:key:z6MknNQD1WHLGGraFi6zcbGevuAgkVfdyCdtZnQTGWVVvR5Q": {
+                "issuerName": "Department of History",
+                "url": "https://history.uni.edu"
+            },
+            "did:key:z6MktL8XGbuYv5f7hwf6hVyJkJWynNtNhcsXFYe9NJzjKHkW": {
+                "issuerName": "Digital Credentials Consortium",
+                "url": "https://dcconsortium.org"
+            }
+          }
+        </template>
+      </veri-good>
+    </div>
+    <script type="module" src="./bundle.js"></script>
+     <script>
+      const verifier = document.querySelector('veri-good')
+      const sampleVC = "https://digitalcredentials.github.io/vc-test-fixtures/verifiableCredentials/v1/bothSignatureTypes/didWeb/legacy-validStatus-noExpiry.json"
+        verifier.addEventListener('veri-good-is-ready', (e) => {
+         /*  
+         Can also set the issuer did list programmatically:
+         
+         verifier.setIssuerDids(`{
+            "did:web:digitalcredentials.github.io:testDID": {
+                "issuerName": "Department of Chemistry",
+                "url": "https://chemistry.uni.edu"
+            }}`) 
+          */
+          const queryString = window.location.search;
+          const urlParams = new URLSearchParams(queryString);
+          const vc = urlParams.get('vc'); 
+          if (vc) {verifier.verify(vc)} //else {verifier.verify(sampleVC)}  
+                
+      });
+    </script>
+  </body>
+</html>
