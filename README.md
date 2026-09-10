@@ -4,6 +4,11 @@ A [Web Component](https://developer.mozilla.org/en-US/docs/Web/API/Web_component
 
 'In-browser' meaning that the credential is not sent to the server. It never leaves the web browser, and so remains entirely private.
 
+The verifier accepts a bare Verifiable Credential, or (since `0.0.0-beta.7`) a
+[Verifiable Presentation](https://www.w3.org/TR/vc-data-model-2.0/#presentations)
+envelope of the kind wallets export — the enclosed credential (the first, if
+several) is unwrapped and verified.
+
 Web components are custom HTML tags that work natively with all modern browsers, and can therefore be dropped into any HTML page, like this simple example:
 
 ```
@@ -69,6 +74,14 @@ You can set your issuer list in a template inside the `veri-good` tag like so:
 
 Use the same json structure for your own list.
 
+> [!WARNING]
+> The template only works in HTML that the browser parses: the component reads
+> the template's `.content` fragment, which only the HTML parser populates.
+> Frameworks that build the DOM programmatically — React included — render
+> template children as ordinary child nodes and leave `.content` empty, so the
+> issuer list silently ends up empty. In React (and similar), call
+> `setIssuerDids()` instead (see below).
+
 The issuerName is displayed when verifying a credential issued by that DID.
 
 You can also programmatically set the did list like so:
@@ -96,7 +109,7 @@ You can of course also (and more likely) call setIssuerDids in your own javascri
 
 ### Programmatic Verification
 
-You can programmatically set the VC to be verified by calling the 'verify' method on the element, like so:
+You can programmatically set the VC to be verified by calling the 'verify' method on the element. It accepts either a URL to fetch the credential from, or the credential itself as a JSON string (e.g. `verifier.verify(JSON.stringify(vc))` — the same content a user could paste). For example:
  
  ```
  <body>
@@ -155,6 +168,17 @@ If you don't provide content for the slots, they default to the values show in t
 
 
 ## Development
+
+### Tests
+
+```bash
+npm start                              # serves the demo page on :8080
+npx playwright test --project=Chromium # in another terminal
+```
+
+The Playwright suite drives the demo page through pasted and fetched
+credentials — valid, tampered, expired, revoked, and wallet-exported
+VerifiablePresentation envelopes (`tests/fixtures/`).
 
 ### disable-pauses
 
