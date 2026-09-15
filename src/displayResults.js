@@ -77,11 +77,15 @@ const displayStepResults = async (result) => {
     // achievement and no issuance date opens a dialog containing nothing at
     // all. Don't offer a link that promises details we haven't got.
     const issuedDate = result.credential.issuanceDate || result.credential.validFrom
+    // alignment may be a single object or an array, so normalise before asking
+    // whether there is anything in it -- an empty array is truthy, and would
+    // otherwise count as content and produce the empty dialog this guards against
+    const alignments = [].concat(achievement?.alignment ?? [])
     const hasDialogContent = Boolean(
         achievementName ||
         achievement?.description ||
         issuedDate ||
-        achievement?.alignment ||
+        alignments.length ||
         achievement?.criteria?.narrative
     )
     // clear the inline display rather than setting one, so the link keeps
@@ -111,11 +115,9 @@ const displayStepResults = async (result) => {
         "targetDescription": "This is a description" 
     */
 
-    if (achievement?.alignment) {
+    if (alignments.length) {
         showElement('#more-alignment-section')
         const listElement = getElement('#more-alignment-list')
-        // make an array if not already
-        const alignments = [].concat(achievement.alignment);
         alignments.forEach(alignment=>{ 
             const newLink = document.createElement('a');
             newLink.href = alignment.targetUrl;

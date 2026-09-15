@@ -166,6 +166,13 @@ You'll of course likely have to play with the css for your slots.
 
 If you don't provide content for the slots, they default to the values show in the screenshot.
 
+One constraint on the `wasAwarded` slot: **don't end your wording with an article**
+("a", "an", "the"). A credential that carries no title of its own renders the
+generic title "a credential" on the line below, so wording that ends in an article
+would read "was awarded a a credential". The shipped default is "was awarded" for
+exactly this reason. (The screenshot above predates that change and still shows the
+older "was awarded a".)
+
 
 ## Development
 
