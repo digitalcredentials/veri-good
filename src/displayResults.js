@@ -46,15 +46,42 @@ const displayStepResults = async (result) => {
     // now show the credential recipient, credential name, and issuer   
     showElement("#details-container",'flex')
     showText('#holder-name', result.credential.credentialSubject.name)
-    showText('#cred-name', result.credential.name)
+
+    // The title is the top-level name, falling back to the achievement name -
+    // the same lookup that feeds the dialog title below, reused rather than
+    // traversed twice. Note that this only finds a dict-shaped achievement:
+    // an array-shaped one (which Open Badges permits) yields no title and
+    // falls through to suppression, exactly as it did before.
+    const achievementName = result.credential.credentialSubject.achievement?.name
+    const credentialName = result.credential.name || achievementName
+    const wasAwardedLabel = getElement('slot[name="wasAwarded"]')
+    const credNameElement = getElement('#cred-name')
+    if (credentialName) {
+        showText('#cred-name', credentialName)
+        // clear the inline display rather than setting one, so the slot keeps
+        // whatever the stylesheet gives it
+        wasAwardedLabel.style.display = ''
+    } else {
+        // With no title anywhere, hide the 'was awarded a' label too, so the
+        // card reads as two lines rather than three with a hole in the middle.
+        // This hides an embedder's replacement for the slot as well, which is
+        // accepted: a label framing an empty space is worse.
+        // Clear the element explicitly -- reset() looks for '.toClear' while
+        // these elements carry 'to-clear', so it clears nothing, and a title
+        // from a previous verification would otherwise survive into this one.
+        credNameElement.textContent = ''
+        credNameElement.style.display = 'none'
+        wasAwardedLabel.style.display = 'none'
+    }
+
     showText('#issuer-name', result.issuer.message)
 
     // also populate the fields in the 'more...' dialog
     // - if we have data
     
-     if (result.credential.credentialSubject.achievement?.name) {
+     if (achievementName) {
         showElement('#more-title-section')
-        showText('#more-title', result.credential.credentialSubject.achievement?.name)
+        showText('#more-title', achievementName)
     }
     if (result.credential.credentialSubject.achievement?.description) {
         showElement('#more-description-section')

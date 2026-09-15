@@ -1,0 +1,43 @@
+{
+  "@context": [
+    "https://www.w3.org/ns/credentials/v2",
+    "https://purl.imsglobal.org/spec/ob/v3p0/context-3.0.2.json",
+    "https://w3id.org/security/suites/ed25519-2020/v1"
+  ],
+  "id": "urn:uuid:9d1a7f2c-59b1-4f0a-9d5e-3a6c1b8e40f2",
+  "type": [
+    "VerifiableCredential",
+    "OpenBadgeCredential"
+  ],
+  "issuer": {
+    "id": "did:key:z6MkvDqGT54cXesYGvABpF1UapVNwjCqRcafi4Px6Thv5T3Z",
+    "type": [
+      "Profile"
+    ],
+    "name": "Department of Cartography",
+    "url": "https://cartography.uni.edu"
+  },
+  "validFrom": "2025-03-04T10:00:00Z",
+  "credentialSubject": {
+    "name": "Marguerite Vance",
+    "type": [
+      "AchievementSubject"
+    ],
+    "achievement": {
+      "id": "urn:uuid:5c8b3d10-6f44-4e2a-8b6f-1d0c9a7e2b35",
+      "type": [
+        "Achievement"
+      ],
+      "achievementType": "Badge",
+      "name": "Advanced Cartography",
+      "description": "Learner has demonstrated advanced map-making technique."
+    }
+  },
+  "proof": {
+    "type": "Ed25519Signature2020",
+    "created": "2026-09-15T19:03:31Z",
+    "verificationMethod": "did:key:z6MkvDqGT54cXesYGvABpF1UapVNwjCqRcafi4Px6Thv5T3Z#z6MkvDqGT54cXesYGvABpF1UapVNwjCqRcafi4Px6Thv5T3Z",
+    "proofPurpose": "assertionMethod",
+    "proofValue": "z5AGHfymrr92a98Yd9CzYfrNG72S7eTckAsWQYVudVQZoSCXU1B6qFxVbfzvhwkhH9xjHTu9HYaJTmDfZB7TT2pJA"
+  }
+}
