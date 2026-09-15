@@ -166,13 +166,6 @@ You'll of course likely have to play with the css for your slots.
 
 If you don't provide content for the slots, they default to the values show in the screenshot.
 
-Note that the `wasAwarded` slot is hidden entirely when the credential has no
-title — i.e. when there is no top-level `name` and no `credentialSubject.achievement.name`
-to fall back to. The label would otherwise sit above an empty line, framing a gap.
-This hides your slotted content along with the default wording, so if you slot in
-an icon or other markup there, expect it to disappear for untitled credentials.
-The `awardedBy` slot is not affected.
-
 
 ## Development
 

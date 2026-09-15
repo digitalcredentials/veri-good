@@ -6,6 +6,11 @@ marked.setOptions({
   gfm: true // The 'breaks' option requires GFM (GitHub Flavored Markdown) to be true
 });
 
+// Shown on the title line when the credential carries no title of its own.
+// The surrounding labels are slots an embedder may have reworded, so this
+// stays a plain noun phrase that reads correctly after any of them.
+const GENERIC_CREDENTIAL_TITLE = 'a credential'
+
 const dateOptions = {
   year: 'numeric',
   month: 'short',
@@ -51,30 +56,37 @@ const displayStepResults = async (result) => {
     // the same lookup that feeds the dialog title below, reused rather than
     // traversed twice. Note that this only finds a dict-shaped achievement:
     // an array-shaped one (which Open Badges permits) yields no title and
-    // falls through to suppression, exactly as it did before.
-    const achievementName = result.credential.credentialSubject.achievement?.name
+    // falls back to the generic title, exactly as it did before.
+    //
+    // When neither exists we still write a title, rather than leaving the
+    // line blank or hiding the label: the card is one running sentence, so
+    // an omission anywhere in the middle reads as a fragment. Writing it
+    // unconditionally also means a title can never survive from a previous
+    // verification -- which matters, because reset() intends to clear these
+    // fields but queries '.toClear' while they carry 'to-clear', so it
+    // clears nothing. That mismatch is a separate bug (#15) and is left
+    // alone here.
+    const achievement = result.credential.credentialSubject.achievement
+    const achievementName = achievement?.name
     const credentialName = result.credential.name || achievementName
-    const wasAwardedLabel = getElement('slot[name="wasAwarded"]')
-    const credNameElement = getElement('#cred-name')
-    if (credentialName) {
-        showText('#cred-name', credentialName)
-        // clear the inline display rather than setting one, so the slot keeps
-        // whatever the stylesheet gives it
-        wasAwardedLabel.style.display = ''
-    } else {
-        // With no title anywhere, hide the 'was awarded a' label too, so the
-        // card reads as two lines rather than three with a hole in the middle.
-        // This hides an embedder's replacement for the slot as well, which is
-        // accepted: a label framing an empty space is worse.
-        // Clear the element explicitly -- reset() looks for '.toClear' while
-        // these elements carry 'to-clear', so it clears nothing, and a title
-        // from a previous verification would otherwise survive into this one.
-        credNameElement.textContent = ''
-        credNameElement.style.display = 'none'
-        wasAwardedLabel.style.display = 'none'
-    }
+    showText('#cred-name', credentialName || GENERIC_CREDENTIAL_TITLE)
 
     showText('#issuer-name', result.issuer.message)
+
+    // Every section of the dialog is conditional, so a credential with no
+    // achievement and no issuance date opens a dialog containing nothing at
+    // all. Don't offer a link that promises details we haven't got.
+    const issuedDate = result.credential.issuanceDate || result.credential.validFrom
+    const hasDialogContent = Boolean(
+        achievementName ||
+        achievement?.description ||
+        issuedDate ||
+        achievement?.alignment ||
+        achievement?.criteria?.narrative
+    )
+    // clear the inline display rather than setting one, so the link keeps
+    // whatever the stylesheet gives it
+    getElement('#more-link').style.display = hasDialogContent ? '' : 'none'
 
     // also populate the fields in the 'more...' dialog
     // - if we have data
@@ -83,14 +95,12 @@ const displayStepResults = async (result) => {
         showElement('#more-title-section')
         showText('#more-title', achievementName)
     }
-    if (result.credential.credentialSubject.achievement?.description) {
+    if (achievement?.description) {
         showElement('#more-description-section')
-        showText('#more-description', result.credential.credentialSubject.achievement.description)
+        showText('#more-description', achievement.description)
     }
-    if (result.credential.issuanceDate || result.credential.validFrom) {
-        const issuanceDate = (result.credential.issuanceDate || result.credential.validFrom) ?
-            new Date(result.credential.issuanceDate || result.credential.validFrom) : 
-            null
+    if (issuedDate) {
+        const issuanceDate = new Date(issuedDate)
         const formattedDate = new Intl.DateTimeFormat('en-US', dateOptions).format(issuanceDate);
         showElement('#more-issued-date-section');
         showText('#more-issued-date', formattedDate);
@@ -101,11 +111,11 @@ const displayStepResults = async (result) => {
         "targetDescription": "This is a description" 
     */
 
-    if (result.credential.credentialSubject.achievement?.alignment) {
+    if (achievement?.alignment) {
         showElement('#more-alignment-section')
         const listElement = getElement('#more-alignment-list')
         // make an array if not already
-        const alignments = [].concat(result.credential.credentialSubject.achievement.alignment);
+        const alignments = [].concat(achievement.alignment);
         alignments.forEach(alignment=>{ 
             const newLink = document.createElement('a');
             newLink.href = alignment.targetUrl;
@@ -120,9 +130,9 @@ const displayStepResults = async (result) => {
         })
     }
 
-    if (result.credential.credentialSubject.achievement?.criteria?.narrative) {
+    if (achievement?.criteria?.narrative) {
         showElement('#more-criteria-section')
-        const html = marked.parse(result.credential.credentialSubject.achievement.criteria.narrative);
+        const html = marked.parse(achievement.criteria.narrative);
         getElement('#more-criteria').innerHTML = html
     }
     

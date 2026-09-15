@@ -54,26 +54,31 @@ test.describe('credential title', () => {
     await open(page);
     await verify(page, achievementNameOnly);
     await expect(page.locator('#cred-name')).toHaveText('Advanced Cartography');
-    await expect(page.getByText('was awarded a')).toBeVisible();
+    await expect(page.getByText('was awarded')).toBeVisible();
     await expect(page.locator('#issuer-name')).toHaveText('Department of Cartography');
+    // this one has dialog content, so the link is offered and comes back
+    // after having been hidden for an untitled credential
+    await expect(page.locator('#more-link')).toBeVisible();
   });
 
   test('uses the top-level name when there is one', async ({ page }) => {
     await open(page);
     await verify(page, bothNames);
     await expect(page.locator('#cred-name')).toHaveText('LCW Experience Badge');
-    await expect(page.getByText('was awarded a')).toBeVisible();
+    await expect(page.getByText('was awarded')).toBeVisible();
   });
 
-  test('suppresses the title line and its label when there is no title at all', async ({ page }) => {
+  test('shows a generic title when there is no title at all', async ({ page }) => {
     await open(page);
     await verify(page, JSON.stringify(sampleVC));
     await expect(page.locator('#holder-name')).toHaveText('James Chartrand');
-    await expect(page.locator('#cred-name')).toBeHidden();
-    await expect(page.getByText('was awarded a')).toBeHidden();
-    // the other label is unaffected
+    // the card stays a complete sentence rather than skipping a clause
+    await expect(page.locator('#cred-name')).toHaveText('a credential');
+    await expect(page.getByText('was awarded')).toBeVisible();
     await expect(page.getByText('by the')).toBeVisible();
     await expect(page.locator('#issuer-name')).toHaveText('Department of History');
+    // nothing to put in the dialog, so the link isn't offered
+    await expect(page.locator('#more-link')).toBeHidden();
   });
 
   test('leaves no trace of a previous title when verifying an untitled credential next', async ({ page }) => {
@@ -85,8 +90,8 @@ test.describe('credential title', () => {
     await verify(page, JSON.stringify(sampleVC));
 
     await expect(page.locator('#holder-name')).toHaveText('James Chartrand');
-    await expect(page.locator('#cred-name')).toBeHidden();
-    await expect(page.locator('#cred-name')).toHaveText('');
-    await expect(page.getByText('was awarded a')).toBeHidden();
+    // the generic title, with no trace of 'LCW Experience Badge'
+    await expect(page.locator('#cred-name')).toHaveText('a credential');
+    await expect(page.getByText('was awarded')).toBeVisible();
   });
 });
