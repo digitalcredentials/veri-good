@@ -165,9 +165,7 @@
     garbage:       "something that is not a credential",
     emptyVp:       JSON.stringify({ '@context':['https://www.w3.org/ns/credentials/v2'],
                                     type:['VerifiablePresentation'], verifiableCredential:[] }),
-    presentation:  JSON.stringify({ '@context':['https://www.w3.org/ns/credentials/v2'],
-                                    type:['VerifiablePresentation'],
-                                    verifiableCredential:[ "__VC__" ] }),
+    presentation:  null,   // built on demand below, by wrapping the valid fixture
     clear:         ""
   };
 
@@ -177,8 +175,21 @@
 
   // the wallet-presentation button wraps the valid fixture, which has to be
   // fetched first -- the component takes a presentation as JSON, not a link
+  const visible = (el) => el && getComputedStyle(el).display !== 'none';
+
   async function fill(key) {
     const root = sr(); if (!root) return;
+
+    // A finished verification hides the paste box and swaps Verify for
+    // Verify Another, so filling now would write into an invisible field with
+    // no way to submit it. Put the card back first -- and before writing,
+    // since reset() clears the box.
+    const another = root.querySelector('#verifyAnotherBtn');
+    if (visible(another)) {
+      another.click();
+      await new Promise(r => setTimeout(r, 60));
+    }
+
     const box = root.querySelector('#vc-paste'); if (!box) return;
     let value = F[key] ?? '';
     if (key === 'presentation') {
@@ -199,13 +210,23 @@
 
   const body = document.getElementById('readout');
   const verdict = document.getElementById('verdict');
+  const esc = (t) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+  let lastRender = null;
 
   setInterval(() => {
     const root = sr(); if (!root) return;
     const vals = IDS.map(id => [id, (root.querySelector(id)?.textContent ?? '').trim()]);
-    body.innerHTML = vals.map(([id,v]) =>
-      `<tr><td><code>${id}</code></td><td class="val ${v?'filled':'empty'}">${
-        v ? v.replace(/</g,'&lt;') : '(empty)'}</td></tr>`).join('');
+
+    // only redraw when something actually changed: rebuilding every 300ms
+    // wipes any text the reader has selected, in the one table on the page
+    // whose whole point is being read
+    const signature = JSON.stringify(vals);
+    if (signature !== lastRender) {
+      lastRender = signature;
+      body.innerHTML = vals.map(([id,v]) =>
+        `<tr><td><code>${esc(id)}</code></td><td class="val ${v?'filled':'empty'}">${
+          v ? esc(v) : '(empty)'}</td></tr>`).join('');
+    }
 
     const card = vals.filter(([id]) => id !== '#error-message');
     const filled = card.filter(([,v]) => v);
