@@ -44,14 +44,6 @@
     .warn { background:var(--warn-bg); color:var(--warn); border:1px solid #ffcc80; }
     .note { font-size:.85rem; color:var(--ink-soft); line-height:1.5; }
     ol { margin:0; padding-left:1.35rem; } li { margin-bottom:.75rem; }
-    li.done { opacity:.42; }
-    .exp { display:block; font-size:.87rem; color:var(--ink-soft); margin-top:.15rem; }
-    .exp b { color:var(--ok); }
-    .pr { display:inline-block; font-size:.7rem; font-weight:700; letter-spacing:.04em;
-          background:var(--blue); color:#fff; padding:.1rem .42rem; border-radius:99px;
-          vertical-align:.09em; margin-right:.3rem; }
-    .grp { border-top:1px solid var(--rule); padding-top:.9rem; margin-top:.9rem; }
-    .grp:first-of-type { border-top:0; padding-top:0; margin-top:0; }
     @media (max-width:900px){ .left{position:static;} }
   </style>
 </head>
@@ -86,7 +78,8 @@
       <code>./dist/bundle.js</code> exactly as the demo page loads it. Everything here is
       scaffolding around it: sample credentials to feed it, and a live read of what it put
       on screen.</p>
-      <p class="note">Nothing on this page is part of the published component.</p>
+      <p class="note">Nothing on this page is part of the published component. It is here so
+      you can try the verifier without hunting for a credential to paste into it.</p>
     </div>
 
     <div class="panel">
@@ -138,50 +131,22 @@
     </div>
 
     <div class="panel">
-      <h2>Verification plan</h2>
-      <p class="note" style="margin-bottom:.9rem">Click a step to tick it off. Command line
-      first: <code>npm ci &amp;&amp; npm test</code> → <b>28 passed</b>, no second terminal,
-      no browser install. <span class="pr">#28</span></p>
-      <ol id="steps">
-        <li data-s><span class="pr">#27</span>Load this page fresh. Press <b>Valid, no expiry</b>, click <b>Verify</b>.
-          <span class="exp">Expect: three green checks, card reads Taylor Tuna / Department of Biology.
-          Open <b>Credential details</b> — title, description, date, criteria all filled. Close it.</span></li>
-
-        <li data-s><span class="pr">#27</span>Click <b>Verify Another</b>.
-          <span class="exp">Expect: <b>verdict above turns green</b> — all seven rows empty.
-          This is the one step that can fail invisibly: on a broken build the card looks identical
-          and the rows still hold Taylor Tuna.</span></li>
-
-        <li data-s><span class="pr">#31</span>Press <b>Not a credential</b>, click <b>Verify</b>.
-          <span class="exp">Expect: message appears <b>beside the paste box</b>, your text is
-          <b>still there</b>, button still says <b>Verify</b>. All seven rows stay empty —
-          nothing reached the card. Previously this cleared your paste and showed three messages.</span></li>
-
-        <li data-s><span class="pr">#31</span>Type a character into the box.
-          <span class="exp">Expect: the message <b>disappears</b> as soon as the text changes.</span></li>
-
-        <li data-s><span class="pr">#31</span>Press <b>Tampered</b>, click <b>Verify</b>.
-          <span class="exp">Expect: an alert <b>on the card</b> titled <b>“Signature doesn't match”</b>,
-          and <b>no red ring on the box</b> — the paste was fine, the credential wasn't.
-          <code>#error-message</code> fills here.</span></li>
-
-        <li data-s><span class="pr">#30</span>Narrow the browser window to roughly phone width.
-          <span class="exp">Expect: the card <b>shrinks with the window</b> and the page never
-          scrolls sideways. Nothing clipped — the paste box and drop zone shrink too.</span></li>
-
-        <li data-s><span class="pr">#30</span>Trigger an error at that narrow width.
-          <span class="exp">Expect: the button keeps <b>clear space below it</b> and is never
-          cut off by the card's bottom edge.</span></li>
-
-        <li data-s><span class="pr">#29</span>Turn on VoiceOver (⌘F5) and verify something that fails.
-          <span class="exp">Expect: the failure is <b>spoken</b>. Previously it was announced to
-          nobody. The running checks are read out politely as they complete.</span></li>
-
-        <li data-s><span class="pr">#27</span>Press <b>Expired</b>, verify, then <b>Verify Another</b>,
-          then <b>Valid, no expiry</b> and verify again.
-          <span class="exp">Expect: every field renders the second time — nothing suppressed or
-          stuck empty after a failure.</span></li>
-      </ol>
+      <h2>What to look at</h2>
+      <p class="note">The card shows a verdict. The table above shows what the component
+      actually put in the DOM to produce it — which is not always the same thing, because
+      several of those fields are hidden rather than empty.</p>
+      <h3>Worth trying</h3>
+      <ul class="note" style="margin:0;padding-left:1.15rem">
+        <li style="margin-bottom:.45rem">Verify something, click <b>Verify Another</b>, and
+        watch the table. Anything still filled there is carried over from the last
+        verification and invisible on screen.</li>
+        <li style="margin-bottom:.45rem">Compare <b>Expired</b> with <b>Tampered</b>. One is a
+        credential that verified and failed a check; the other could not be trusted at all.
+        Whether the card tells those apart clearly is worth your judgement.</li>
+        <li style="margin-bottom:.45rem">Try <b>Not a credential</b>, then check whether your
+        pasted text is still there to fix.</li>
+        <li>Narrow the window to phone width and verify something.</li>
+      </ul>
     </div>
 
   </div>
@@ -200,9 +165,7 @@
     garbage:       "something that is not a credential",
     emptyVp:       JSON.stringify({ '@context':['https://www.w3.org/ns/credentials/v2'],
                                     type:['VerifiablePresentation'], verifiableCredential:[] }),
-    presentation:  JSON.stringify({ '@context':['https://www.w3.org/ns/credentials/v2'],
-                                    type:['VerifiablePresentation'],
-                                    verifiableCredential:[ "__VC__" ] }),
+    presentation:  null,   // built on demand below, by wrapping the valid fixture
     clear:         ""
   };
 
@@ -212,8 +175,21 @@
 
   // the wallet-presentation button wraps the valid fixture, which has to be
   // fetched first -- the component takes a presentation as JSON, not a link
+  const visible = (el) => el && getComputedStyle(el).display !== 'none';
+
   async function fill(key) {
     const root = sr(); if (!root) return;
+
+    // A finished verification hides the paste box and swaps Verify for
+    // Verify Another, so filling now would write into an invisible field with
+    // no way to submit it. Put the card back first -- and before writing,
+    // since reset() clears the box.
+    const another = root.querySelector('#verifyAnotherBtn');
+    if (visible(another)) {
+      another.click();
+      await new Promise(r => setTimeout(r, 60));
+    }
+
     const box = root.querySelector('#vc-paste'); if (!box) return;
     let value = F[key] ?? '';
     if (key === 'presentation') {
@@ -234,13 +210,23 @@
 
   const body = document.getElementById('readout');
   const verdict = document.getElementById('verdict');
+  const esc = (t) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+  let lastRender = null;
 
   setInterval(() => {
     const root = sr(); if (!root) return;
     const vals = IDS.map(id => [id, (root.querySelector(id)?.textContent ?? '').trim()]);
-    body.innerHTML = vals.map(([id,v]) =>
-      `<tr><td><code>${id}</code></td><td class="val ${v?'filled':'empty'}">${
-        v ? v.replace(/</g,'&lt;') : '(empty)'}</td></tr>`).join('');
+
+    // only redraw when something actually changed: rebuilding every 300ms
+    // wipes any text the reader has selected, in the one table on the page
+    // whose whole point is being read
+    const signature = JSON.stringify(vals);
+    if (signature !== lastRender) {
+      lastRender = signature;
+      body.innerHTML = vals.map(([id,v]) =>
+        `<tr><td><code>${esc(id)}</code></td><td class="val ${v?'filled':'empty'}">${
+          v ? esc(v) : '(empty)'}</td></tr>`).join('');
+    }
 
     const card = vals.filter(([id]) => id !== '#error-message');
     const filled = card.filter(([,v]) => v);
@@ -257,14 +243,6 @@
       verdict.textContent = `✗ ${filled.length} field(s) still hold the previous credential while the card is hidden.`;
     }
   }, 300);
-
-  document.querySelectorAll('#steps li[data-s]').forEach(li => {
-    li.style.cursor = 'pointer'; li.title = 'click to tick off';
-    li.addEventListener('click', e => {
-      if (['B','CODE','EM'].includes(e.target.tagName)) return;
-      li.classList.toggle('done');
-    });
-  });
 </script>
 </body>
 </html>
