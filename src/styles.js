@@ -10,6 +10,10 @@ const dccBlue = '#234467'
 const defaultBlueColor = '#002147'
 const defaultTextColor = 'white'
 const dccRegalPurple = '#320E3B'
+// warm red-orange rather than the brand purple: failure needs to read as
+// failure, and this sits legibly on the blue card in the way pure red does not
+const errorAccent = '#e8836c'
+const errorAccentSoft = '#f0a494'
 const dccLightGrey = '#626a73'
 const dccDarkGrey = '#40464c'
 
@@ -23,8 +27,19 @@ const componentStyles = `
     color: ${defaultTextColor};
     background: ${dccBlue};
     border-radius: var(--default-radius);
+    /* max-width rather than a bare width so the card can shrink into a
+       narrow viewport instead of forcing the page to scroll sideways
+       (WCAG 2.1 SC 1.4.10 Reflow) */
     width: 380px;
-    height: 450px;
+    max-width: 100%;
+    box-sizing: border-box;
+    /* min-height, not height: the card has to grow with its content. As a
+       fixed 450px the bottom gap was simply whatever was left over, so a
+       longer error message squeezed the button against the edge -- 11px
+       below the CTA on the failure screen against 24-28px everywhere else
+       -- and anything taller still overflowed, since overflow is visible. */
+    min-height: 450px;
+    padding-bottom: 1.5em;
     text-align: center;
     box-shadow: 0 0 var(--default-depth) rgba(0,0,0,.5);
   }
@@ -92,7 +107,7 @@ const componentStyles = `
     align-items: center;
 }
 
-#result-container, #error-container, #details-container, #verify-spinner, #verifyAnotherBtn, #error-message {
+#result-container, #error-container, #details-container, #verify-spinner, #verifyAnotherBtn {
   display: none;
 }
 
@@ -100,7 +115,11 @@ const componentStyles = `
   height: 150px;
   width: 200px;
   max-height: 180px;
-  max-width: 250px;
+  /* box-sizing so the padding counts inside the width, and a percentage cap
+     so the field shrinks with the card rather than being clipped by
+     contain: content on a narrow screen */
+  box-sizing: border-box;
+  max-width: min(250px, 100%);
   padding: 10px;
   margin: 15px 0 20px;
   background: lightgrey;        /* old background #e3e8df; */
@@ -135,6 +154,15 @@ textarea::placeholder {
     align-items: center; 
 }
 
+/* the textarea's max-width is a percentage, so its wrapper has to have a
+   width for that to resolve against -- shrink-to-fit around a 200px field
+   means the cap never binds and the field is clipped on a narrow card */
+.input-field {
+  width: 100%;
+  box-sizing: border-box;
+  padding-inline: 1em;
+}
+
   #details-container {
     font: 400 13px 'Varela Round', sans-serif;
     margin: 25px 0 20px 0;
@@ -149,17 +177,78 @@ textarea::placeholder {
   }
 
   #error-container {
-    margin:3em;
+    margin: 2em 1.25em;
   }
 
-  .error-lines {
-    padding-bottom: .5em;
+  /* One alert rather than three stacked messages: what happened, then what to
+     do about it. The severity stripe carries the colour so the block stays
+     quiet against the card instead of competing with it. */
+  .error-alert {
+    display: grid;
+    grid-template-columns: 1.3em 1fr;
+    gap: .65em;
+    text-align: left;
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.18);
+    border-left: 3px solid ${errorAccent};
+    border-radius: 5px;
+    padding: .85em .95em;
+  }
+  /* ringed, not a bare glyph floating next to the text */
+  .error-alert-glyph, .field-error-glyph {
+    border-radius: 50%;
+    border: 1.5px solid ${errorAccent};
+    color: ${errorAccent};
+    display: grid;
+    place-items: center;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .error-alert-glyph {
+    width: 1.3em; height: 1.3em; font-size: .85em; margin-top: .1em;
+  }
+  .error-alert-title {
+    font-weight: 600;
+    line-height: 1.35;
+    margin-bottom: .2em;
+  }
+  .error-alert-detail {
+    font-size: .88em;
+    line-height: 1.45;
+    color: rgba(255,255,255,.82);
   }
 
-  #error-message {
-      margin:1em;
-      padding: 1em;
-      background: ${dccRegalPurple} /* #e3e8df; */
+  /* Errors the user can fix belong beside the box that caused them, with the
+     pasted text left in place so a typo does not cost the whole credential. */
+  .field-error {
+    display: none;
+    grid-template-columns: 1.05em 1fr;
+    gap: .45em;
+    text-align: left;
+    /* match the textarea's own width so the message lines up with the field
+       it belongs to -- left to itself the wrapper grows to fit the message
+       and the textarea then centres inside it, leaving the two misaligned.
+       220px is the textarea's border box: 200 wide plus its 10px padding */
+    width: 220px;
+    max-width: 100%;
+    /* stays flush with the textarea once that starts shrinking */
+    padding-inline: 0;
+    box-sizing: border-box;
+    margin: -14px auto 6px;
+    color: ${errorAccentSoft};
+    font-size: .85em;
+    line-height: 1.4;
+  }
+  .field-error.showing {
+    display: grid;
+  }
+  .field-error-glyph {
+    width: 1.05em; height: 1.05em; font-size: .7em; margin-top: .1em;
+    border-color: ${errorAccentSoft};
+    color: ${errorAccentSoft};
+  }
+  .vc-area.invalid {
+    border: 2px solid ${errorAccentSoft};
   }
 
   #button-container {
@@ -320,6 +409,8 @@ const dragNDropStyles = `
 .drop-zone {
   height: 10px;
   width: 200px;
+  box-sizing: border-box;
+  max-width: 100%;
   margin: 0 0 25px;
   padding: 25px;
   display: flex;

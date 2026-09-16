@@ -44,7 +44,12 @@ const displayStepResults = async (result) => {
          const message = ! result.signature.valid ? 
             result.signature.message :
             result.issuer.message
-        displayError(message)
+        // name which of the two failed rather than restating the detail line
+        // underneath it, and never imply the user mistyped something
+        const title = ! result.signature.valid ?
+            "Signature doesn't match" :
+            "Issuer isn't recognised"
+        displayError(message, title)
         return
      }  
      
