@@ -70,6 +70,29 @@ test.describe('a fixable error leaves the user able to fix it', () => {
     await expect(page.getByRole('button', { name: 'Verify', exact: true })).toBeVisible()
   });
 
+  // Mutation testing found this untested: removing the class broke nothing.
+  // The message alone carries the error otherwise, which leaves the field
+  // itself looking untouched.
+  test('the field that caused the error is marked', async ({ page }) => {
+    await page.goto(`${baseUrl}`);
+    await page.locator('#vc-paste').fill('something that is not a credential');
+    await page.getByRole('button', { name: 'Verify', exact: true }).click();
+    await expect(page.locator('#input-error')).toBeVisible()
+
+    await expect(page.locator('#vc-paste')).toHaveClass(/invalid/)
+    // and it has to be a visible border, not just a class nothing styles
+    const border = await page.locator('#vc-paste').evaluate(el => {
+      const cs = getComputedStyle(el)
+      return { width: cs.borderTopWidth, color: cs.borderTopColor }
+    })
+    expect(border.width).not.toBe('0px')
+    expect(border.color).not.toBe('rgba(0, 0, 0, 0)')
+
+    // and it clears with the message
+    await page.locator('#vc-paste').fill('h')
+    await expect(page.locator('#vc-paste')).not.toHaveClass(/invalid/)
+  });
+
   test('editing the box drops an error that no longer applies', async ({ page }) => {
     await page.goto(`${baseUrl}`);
     await page.locator('#vc-paste').fill('something that is not a credential');
