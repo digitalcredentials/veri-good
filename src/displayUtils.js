@@ -53,11 +53,41 @@ export const getElement = (selector, ancestor=shadowRoot) => {
     return ancestor.querySelector(selector)
 }
 
-export const displayError = (message) => {
+// Failures the user cannot act on: the credential is bad, or its issuer is
+// unknown. The paste was fine, so there is nothing to edit and nothing to
+// blame the input for -- state what happened and offer the next verification.
+export const displayError = (message, title = 'Verification failed') => {
     hideElement("#verify-spinner")
+    clearInputError()
     showElement("#error-container")
+    showText('#error-title', title)
     showText('#error-message', message)
     showElement("#verifyAnotherBtn", 'flex')
+}
+
+// Failures the user can act on: nothing parsed, or the url did not resolve.
+// Keep them on the input with what they pasted still in the box -- losing a
+// credential to a typo is the actual cost of an error here.
+export const displayInputError = (message, pastedContent) => {
+    hideElement("#verify-spinner")
+    hideElement("#error-container")
+    showElement("#input-container", 'block')
+    showElement("#verifyBtn", 'flex')
+    hideElement("#verifyAnotherBtn")
+
+    const box = getElement('#vc-paste')
+    if (typeof pastedContent === 'string') box.value = pastedContent
+    box.classList.add('invalid')
+
+    getElement('#input-error').classList.add('showing')
+    getElement('#input-error-text').textContent = message
+    box.focus()
+}
+
+export const clearInputError = () => {
+    getElement('#vc-paste').classList.remove('invalid')
+    getElement('#input-error').classList.remove('showing')
+    getElement('#input-error-text').textContent = ''
 }
 
 export const reset = () => {
@@ -83,6 +113,7 @@ export const reset = () => {
     showText('#rev-message', VERIFYING_REV_MSG)
     showText('#exp-message', VERIFYING_EXP_MSG)
     getElement('#vc-paste').value = '';
+    clearInputError()
 
     shadowRoot.querySelectorAll('.circle-loader').forEach(element=>
      {

@@ -31,7 +31,7 @@ test.describe('verifiable presentations', () => {
       verifiableCredential: []
     }));
     await page.getByRole('button', { name: 'Verify' }).click();
-    await expect(page.getByText('Something went wrong - please try again.')).toBeVisible()
-    await expect(page.getByText("The presentation you provided doesn't contain a credential.")).toBeVisible()
+    await expect(page.locator('#input-error-text'))
+      .toHaveText("The presentation you provided doesn't contain a credential.")
   });
 });

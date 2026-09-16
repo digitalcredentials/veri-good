@@ -24,7 +24,8 @@ test.describe('card layout', () => {
     await page.addStyleTag({ content: 'body { font-family: system-ui, sans-serif }' })
     await page.locator('#vc-paste').fill('something that is not a credential');
     await page.getByRole('button', { name: 'Verify', exact: true }).click();
-    await expect(page.locator('#error-message')).toBeVisible()
+    // a fixable failure renders beside the field, which is what grows the card
+    await expect(page.locator('#input-error')).toBeVisible()
 
     const { gap, overflows } = await gapBelowCTA(page)
     expect(overflows).toBe(false)
@@ -39,7 +40,7 @@ test.describe('card layout', () => {
 
     await page.locator('#vc-paste').fill('something that is not a credential');
     await page.getByRole('button', { name: 'Verify', exact: true }).click();
-    await expect(page.locator('#error-message')).toBeVisible()
+    await expect(page.locator('#input-error')).toBeVisible()
 
     const errored = await page.evaluate(() =>
       Math.round(document.querySelector('veri-good').getBoundingClientRect().height))
