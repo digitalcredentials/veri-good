@@ -84,8 +84,9 @@
         <h2>Test plan</h2>
         <p class="note">Tick as you go. Steps 3–7 cover <b>#15</b> (open). Steps 1–2 re-check
         <b>#12</b>, already merged to main, as a regression guard. <b>#17</b> is the command
-        line: <code>npm ci &amp;&amp; npm test</code> → <b>18 passed</b>.<br>
-        Base is main at #20, so #8's title fallback and #14's relabel are live here too.</p>
+        line: <code>npm ci &amp;&amp; npm test</code> → <b>28 passed</b>.<br>
+        Also carries <b>#31</b>, which splits errors by whether you can act on them, and
+        <b>#29</b>/<b>#30</b> underneath it.</p>
         <ol id="steps">
           <li data-s>Load this page fresh (or hit reload).
             <span class="exp">Expect: paste box <b>empty</b>, grey placeholder visible. <i>(#12)</i></span></li>
@@ -98,7 +99,15 @@
           <li data-s>Click <b>Verify Another</b>.
             <span class="exp">Expect: <b>verdict above turns green</b> — all seven empty. On a broken build it stays red with Taylor Tuna's details still in the DOM. <i>(#15 — the step that can actually fail)</i></span></li>
           <li data-s>Press <b>Not a credential</b>, click <b>Verify</b>.
-            <span class="exp">Expect: error message; the six card/dialog rows above stay <b>empty</b>. Only <code>#error-message</code> fills. <i>(#15)</i></span></li>
+            <span class="exp">Expect: the message appears <b>beside the paste box</b>, which <b>keeps your text</b>,
+            and the button still says <b>Verify</b> — this is a failure you can fix by editing. All seven rows above
+            stay <b>empty</b>, <code>#error-message</code> included: nothing reached the card. <i>(#31)</i></span></li>
+          <li data-s>Edit the box — type a character.
+            <span class="exp">Expect: the message disappears the moment the text changes. <i>(#31)</i></span></li>
+          <li data-s>Press <b>Expired fixture</b>… then try a tampered credential.
+            <span class="exp">Expect: an alert <b>on the card</b> with a title naming what failed, and
+            <b>no red ring on the box</b> — the paste was correct, the credential wasn't. <code>#error-message</code>
+            fills here. <i>(#31)</i></span></li>
           <li data-s>Click <b>Verify Another</b>, press <b>Good credential</b>, <b>Verify</b>, then open <b>Credential details</b>.
             <span class="exp">Expect: everything renders again — nothing suppressed or stuck empty after the error. <i>(#15 reverse)</i></span></li>
         </ol>
