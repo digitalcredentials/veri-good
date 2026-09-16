@@ -152,10 +152,16 @@ test.describe('the accessibility tree exposes the right shape', () => {
     await expect(page.getByRole('alert')).toHaveCount(1)
     await expect(page.getByRole('alert')).toContainText("couldn't be processed")
 
-    // the generic copy above it is not itself an alert, so it is not announced
-    // a second time
-    const alertText = await page.getByRole('alert').textContent()
-    expect(alertText.trim()).toBe("The credential you provided couldn't be processed.")
+    // What a screen reader actually reads: textContent includes decorative
+    // glyphs, which are aria-hidden and must not be announced. Asserting the
+    // accessible text checks both that the message is exact and that the
+    // decoration is properly hidden.
+    const announced = await page.getByRole('alert').evaluate(el => {
+      const clone = el.cloneNode(true)
+      clone.querySelectorAll('[aria-hidden="true"]').forEach(n => n.remove())
+      return clone.textContent.replace(/\s+/g, ' ').trim()
+    })
+    expect(announced).toBe("The credential you provided couldn't be processed.")
   });
 
   test('the checks are one status region holding all three lines', async ({ page }) => {
