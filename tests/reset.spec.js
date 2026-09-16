@@ -1,6 +1,12 @@
 import { test, expect } from '@playwright/test';
 
 const validStatusNoExpiry = "https://digitalcredentials.github.io/vc-test-fixtures/verifiableCredentials/v1/ed25519/didWeb/legacy-validStatus-noExpiry.json"
+// A credential that fails verification, rather than input that never parses.
+// Both populate only the error message and none of the six card fields, but
+// only this one is guaranteed to leave the card on the "Verify Another"
+// screen -- a malformed paste is a recoverable input error, which #31 keeps
+// on the input with the Verify button.
+const tampered = "https://digitalcredentials.github.io/vc-test-fixtures/verifiableCredentials/v2/ed25519/didKey/legacy-noStatus-noExpiry-tampered.json"
 const baseUrl = process.env.BASE_URL ?? 'http://localhost:8080';
 
 // The seven elements carrying class="to-clear" in the markup. reset() clears
@@ -16,9 +22,9 @@ const toClearIds = [
   '#error-message'
 ]
 
-// A credential populates the six card and dialog fields; garbage populates
-// only the error message. Verifying one after the other is what exposes text
-// carried over from the previous verification.
+// A credential populates the six card and dialog fields; a failed verification
+// populates only the error message. Verifying one after the other is what
+// exposes text carried over from the previous verification.
 const cardFields = ['#holder-name', '#cred-name', '#issuer-name']
 const dialogFields = ['#more-title', '#more-description', '#more-issued-date']
 const populatedByCredential = [...cardFields, ...dialogFields]
@@ -41,14 +47,14 @@ const verifyAnother = async (page) => {
 
 test.describe('reset clears every to-clear element', () => {
 
-  test('a credential then garbage leaves no text from the credential', async ({ page }) => {
+  test('a credential then a failure leaves no text from the credential', async ({ page }) => {
     await page.goto(`${baseUrl}`);
     await verify(page, validStatusNoExpiry);
     await expect(page.locator('#more-issued-date')).not.toBeEmpty()
 
     await verifyAnother(page);
-    await verify(page, 'something that is not a credential');
-    await expect(page.getByText("The credential you provided couldn't be processed.")).toBeVisible()
+    await verify(page, tampered);
+    await expect(page.locator('#error-message')).toContainText("couldn't be verified")
 
     // the second verification writes only #error-message, so anything left in
     // the other six came from the first credential
@@ -57,10 +63,10 @@ test.describe('reset clears every to-clear element', () => {
     }
   });
 
-  test('garbage then a credential renders every field, none suppressed', async ({ page }) => {
+  test('a failure then a credential renders every field, none suppressed', async ({ page }) => {
     await page.goto(`${baseUrl}`);
-    await verify(page, 'something that is not a credential');
-    await expect(page.getByText("The credential you provided couldn't be processed.")).toBeVisible()
+    await verify(page, tampered);
+    await expect(page.locator('#error-message')).toContainText("couldn't be verified")
 
     await verifyAnother(page);
     await verify(page, validStatusNoExpiry);
