@@ -115,7 +115,11 @@ const componentStyles = `
   height: 150px;
   width: 200px;
   max-height: 180px;
-  max-width: 250px;
+  /* box-sizing so the padding counts inside the width, and a percentage cap
+     so the field shrinks with the card rather than being clipped by
+     contain: content on a narrow screen */
+  box-sizing: border-box;
+  max-width: min(250px, 100%);
   padding: 10px;
   margin: 15px 0 20px;
   background: lightgrey;        /* old background #e3e8df; */
@@ -148,6 +152,15 @@ textarea::placeholder {
     display: flex; 
     flex-direction: column;
     align-items: center; 
+}
+
+/* the textarea's max-width is a percentage, so its wrapper has to have a
+   width for that to resolve against -- shrink-to-fit around a 200px field
+   means the cap never binds and the field is clipped on a narrow card */
+.input-field {
+  width: 100%;
+  box-sizing: border-box;
+  padding-inline: 1em;
 }
 
   #details-container {
@@ -218,6 +231,8 @@ textarea::placeholder {
        220px is the textarea's border box: 200 wide plus its 10px padding */
     width: 220px;
     max-width: 100%;
+    /* stays flush with the textarea once that starts shrinking */
+    padding-inline: 0;
     box-sizing: border-box;
     margin: -14px auto 6px;
     color: ${errorAccentSoft};
@@ -394,6 +409,8 @@ const dragNDropStyles = `
 .drop-zone {
   height: 10px;
   width: 200px;
+  box-sizing: border-box;
+  max-width: 100%;
   margin: 0 0 25px;
   padding: 25px;
   display: flex;

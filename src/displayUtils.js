@@ -71,7 +71,10 @@ export const displayError = (message, title = 'Verification failed') => {
 export const displayInputError = (message, pastedContent) => {
     hideElement("#verify-spinner")
     hideElement("#error-container")
-    showElement("#input-container", 'block')
+    // flex, not block: showVerifyingSpinner hid this, and the stylesheet
+    // centres its children with flex -- re-showing it as block left the
+    // drop zone flush against the card's left edge until the next reset
+    showElement("#input-container", 'flex')
     showElement("#verifyBtn", 'flex')
     hideElement("#verifyAnotherBtn")
 
@@ -81,7 +84,6 @@ export const displayInputError = (message, pastedContent) => {
 
     getElement('#input-error').classList.add('showing')
     getElement('#input-error-text').textContent = message
-    box.focus()
 }
 
 export const clearInputError = () => {

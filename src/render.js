@@ -48,7 +48,7 @@ const render = x => `
 
 
     <div id="input-container" class="show-on-reset">
-        <div>
+        <div class="input-field">
             <textarea id="vc-paste" class="vc-area" placeholder="Paste your credential, or a url pointing to it."
                 aria-describedby="input-error"></textarea>
             <div id="input-error" class="field-error" role="alert">

@@ -44,8 +44,6 @@ const displayStepResults = async (result) => {
          const message = ! result.signature.valid ? 
             result.signature.message :
             result.issuer.message
-        // the paste was fine and the credential is not, so say which of the
-        // two failed rather than implying the user mistyped something
         // name which of the two failed rather than restating the detail line
         // underneath it, and never imply the user mistyped something
         const title = ! result.signature.valid ?
