@@ -31,7 +31,7 @@ test.describe('status messages are announced', () => {
     await page.locator('#vc-paste').fill(tampered);
     await page.getByRole('button', { name: 'Verify', exact: true }).click();
 
-    await expect(page.locator('#error-title')).toHaveText("Signature doesn't match")
+    await expect(page.locator('#error-title')).toHaveText("Couldn't verify this credential")
     await expect(page.getByRole('alert')).toContainText("couldn't be verified")
   });
 
@@ -92,4 +92,20 @@ test.describe('a fixable error leaves the user able to fix it', () => {
     await expect(page.locator('#vc-paste')).not.toHaveClass(/invalid/)
   });
 
+});
+
+const badDidWeb = "https://digitalcredentials.github.io/vc-test-fixtures/verifiableCredentials/v2/ed25519/didWeb/badDidWeb.json"
+
+// verify.js returns the same {signature: {valid:false}} shape for a tampered
+// credential and for an issuer DID that will not resolve, so the alert title
+// must not name a cause. Accusing an issuer of tampering when their DID was
+// merely unreachable is a worse failure than saying nothing specific.
+test('an unresolvable issuer is not reported as a bad signature', async ({ page }) => {
+  await page.goto(`${baseUrl}`);
+  await page.locator('#vc-paste').fill(badDidWeb);
+  await page.getByRole('button', { name: 'Verify', exact: true }).click();
+  await expect(page.locator('#error-title')).toBeVisible()
+
+  await expect(page.locator('#error-title')).not.toContainText('Signature')
+  await expect(page.locator('#error-title')).toHaveText("Couldn't verify this credential")
 });
