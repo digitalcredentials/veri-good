@@ -1,9 +1,5 @@
 import {VERIFYING_SIG_MSG, VERIFYING_EXP_MSG, VERIFYING_REV_MSG} from './constants.js'
 
-const expired = "https://digitalcredentials.github.io/vc-test-fixtures/verifiableCredentials/v1/bothSignatureTypes/didKey/oidf-noStatus-expired.json"
-const expiredAndRevoked = "https://digitalcredentials.github.io/vc-test-fixtures/verifiableCredentials/v1/bothSignatureTypes/didKey/oidf-revokedStatus-expired.json"
-const revoked = "https://digitalcredentials.github.io/vc-test-fixtures/verifiableCredentials/v1/bothSignatureTypes/didWeb/legacy-revokedStaus-noExpiry.json"
-const notRevoked = "https://digitalcredentials.github.io/vc-test-fixtures/verifiableCredentials/v1/ed25519/didWeb/legacy-validStatus-noExpiry.json"
 const render = x => `
   <div class="header">
     <slot name="header">
@@ -15,14 +11,14 @@ const render = x => `
    <div id="details-container" class="hide-on-reset">
         <div id="holder-name" class="to-clear"></div>
         <slot name="wasAwarded">
-            <div class="cred-label">was awarded a</div>
+            <div class="cred-label">was awarded</div>
         </slot>
         <div id="cred-name" class="to-clear"></div>
         <slot name="awardedBy">
             <div class="cred-label">by the</div>
         </slot>
         <div id="issuer-name" class="to-clear"></div>
-        <div id="more-link">More..</div>
+        <div id="more-link">Credential details</div>
         <dialog id="more-dialog">
             <div id="more-title-section" class="hide-on-reset">
                 <div id="more-title" class="dialog-heading to-clear"></div>
@@ -53,7 +49,7 @@ const render = x => `
 
     <div id="input-container" class="show-on-reset">
         <div>
-            <textarea id="vc-paste" class="vc-area" placeholder="Paste your credential, or a url pointing to it.">${expired}</textarea>
+            <textarea id="vc-paste" class="vc-area" placeholder="Paste your credential, or a url pointing to it."></textarea>
         </div>
         <div class="drop-zone" id="drop-zone">
             <span class="drop-zone__prompt">Drag file here or click to upload</span>
