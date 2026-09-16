@@ -1,9 +1,5 @@
 import {VERIFYING_SIG_MSG, VERIFYING_EXP_MSG, VERIFYING_REV_MSG} from './constants.js'
 
-const expired = "https://digitalcredentials.github.io/vc-test-fixtures/verifiableCredentials/v1/bothSignatureTypes/didKey/oidf-noStatus-expired.json"
-const expiredAndRevoked = "https://digitalcredentials.github.io/vc-test-fixtures/verifiableCredentials/v1/bothSignatureTypes/didKey/oidf-revokedStatus-expired.json"
-const revoked = "https://digitalcredentials.github.io/vc-test-fixtures/verifiableCredentials/v1/bothSignatureTypes/didWeb/legacy-revokedStaus-noExpiry.json"
-const notRevoked = "https://digitalcredentials.github.io/vc-test-fixtures/verifiableCredentials/v1/ed25519/didWeb/legacy-validStatus-noExpiry.json"
 const render = x => `
   <div class="header">
     <slot name="header">
@@ -53,7 +49,7 @@ const render = x => `
 
     <div id="input-container" class="show-on-reset">
         <div>
-            <textarea id="vc-paste" class="vc-area" placeholder="Paste your credential, or a url pointing to it.">${expired}</textarea>
+            <textarea id="vc-paste" class="vc-area" placeholder="Paste your credential, or a url pointing to it."></textarea>
         </div>
         <div class="drop-zone" id="drop-zone">
             <span class="drop-zone__prompt">Drag file here or click to upload</span>
