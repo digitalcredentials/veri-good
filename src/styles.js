@@ -23,8 +23,19 @@ const componentStyles = `
     color: ${defaultTextColor};
     background: ${dccBlue};
     border-radius: var(--default-radius);
+    /* max-width rather than a bare width so the card can shrink into a
+       narrow viewport instead of forcing the page to scroll sideways
+       (WCAG 2.1 SC 1.4.10 Reflow) */
     width: 380px;
-    height: 450px;
+    max-width: 100%;
+    box-sizing: border-box;
+    /* min-height, not height: the card has to grow with its content. As a
+       fixed 450px the bottom gap was simply whatever was left over, so a
+       longer error message squeezed the button against the edge -- 11px
+       below the CTA on the failure screen against 24-28px everywhere else
+       -- and anything taller still overflowed, since overflow is visible. */
+    min-height: 450px;
+    padding-bottom: 1.5em;
     text-align: center;
     box-shadow: 0 0 var(--default-depth) rgba(0,0,0,.5);
   }
