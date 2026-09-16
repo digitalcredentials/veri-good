@@ -102,7 +102,15 @@ const componentStyles = `
     display: none;
     flex-direction: row;
     justify-content: left;
-    padding: 0 4em .5em 4em;
+    /* percentage-capped so the row still fits once the card shrinks: a fixed
+       4em each side leaves nothing for the message on a narrow card, and
+       contain: content clips the overflow rather than wrapping it */
+    padding: 0 min(4em, 9%) .5em;
+    /* flex items default to min-width:auto, so the message refuses to shrink
+       below its longest word and overflows a narrow card instead of wrapping.
+       The interim "Checking expiration..." is longer than any final text, so
+       this clipped during verification even where the result fit. */
+    min-width: 0;
     font-weight: 500;
     align-items: center;
 }
@@ -228,8 +236,9 @@ textarea::placeholder {
     /* match the textarea's own width so the message lines up with the field
        it belongs to -- left to itself the wrapper grows to fit the message
        and the textarea then centres inside it, leaving the two misaligned.
-       220px is the textarea's border box: 200 wide plus its 10px padding */
-    width: 220px;
+       200px is the textarea's border box -- box-sizing: border-box above
+       means its padding is already inside that width */
+    width: 200px;
     max-width: 100%;
     /* stays flush with the textarea once that starts shrinking */
     padding-inline: 0;
@@ -258,9 +267,14 @@ textarea::placeholder {
     align-items: center; 
   }
 
+  .message {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
   #result-list {
     height: 100px;
-    padding-left:2em;
+    padding-left: min(2em, 5%);
     font: 400 14px 'Varela Round', sans-serif;
     display: flex;
     flex-direction: column;
@@ -272,7 +286,7 @@ textarea::placeholder {
 const verifyingStyles = `
 
 .circle-loader {
-  margin-right: 2em;
+  margin-right: min(2em, 7%);
   border: 3px solid rgba(0, 0, 0, 0.2);
   border-left-color: #5cb85c;
   animation: loader-spin 1.2s infinite linear;
