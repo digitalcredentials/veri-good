@@ -40,6 +40,10 @@ test.describe('status messages are announced', () => {
     const list = page.locator('#result-list')
     await expect(list).toHaveAttribute('role', 'status')
     await expect(list).toHaveAttribute('aria-live', 'polite')
+    // role="status" implies aria-atomic="true", which re-announces the whole
+    // list on every staggered reveal, unrun "Checking..." placeholders
+    // included. Only the line that changed should be spoken.
+    await expect(list).toHaveAttribute('aria-atomic', 'false')
 
     await page.locator('#vc-paste').fill(validStatusNoExpiry);
     await page.getByRole('button', { name: 'Verify', exact: true }).click();
@@ -131,4 +135,40 @@ test('an unresolvable issuer is not reported as a bad signature', async ({ page 
 
   await expect(page.locator('#error-title')).not.toContainText('Signature')
   await expect(page.locator('#error-title')).toHaveText("Couldn't verify this credential")
+});
+// Attribute assertions prove the markup; these prove what the accessibility
+// tree actually exposes, which is what a screen reader reads. Closer to the
+// real thing than checking role="alert" is present, though still not a
+// substitute for listening to it.
+test.describe('the accessibility tree exposes the right shape', () => {
+
+  test('a failure surfaces exactly one alert, carrying the reason', async ({ page }) => {
+    await page.goto(`${baseUrl}`);
+    await page.locator('#vc-paste').fill('something that is not a credential');
+    await page.getByRole('button', { name: 'Verify', exact: true }).click();
+    await expect(page.getByRole('alert')).toBeVisible()
+
+    // one, not several competing for the announcement
+    await expect(page.getByRole('alert')).toHaveCount(1)
+    await expect(page.getByRole('alert')).toContainText("couldn't be processed")
+
+    // the generic copy above it is not itself an alert, so it is not announced
+    // a second time
+    const alertText = await page.getByRole('alert').textContent()
+    expect(alertText.trim()).toBe("The credential you provided couldn't be processed.")
+  });
+
+  test('the checks are one status region holding all three lines', async ({ page }) => {
+    await page.goto(`${baseUrl}`);
+    await page.locator('#vc-paste').fill(validStatusNoExpiry);
+    await page.getByRole('button', { name: 'Verify', exact: true }).click();
+    await expect(page.locator('#rev-message')).toHaveText('Has not been revoked')
+
+    await expect(page.getByRole('status')).toHaveCount(1)
+    const status = page.getByRole('status')
+    for (const line of ['Signature is valid.', 'No expiry date.', 'Has not been revoked']) {
+      await expect(status).toContainText(line)
+    }
+  });
+
 });
