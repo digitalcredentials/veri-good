@@ -38,7 +38,7 @@ test('invalid credential', async ({ page }) => {
     await page.getByRole('button', { name: 'Verify' }).click();
     // the credential is bad, not the paste, so this is the alert and the
     // title must not blame the input
-    await expect(page.locator('#error-title')).toHaveText("Signature doesn't match")
+    await expect(page.locator('#error-title')).toHaveText("Couldn't verify this credential")
     await expect(page.locator('#error-message')).toContainText("The credential couldn't be verified.")
 
   });

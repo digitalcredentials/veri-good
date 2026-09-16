@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 
 const baseUrl = process.env.BASE_URL ?? 'http://localhost:8080';
 const tampered = "https://digitalcredentials.github.io/vc-test-fixtures/verifiableCredentials/v2/ed25519/didKey/legacy-noStatus-noExpiry-tampered.json"
+const validStatusNoExpiry = "https://digitalcredentials.github.io/vc-test-fixtures/verifiableCredentials/v1/ed25519/didWeb/legacy-validStatus-noExpiry.json"
 
 // The card used to be a fixed 380x450. Two consequences, both tested here:
 // the bottom gap was only whatever was left over, and the card could not
@@ -83,6 +84,38 @@ test.describe('card layout', () => {
       expect(overflows, `CTA overflows at ${width}px`).toBe(false)
       expect(gap, `CTA cramped at ${width}px`).toBeGreaterThanOrEqual(16)
     }
+  });
+
+  // The reflow test below only exercised the input screen, which is how a
+  // clipped success screen got through: letting the card shrink without
+  // shrinking #result-list's fixed 4em paddings pushed the check messages
+  // past the card edge, where contain: content paints them away. Losing text
+  // is worse than the sideways scroll it replaced.
+  test('the success screen fits the card at phone width', async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 900 })
+    await page.goto(`${baseUrl}`);
+    await page.locator('#vc-paste').fill(validStatusNoExpiry);
+    await page.getByRole('button', { name: 'Verify', exact: true }).click();
+    await expect(page.locator('#sig-message')).toHaveText('Signature is valid.')
+
+    // wait for every check to land, so the placeholders -- which are longer
+    // than the results and therefore the real worst case -- are measured too
+    await expect(page.locator('#rev-message')).toHaveText('Has not been revoked')
+
+    const overflowing = await page.evaluate(() => {
+      const host = document.querySelector('veri-good'), sr = host.shadowRoot
+      const hb = host.getBoundingClientRect()
+      return ['#sig-message','#exp-message','#rev-message',
+              '#holder-name','#cred-name','#issuer-name']
+        .filter(sel => {
+          const el = sr.querySelector(sel); if (!el) return false
+          const r = el.getBoundingClientRect()
+          // a hidden row reports a zero rect at 0,0, which is not an overflow
+          if (r.width === 0 && r.height === 0) return false
+          return r.right > hb.right + 0.5 || r.left < hb.left - 0.5
+        })
+    })
+    expect(overflowing).toEqual([])
   });
 
   // WCAG 2.1 SC 1.4.10 Reflow: content must not require scrolling in two
