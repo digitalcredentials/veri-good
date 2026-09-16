@@ -30,6 +30,10 @@ test.describe('status messages are announced', () => {
     const list = page.locator('#result-list')
     await expect(list).toHaveAttribute('role', 'status')
     await expect(list).toHaveAttribute('aria-live', 'polite')
+    // role="status" implies aria-atomic="true", which re-announces the whole
+    // list on every staggered reveal, unrun "Checking..." placeholders
+    // included. Only the line that changed should be spoken.
+    await expect(list).toHaveAttribute('aria-atomic', 'false')
 
     await page.locator('#vc-paste').fill(validStatusNoExpiry);
     await page.getByRole('button', { name: 'Verify', exact: true }).click();

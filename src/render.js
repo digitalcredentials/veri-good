@@ -71,7 +71,7 @@ const render = x => `
     </div>
 
     <div id="result-container" class="hide-on-reset hide-on-reset">
-        <div id="result-list" role="status" aria-live="polite">
+        <div id="result-list" role="status" aria-live="polite" aria-atomic="false">
             <div id="sigCheck" class="resultLine">
                 <div class="circle-loader">
                     <div class="checkmark draw"></div>
