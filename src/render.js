@@ -22,7 +22,7 @@ const render = x => `
             <div class="cred-label">by the</div>
         </slot>
         <div id="issuer-name" class="to-clear"></div>
-        <div id="more-link">More..</div>
+        <div id="more-link">Credential details</div>
         <dialog id="more-dialog">
             <div id="more-title-section" class="hide-on-reset">
                 <div id="more-title" class="dialog-heading to-clear"></div>
