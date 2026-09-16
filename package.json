@@ -10,7 +10,7 @@
     "start-wp": "webpack serve --open",
     "test": "playwright test --project=Chromium",
     "build": "webpack",
-    "postinstall": "node -e \"try{require.resolve('@playwright/test')}catch{process.exit(0)};process.exit(1)\" || playwright install chromium"
+    "postinstall": "node scripts/install-browsers.mjs"
   },
   "repository": {
     "type": "git",

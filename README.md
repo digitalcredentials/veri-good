@@ -191,9 +191,14 @@ To run the other browsers, or to pass reporter and worker flags, call Playwright
 directly:
 
 ```bash
-npx playwright test                     # Chromium, WebKit and Firefox
 npx playwright test --reporter=html
+npx playwright install                  # WebKit and Firefox, once
+npx playwright test                     # then all three browsers
 ```
+
+`postinstall` installs only Chromium, which is what `npm test` runs. The WebKit
+and Firefox projects abort with "Executable doesn't exist" until you install
+them.
 
 ### disable-pauses
 
