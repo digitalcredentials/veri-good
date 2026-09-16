@@ -19,7 +19,16 @@ const toClearIds = [
 // A credential populates the six card and dialog fields; garbage populates
 // only the error message. Verifying one after the other is what exposes text
 // carried over from the previous verification.
-const populatedByCredential = toClearIds.filter(id => id !== '#error-message')
+const cardFields = ['#holder-name', '#cred-name', '#issuer-name']
+const dialogFields = ['#more-title', '#more-description', '#more-issued-date']
+const populatedByCredential = [...cardFields, ...dialogFields]
+
+// the three dialog fields sit inside <dialog id="more-dialog">, so they are
+// only on screen once it is opened
+const openMoreDialog = async (page) => {
+  await page.locator('#more-link').click()
+  await expect(page.locator('#more-dialog')).toBeVisible()
+}
 
 const verify = async (page, input) => {
   await page.locator('#vc-paste').fill(input);
@@ -57,8 +66,17 @@ test.describe('reset clears every to-clear element', () => {
     await verify(page, validStatusNoExpiry);
     await expect(page.locator('#more-issued-date')).not.toBeEmpty()
 
-    for (const id of populatedByCredential) {
+    // "nothing suppressed" means on screen, not merely non-empty: each of these
+    // sits in a hide-on-reset wrapper that reset() sets to display:none, so
+    // asserting text alone would miss a wrapper left hidden
+    for (const id of cardFields) {
       await expect(page.locator(id)).not.toBeEmpty()
+      await expect(page.locator(id)).toBeVisible()
+    }
+    await openMoreDialog(page)
+    for (const id of dialogFields) {
+      await expect(page.locator(id)).not.toBeEmpty()
+      await expect(page.locator(id)).toBeVisible()
     }
     await expect(page.locator('#error-message')).toBeEmpty()
   });
