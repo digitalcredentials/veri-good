@@ -16,6 +16,13 @@ export default defineConfig({
     { name: 'WebKit',   use: { ...devices['Desktop Safari'] } },
     { name: 'Firefox',  use: { ...devices['Desktop Firefox'] } },
   ],
-  // Optional: auto-run your dev server for local runs
-  // webServer: { command: 'npm run dev', port: 3001, reuseExistingServer: !process.env.CI },
+  // Serves the demo page the suite drives. Note that it serves the repo root,
+  // so the page loads the committed dist/bundle.js and never src/ — rebuild
+  // before running, or the suite tests the previous bundle (#16).
+  webServer: {
+    command: 'npm start',
+    url: 'http://localhost:8080/index.html',
+    reuseExistingServer: !process.env.CI,
+    timeout: 60_000,
+  },
 });
