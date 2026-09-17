@@ -57,11 +57,19 @@ jobs:
 
   # The layout work in this component is browser-sensitive -- min(), flex
   # min-width, contain: content -- and it ships to embedders we do not
-  # control, so Chromium alone is thin cover. Kept off the per-PR path to
-  # avoid tripling every run: this goes on merges to main and on demand.
-  # Move it under `pull_request` if the coverage is worth the minutes.
+  # control, so Chromium alone is thin cover.
+  #
+  # TEMPORARY: this runs on pull requests too, for the current batch of
+  # layout and error-presentation PRs (#27, #29, #30, #31, #32). Those change
+  # min(), flex min-width and contain: content, and none of it has ever been
+  # exercised outside Chromium -- the matrix job's first run was on the merge
+  # that added it, against code that predates those changes. Gating it off
+  # `pull_request` means a Safari-only break is found after the merge that
+  # causes it.
+  #
+  # Restore `if: github.event_name != 'pull_request'` once that batch lands,
+  # to stop tripling the minutes on every routine PR.
   cross-browser:
-    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
