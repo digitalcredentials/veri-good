@@ -124,7 +124,7 @@
         <thead><tr><th style="width:11em">element</th><th>current text</th></tr></thead>
         <tbody id="readout"></tbody>
       </table>
-      <p class="note" style="margin-top:.7rem">These seven are read live from the component's
+      <p class="note" style="margin-top:.7rem">All nine are read live from the component's
       shadow root. They matter because you <em>can't</em> see them: each sits in a wrapper that
       <code>reset()</code> hides, so text left behind by a previous verification is invisible
       on screen and identical in a screenshot. This table is the only way to tell.</p>
@@ -169,8 +169,15 @@
     clear:         ""
   };
 
-  const IDS = ['#holder-name','#cred-name','#issuer-name','#more-title',
-               '#more-description','#more-issued-date','#error-message'];
+  // The six card/dialog fields a credential populates...
+  const CARD_IDS = ['#holder-name','#cred-name','#issuer-name','#more-title',
+                    '#more-description','#more-issued-date'];
+  // ...and the three a failure populates. #31 split errors by whether the user
+  // can act on them, which added #error-title and #input-error-text alongside
+  // the original #error-message. All three carry class="to-clear", so all
+  // three can hold text from a previous verification.
+  const ERROR_IDS = ['#error-title','#error-message','#input-error-text'];
+  const IDS = [...CARD_IDS, ...ERROR_IDS];
   const sr = () => document.querySelector('veri-good')?.shadowRoot;
 
   // the wallet-presentation button wraps the valid fixture, which has to be
@@ -228,7 +235,7 @@
           v ? esc(v) : '(empty)'}</td></tr>`).join('');
     }
 
-    const card = vals.filter(([id]) => id !== '#error-message');
+    const card = vals.filter(([id]) => CARD_IDS.includes(id));
     const filled = card.filter(([,v]) => v);
     const shown = root.querySelector('#details-container')?.style.display !== 'none';
 
