@@ -1,0 +1,94 @@
+name: Test
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      # postinstall installs the Chromium build Playwright needs, so this is
+      # the whole setup. --with-deps covers the system libraries a bare CI
+      # runner lacks, which a developer machine already has.
+      - run: npm ci
+      - run: npx playwright install-deps chromium
+
+      # The demo page loads the COMMITTED bundle and never src/, so a change to
+      # the source is invisible to the suite until dist/bundle.js is rebuilt
+      # and committed (#16). A stale bundle means every test below passes
+      # against the previous build -- green, and meaningless. Catch it here
+      # rather than discovering it in review.
+      - name: The committed bundle matches its source
+        run: |
+          npm run build
+          # Compare the CODE only. webpack's inline source map embeds the
+          # build machine's absolute paths, so a byte-for-byte comparison
+          # differs on every checkout and would fail this job permanently --
+          # verified against main, whose bundle is current but whose sourcemap
+          # naturally differs from any other machine's.
+          committed=$(git show HEAD:dist/bundle.js | grep -v '^//# sourceMappingURL=' | shasum -a256)
+          rebuilt=$(grep -v '^//# sourceMappingURL=' dist/bundle.js | shasum -a256)
+          if [ "$committed" != "$rebuilt" ]; then
+            echo "::error file=dist/bundle.js::dist/bundle.js is stale. Run 'npm run build' and commit the result."
+            exit 1
+          fi
+          echo "Committed bundle is current."
+
+      - run: npm test
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
+
+  # The layout work in this component is browser-sensitive -- min(), flex
+  # min-width, contain: content -- and it ships to embedders we do not
+  # control, so Chromium alone is thin cover.
+  #
+  # TEMPORARY: this runs on pull requests too, for the current batch of
+  # layout and error-presentation PRs (#27, #29, #30, #31, #32). Those change
+  # min(), flex min-width and contain: content, and none of it has ever been
+  # exercised outside Chromium -- the matrix job's first run was on the merge
+  # that added it, against code that predates those changes. Gating it off
+  # `pull_request` means a Safari-only break is found after the merge that
+  # causes it.
+  #
+  # Restore `if: github.event_name != 'pull_request'` once that batch lands,
+  # to stop tripling the minutes on every routine PR.
+  cross-browser:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [WebKit, Firefox]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps ${{ matrix.browser == 'WebKit' && 'webkit' || 'firefox' }}
+      - run: npx playwright test --project=${{ matrix.browser }}
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: report-${{ matrix.browser }}
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7

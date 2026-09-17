@@ -100,7 +100,7 @@ export const reset = () => {
      shadowRoot.querySelectorAll('.hide-on-reset').forEach(element=>
         element.style.display = 'none'
     );
-    shadowRoot.querySelectorAll('.toClear').forEach(element=>
+    shadowRoot.querySelectorAll('.to-clear').forEach(element=>
         element.textContent = ''
     );
 
