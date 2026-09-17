@@ -1,6 +1,6 @@
 
 import processCredential from './processCredential.js'
-import {reset, showDialog, getElement} from './displayUtils.js'
+import {reset, showDialog, getElement, clearInputError} from './displayUtils.js'
 
 let listeners = []
 
@@ -98,6 +98,17 @@ const initializeVerifyBtn = () => {
     listeners.push({element, handler, eventName});
 }
 
+// An error about what is in the box stops being true the moment the box
+// changes, so drop it on the first edit rather than leaving it under text the
+// user has already corrected.
+const initializePasteBox = () => {
+    const eventName = 'input'
+    const element = getElement("#vc-paste")
+    const handler = () => clearInputError()
+    element.addEventListener(eventName, handler);
+    listeners.push({element, handler, eventName});
+}
+
 const initializeVerifyAnotherBtn = () => {
     const eventName = 'click'
     const element = getElement("#verifyAnotherBtn")
@@ -142,6 +153,7 @@ export const initializeListeners = (shadowRoot) => {
     initializeMoreDialogClose()
     initializeVerifyAnotherBtn(shadowRoot)
     initializeVerifyBtn()
+    initializePasteBox()
     initializeDragNDrop(shadowRoot)
 }
 

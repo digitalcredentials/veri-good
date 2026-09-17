@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 const baseUrl = process.env.BASE_URL ?? 'http://localhost:8080';
+const tampered = "https://digitalcredentials.github.io/vc-test-fixtures/verifiableCredentials/v2/ed25519/didKey/legacy-noStatus-noExpiry-tampered.json"
 const validStatusNoExpiry = "https://digitalcredentials.github.io/vc-test-fixtures/verifiableCredentials/v1/ed25519/didWeb/legacy-validStatus-noExpiry.json"
 
 // The card used to be a fixed 380x450. Two consequences, both tested here:
@@ -9,9 +10,14 @@ const validStatusNoExpiry = "https://digitalcredentials.github.io/vc-test-fixtur
 const gapBelowCTA = (page) => page.evaluate(() => {
   const host = document.querySelector('veri-good'), sr = host.shadowRoot
   const hb = host.getBoundingClientRect()
-  const btn = sr.querySelector('#verifyAnotherBtn') ?? sr.querySelector('#verifyBtn')
+  // both buttons are always in the DOM and one is display:none, so pick the
+  // visible one -- picking the first that *exists* measures a zero rect and
+  // makes every assertion below vacuously true
+  const visible = el => el && getComputedStyle(el).display !== 'none'
+  const btn = [sr.querySelector('#verifyAnotherBtn'), sr.querySelector('#verifyBtn')].find(visible)
+  if (!btn) return { gap: null, overflows: null, found: false }
   const br = btn.getBoundingClientRect()
-  return { gap: Math.round(hb.bottom - br.bottom), overflows: br.bottom > hb.bottom }
+  return { gap: Math.round(hb.bottom - br.bottom), overflows: br.bottom > hb.bottom, found: true }
 })
 
 test.describe('card layout', () => {
@@ -25,41 +31,75 @@ test.describe('card layout', () => {
     await page.addStyleTag({ content: 'body { font-family: system-ui, sans-serif }' })
     await page.locator('#vc-paste').fill('something that is not a credential');
     await page.getByRole('button', { name: 'Verify', exact: true }).click();
-    await expect(page.locator('#error-message')).toBeVisible()
+    // a fixable failure renders beside the field, which is what grows the card
+    await expect(page.locator('#input-error')).toBeVisible()
 
-    const { gap, overflows } = await gapBelowCTA(page)
+    const { gap, overflows, found } = await gapBelowCTA(page)
+    expect(found).toBe(true)
     expect(overflows).toBe(false)
     expect(gap).toBeGreaterThanOrEqual(16)
   });
 
-  test('the card grows rather than crushing its contents', async ({ page }) => {
+  // Neither error path outgrows 450px with today's copy -- the alert replaces
+  // the input, so it is shorter, not taller. min-height still has to hold the
+  // guarantee, because copy changes and embedders set their own fonts. Force
+  // the case rather than asserting growth that today's content never triggers.
+  test('the card grows when its content outgrows the minimum', async ({ page }) => {
     await page.goto(`${baseUrl}`);
-    await page.addStyleTag({ content: 'body { font-family: system-ui, sans-serif }' })
-    const initial = await page.evaluate(() =>
-      Math.round(document.querySelector('veri-good').getBoundingClientRect().height))
-
-    await page.locator('#vc-paste').fill('something that is not a credential');
+    await page.locator('#vc-paste').fill(tampered);
     await page.getByRole('button', { name: 'Verify', exact: true }).click();
-    await expect(page.locator('#error-message')).toBeVisible()
+    await expect(page.locator('#error-title')).toBeVisible()
 
-    const errored = await page.evaluate(() =>
+    const before = await page.evaluate(() =>
       Math.round(document.querySelector('veri-good').getBoundingClientRect().height))
-    // taller content means a taller card, not a squeezed one
-    expect(errored).toBeGreaterThan(initial)
+    expect(before).toBe(450)
+
+    // a longer reason than any we ship today, which a new failure mode or a
+    // translation could easily produce
+    await page.evaluate(() => {
+      document.querySelector('veri-good').shadowRoot.querySelector('#error-message')
+        .textContent = 'The credential could not be verified. '.repeat(12)
+    })
+
+    const after = await gapBelowCTA(page)
+    const grown = await page.evaluate(() =>
+      Math.round(document.querySelector('veri-good').getBoundingClientRect().height))
+
+    expect(grown).toBeGreaterThan(before)   // grew rather than squeezing
+    expect(after.overflows).toBe(false)     // and the CTA came with it
+    expect(after.gap).toBeGreaterThanOrEqual(16)
   });
 
-  // Letting the card shrink without shrinking #result-list's fixed 4em
-  // paddings pushes the check messages past the card edge, where
-  // contain: content paints them away. Losing text is worse than the
-  // sideways scroll it replaced, so this guards the success screen too --
-  // the reflow test below only exercises the input screen.
+  test('the CTA clears the bottom edge at every width', async ({ page }) => {
+    for (const width of [900, 560, 420, 360]) {
+      await page.setViewportSize({ width, height: 1000 })
+      await page.goto(`${baseUrl}`);
+      await page.addStyleTag({ content: 'body { font-family: system-ui, sans-serif }' })
+      await page.locator('#vc-paste').fill('something that is not a credential');
+      await page.getByRole('button', { name: 'Verify', exact: true }).click();
+      await expect(page.locator('#input-error')).toBeVisible()
+
+      const { gap, overflows, found } = await gapBelowCTA(page)
+      expect(found, `no visible CTA at ${width}px`).toBe(true)
+      expect(overflows, `CTA overflows at ${width}px`).toBe(false)
+      expect(gap, `CTA cramped at ${width}px`).toBeGreaterThanOrEqual(16)
+    }
+  });
+
+  // The reflow test below only exercised the input screen, which is how a
+  // clipped success screen got through: letting the card shrink without
+  // shrinking #result-list's fixed 4em paddings pushed the check messages
+  // past the card edge, where contain: content paints them away. Losing text
+  // is worse than the sideways scroll it replaced.
   test('the success screen fits the card at phone width', async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 900 })
     await page.goto(`${baseUrl}`);
     await page.locator('#vc-paste').fill(validStatusNoExpiry);
     await page.getByRole('button', { name: 'Verify', exact: true }).click();
-    // wait for every check to land: the "Checking..." placeholders are longer
-    // than the results and are the real worst case
+    await expect(page.locator('#sig-message')).toHaveText('Signature is valid.')
+
+    // wait for every check to land, so the placeholders -- which are longer
+    // than the results and therefore the real worst case -- are measured too
     await expect(page.locator('#rev-message')).toHaveText('Has not been revoked')
 
     const overflowing = await page.evaluate(() => {

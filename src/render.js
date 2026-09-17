@@ -48,8 +48,13 @@ const render = x => `
 
 
     <div id="input-container" class="show-on-reset">
-        <div>
-            <textarea id="vc-paste" class="vc-area" placeholder="Paste your credential, or a url pointing to it."></textarea>
+        <div class="input-field">
+            <textarea id="vc-paste" class="vc-area" placeholder="Paste your credential, or a url pointing to it."
+                aria-describedby="input-error"></textarea>
+            <div id="input-error" class="field-error" role="alert">
+                <span class="field-error-glyph" aria-hidden="true">!</span>
+                <span id="input-error-text" class="to-clear"></span>
+            </div>
         </div>
         <div class="drop-zone" id="drop-zone">
             <span class="drop-zone__prompt">Drag file here or click to upload</span>
@@ -62,12 +67,14 @@ const render = x => `
                 <div id="spinner-message">Preparing to verify your credential...</div>    
     </div>
 
-    <div id="error-container" class="hide-on-reset">
-        <div class='error-lines'>Something went wrong - please try again. </div>
-        <div class='error-lines'>Be sure that you are pasting in a valid Verifiable Credential or a link to
-            a valid Verifiable Credential.</div>
+    <div id="error-container" class="hide-on-reset" role="alert">
+        <div class="error-alert">
+            <span class="error-alert-glyph" aria-hidden="true">!</span>
+            <div class="error-alert-body">
+                <div id="error-title" class="error-alert-title to-clear"></div>
+                <div id="error-message" class="error-alert-detail to-clear"></div>
+            </div>
         </div>
-        <div id="error-message" class="to-clear hide-on-reset" role="alert"></div>
     </div>
 
     <div id="result-container" class="hide-on-reset hide-on-reset">
