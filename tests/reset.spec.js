@@ -9,18 +9,36 @@ const validStatusNoExpiry = "https://digitalcredentials.github.io/vc-test-fixtur
 const tampered = "https://digitalcredentials.github.io/vc-test-fixtures/verifiableCredentials/v2/ed25519/didKey/legacy-noStatus-noExpiry-tampered.json"
 const baseUrl = process.env.BASE_URL ?? 'http://localhost:8080';
 
-// The seven elements carrying class="to-clear" in the markup. reset() clears
-// them by selector, so a selector that doesn't match the markup leaves stale
-// text behind on every one of them.
-const toClearIds = [
+// The elements carrying class="to-clear". reset() clears them by selector, so
+// a selector that doesn't match the markup leaves stale text behind on every
+// one of them -- which is issue #15.
+//
+// This list is the floor, not the definition: the test reads the real set out
+// of the shadow root and asserts every one of them, so markup added later is
+// covered without anyone remembering to come back here. The names are kept
+// only as a canary -- if `to-clear` is dropped from one of them, discovery
+// would quietly stop checking it, and this list is what notices.
+//
+// It drifted once already: it said "seven" and listed seven while the markup
+// carried nine, because #31 added #error-title and #input-error-text and
+// nothing here was executable enough to fail.
+const knownToClearIds = [
   '#holder-name',
   '#cred-name',
   '#issuer-name',
   '#more-title',
   '#more-description',
   '#more-issued-date',
-  '#error-message'
+  '#error-title',
+  '#error-message',
+  '#input-error-text'
 ]
+
+// the set the component actually carries, read at runtime
+const discoverToClearIds = (page) => page.evaluate(() =>
+  [...document.querySelector('veri-good').shadowRoot.querySelectorAll('.to-clear')]
+    .map(el => `#${el.id}`)
+)
 
 // A credential populates the six card and dialog fields; a failed verification
 // populates only the error message. Verifying one after the other is what
@@ -110,6 +128,55 @@ test.describe('reset clears every to-clear element', () => {
     // loader rings restored
     await expect(page.locator('.circle-loader.load-complete')).toHaveCount(0)
     await expect(page.locator('.circle-loader')).not.toHaveCount(0)
+  });
+
+  test('the markup still carries every to-clear element the tests rely on', async ({ page }) => {
+    await page.goto(`${baseUrl}`);
+    await page.locator('#vc-paste').waitFor();
+
+    const found = await discoverToClearIds(page)
+    // every name we rely on is still marked to-clear; extras are fine and are
+    // picked up by the tests below without being listed here
+    for (const id of knownToClearIds) {
+      expect(found, `${id} no longer carries class="to-clear"`).toContain(id)
+    }
+  });
+
+  test('an unfixable failure leaves nothing behind in any to-clear element', async ({ page }) => {
+    await page.goto(`${baseUrl}`);
+    await verify(page, tampered);
+    // #31 puts an unfixable failure on the card, as a title and a detail
+    await expect(page.locator('#error-title')).not.toBeEmpty()
+    await expect(page.locator('#error-message')).not.toBeEmpty()
+
+    await verifyAnother(page);
+    await verify(page, validStatusNoExpiry);
+    await expect(page.locator('#more-issued-date')).not.toBeEmpty()
+
+    // the credential populates the six card fields and none of the error ones,
+    // so any error text still present was carried over
+    await expect(page.locator('#error-title')).toBeEmpty()
+    await expect(page.locator('#error-message')).toBeEmpty()
+  });
+
+  test('a fixable failure leaves nothing behind in any to-clear element', async ({ page }) => {
+    await page.goto(`${baseUrl}`);
+    // #31 keeps a malformed paste beside the input rather than on the card, so
+    // this populates #input-error-text -- the one element no test reached.
+    //
+    // This asserts the user-facing behaviour, not the mechanism: the component
+    // clears this element twice over, via clearInputError() and via reset()'s
+    // .to-clear sweep. Removing either one on its own keeps this test green
+    // (both mutations verified), so it is the canary above that guards the
+    // class. Kept because the behaviour is worth pinning regardless of which
+    // path delivers it -- if both are ever dropped, this is what fails.
+    await verify(page, 'something that is not a credential');
+    await expect(page.locator('#input-error-text')).not.toBeEmpty()
+
+    await verify(page, validStatusNoExpiry);
+    await expect(page.locator('#more-issued-date')).not.toBeEmpty()
+
+    await expect(page.locator('#input-error-text')).toBeEmpty()
   });
 
 });

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>veri-good playground</title>
+  <style>
+    :root {
+      --paper:#eceff1; --surface:#fff; --ink:#1c2226; --ink-soft:#546e7a; --ink-faint:#8b9199;
+      --rule:#dfe4e7; --blue:#234467; --ok:#2f6b3a; --ok-bg:#e8f5e9; --bad:#b3261e; --bad-bg:#fdecea;
+      --warn:#8a6410; --warn-bg:#fff8e1;
+    }
+    body { margin:0; background:var(--paper); color:var(--ink);
+           font-family:system-ui,-apple-system,"Segoe UI",sans-serif; font-size:15px; line-height:1.55; }
+    .wrap { display:flex; gap:1.5rem; align-items:flex-start; padding:1.5rem; flex-wrap:wrap;
+            max-width:1500px; margin:0 auto; }
+    .left { flex:0 0 auto; position:sticky; top:1.5rem; }
+    .right { flex:1 1 460px; min-width:340px; }
+    .panel { background:var(--surface); border-radius:9px; padding:1.15rem 1.35rem;
+             box-shadow:0 1px 3px rgba(0,0,0,.09); margin-bottom:1.1rem; }
+    h1 { font-size:1.35rem; margin:0 0 .3rem; letter-spacing:-.01em; }
+    h2 { font-size:1rem; margin:0 0 .7rem; letter-spacing:-.005em; }
+    h3 { font-size:.74rem; text-transform:uppercase; letter-spacing:.09em;
+         color:var(--ink-faint); margin:1.1rem 0 .45rem; font-weight:600; }
+    h3:first-of-type { margin-top:.2rem; }
+    p { margin:0 0 .7rem; } p:last-child { margin-bottom:0; }
+    .lede { color:var(--ink-soft); font-size:.94rem; }
+    code { font-family:ui-monospace,Menlo,monospace; font-size:.86em;
+           background:var(--paper); padding:.08em .34em; border-radius:3px; }
+    button { font:inherit; font-size:.88rem; padding:.36rem .75rem; border-radius:6px;
+             border:1px solid #b0bec5; background:#fff; cursor:pointer; margin:.15rem .3rem .15rem 0; }
+    button:hover { background:var(--paper); }
+    button:focus-visible { outline:2px solid var(--blue); outline-offset:2px; }
+    .btn-row { display:flex; flex-wrap:wrap; gap:.1rem; }
+    table { border-collapse:collapse; width:100%; font-size:.85rem; }
+    th,td { text-align:left; padding:.3rem .5rem; border-bottom:1px solid #eee; }
+    th { color:var(--ink-faint); font-weight:600; font-size:.76rem;
+         text-transform:uppercase; letter-spacing:.06em; }
+    td.val { font-family:ui-monospace,Menlo,monospace; word-break:break-word; }
+    /* Three different things can be in a cell, and they are not all warnings.
+         .filled  credential data while the card is on screen -- just data
+         .err     an error message the component is reporting -- be wary of
+                  the credential; red, because that is what the card itself
+                  uses for the same text
+         .stale   a card field still holding text while the card is HIDDEN --
+                  issue #15. A different kind of wrong: the build is broken,
+                  not the credential. It is also the only case the element
+                  name does not give away (#holder-name looks innocent), so it
+                  carries a written flag rather than relying on colour alone
+                  (WCAG 1.4.1). */
+    .empty  { color:#9e9e9e; }
+    .filled { color:var(--ink); font-weight:500; }
+    .err    { color:var(--bad); font-weight:500; }
+    .stale  { color:var(--bad); font-weight:700; }
+    tr.stale-row td { background:var(--bad-bg); }
+    .flag   { display:inline-block; margin-left:.5rem; padding:.05em .4em;
+              border-radius:3px; background:var(--bad); color:#fff;
+              font-family:system-ui,sans-serif; font-size:.72rem;
+              font-weight:600; letter-spacing:.02em; vertical-align:.08em; }
+    .verdict { padding:.65rem .9rem; border-radius:6px; font-weight:600;
+               margin-bottom:.8rem; font-size:.92rem; }
+    .ok { background:var(--ok-bg); color:var(--ok); border:1px solid #a5d6a7; }
+    .bad { background:var(--bad-bg); color:var(--bad); border:1px solid #ef9a9a; }
+    .warn { background:var(--warn-bg); color:var(--warn); border:1px solid #ffcc80; }
+    .note { font-size:.85rem; color:var(--ink-soft); line-height:1.5; }
+    ol { margin:0; padding-left:1.35rem; } li { margin-bottom:.75rem; }
+    @media (max-width:900px){ .left{position:static;} }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="left">
+    <veri-good id="verifier">
+      <div slot="header">
+        <div style="margin-bottom:.5em"><img style="display:block;margin:auto;width:130px"
+          src="https://digitalcredentials.github.io/badge-assets/dcc-logo-white.png" alt="DCC"></div>
+        <div style="font-size:1em;font-family:sans-serif">Credential Verification</div>
+      </div>
+      <template id="issuer-dids">
+        {
+          "did:web:digitalcredentials.github.io:testDID": { "issuerName": "Department of Chemistry", "url": "https://chemistry.uni.edu" },
+          "did:web:digitalcredentials.github.io:vc-test-fixtures:dids:legacy": { "issuerName": "Department of Biology", "url": "https://chemistry.uni.edu" },
+          "did:key:z6MkjoriXdbyWD25YXTed114F8hdJrLXQ567xxPHAUKxpKkS": { "issuerName": "Department of Economics", "url": "https://econ.uni.edu" },
+          "did:key:z6MkqBcwQ7qnRBRpgtsJQviLFeYxExMUE2k9nwKkMTF3DdRZ": { "issuerName": "Department of Computer Science", "url": "https://compsci.uni.edu" },
+          "did:key:z6MknNQD1WHLGGraFi6zcbGevuAgkVfdyCdtZnQTGWVVvR5Q": { "issuerName": "Department of History", "url": "https://history.uni.edu" },
+          "did:key:z6MktL8XGbuYv5f7hwf6hVyJkJWynNtNhcsXFYe9NJzjKHkW": { "issuerName": "Digital Credentials Consortium", "url": "https://dcconsortium.org" }
+        }
+      </template>
+    </veri-good>
+  </div>
+
+  <div class="right">
+
+    <div class="panel">
+      <h1>veri-good playground</h1>
+      <p class="lede">The component on the left is the real thing, loaded from
+      <code>./dist/bundle.js</code> exactly as the demo page loads it. Everything here is
+      scaffolding around it: sample credentials to feed it, and a live read of what it put
+      on screen.</p>
+      <p class="note">Nothing on this page is part of the published component. It is here so
+      you can try the verifier without hunting for a credential to paste into it.</p>
+    </div>
+
+    <div class="panel">
+      <h2>Try a credential</h2>
+      <p class="note" style="margin-bottom:.6rem">Fills the paste box — it does not submit.
+      Click <b>Verify</b> yourself.</p>
+
+      <h3>Verifies cleanly</h3>
+      <div class="btn-row">
+        <button type="button" data-fx="valid">Valid, no expiry</button>
+        <button type="button" data-fx="presentation">Wallet presentation</button>
+      </div>
+
+      <h3>Verifies, but fails a check</h3>
+      <div class="btn-row">
+        <button type="button" data-fx="expired">Expired</button>
+        <button type="button" data-fx="revoked">Revoked</button>
+        <button type="button" data-fx="expiredRevoked">Expired and revoked</button>
+      </div>
+
+      <h3>Can't be trusted — the credential is wrong</h3>
+      <div class="btn-row">
+        <button type="button" data-fx="tampered">Tampered</button>
+        <button type="button" data-fx="badIssuer">Unknown issuer</button>
+      </div>
+
+      <h3>Can't be read — the input is wrong</h3>
+      <div class="btn-row">
+        <button type="button" data-fx="garbage">Not a credential</button>
+        <button type="button" data-fx="badUrl">Unreachable link</button>
+        <button type="button" data-fx="emptyVp">Presentation with nothing in it</button>
+      </div>
+
+      <h3></h3>
+      <div class="btn-row"><button type="button" data-fx="clear">Clear the box</button></div>
+    </div>
+
+    <div class="panel">
+      <h2>What the card is holding right now</h2>
+      <div id="verdict" class="verdict warn">waiting for the component…</div>
+      <table>
+        <thead><tr><th style="width:11em">element</th><th>current text</th></tr></thead>
+        <tbody id="readout"></tbody>
+      </table>
+      <p class="note" style="margin-top:.7rem"><b>What the colours mean.</b>
+      Plain text is the credential's own data &mdash; nothing to see.
+      <span style="color:var(--bad);font-weight:500">Red</span> is an error the
+      component is reporting, so it is the credential you should be wary of.
+      <span style="color:var(--bad);font-weight:700;background:var(--bad-bg)">Red
+      on a tinted row</span> with a <span class="flag">left over</span> flag is
+      different and worse: a card field still holding text from the last
+      verification while the card is hidden. That one is a bug in the build, not
+      a problem with the credential, and it is invisible on screen.</p>
+      <p class="note">All nine are read live from the component's
+      shadow root. They matter because you <em>can't</em> see them: each sits in a wrapper that
+      <code>reset()</code> hides, so text left behind by a previous verification is invisible
+      on screen and identical in a screenshot. This table is the only way to tell.</p>
+    </div>
+
+    <div class="panel">
+      <h2>What to look at</h2>
+      <p class="note">The card shows a verdict. The table above shows what the component
+      actually put in the DOM to produce it — which is not always the same thing, because
+      several of those fields are hidden rather than empty.</p>
+      <h3>Worth trying</h3>
+      <ul class="note" style="margin:0;padding-left:1.15rem">
+        <li style="margin-bottom:.45rem">Verify something, click <b>Verify Another</b>, and
+        watch the table. Anything still filled there is carried over from the last
+        verification and invisible on screen.</li>
+        <li style="margin-bottom:.45rem">Compare <b>Expired</b> with <b>Tampered</b>. One is a
+        credential that verified and failed a check; the other could not be trusted at all.
+        Whether the card tells those apart clearly is worth your judgement.</li>
+        <li style="margin-bottom:.45rem">Try <b>Not a credential</b>, then check whether your
+        pasted text is still there to fix.</li>
+        <li>Narrow the window to phone width and verify something.</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<script type="module" src="./dist/bundle.js"></script>
+<script>
+  const F = {
+    valid:         "https://digitalcredentials.github.io/vc-test-fixtures/verifiableCredentials/v1/ed25519/didWeb/legacy-validStatus-noExpiry.json",
+    expired:       "https://digitalcredentials.github.io/vc-test-fixtures/verifiableCredentials/v1/bothSignatureTypes/didKey/oidf-noStatus-expired.json",
+    revoked:       "https://digitalcredentials.github.io/vc-test-fixtures/verifiableCredentials/v1/bothSignatureTypes/didWeb/legacy-revokedStaus-noExpiry.json",
+    expiredRevoked:"https://digitalcredentials.github.io/vc-test-fixtures/verifiableCredentials/v1/bothSignatureTypes/didKey/oidf-revokedStatus-expired.json",
+    tampered:      "https://digitalcredentials.github.io/vc-test-fixtures/verifiableCredentials/v2/ed25519/didKey/legacy-noStatus-noExpiry-tampered.json",
+    badIssuer:     "https://digitalcredentials.github.io/vc-test-fixtures/verifiableCredentials/v2/ed25519/didWeb/badDidWeb.json",
+    badUrl:        "https://yodidodido.example.org/notAFile.json",
+    garbage:       "something that is not a credential",
+    emptyVp:       JSON.stringify({ '@context':['https://www.w3.org/ns/credentials/v2'],
+                                    type:['VerifiablePresentation'], verifiableCredential:[] }),
+    presentation:  null,   // built on demand below, by wrapping the valid fixture
+    clear:         ""
+  };
+
+  // The six card/dialog fields a credential populates...
+  const CARD_IDS = ['#holder-name','#cred-name','#issuer-name','#more-title',
+                    '#more-description','#more-issued-date'];
+  // ...and the three a failure populates. #31 split errors by whether the user
+  // can act on them, which added #error-title and #input-error-text alongside
+  // the original #error-message. All three carry class="to-clear", so all
+  // three can hold text from a previous verification.
+  const ERROR_IDS = ['#error-title','#error-message','#input-error-text'];
+  const IDS = [...CARD_IDS, ...ERROR_IDS];
+  const sr = () => document.querySelector('veri-good')?.shadowRoot;
+
+  // the wallet-presentation button wraps the valid fixture, which has to be
+  // fetched first -- the component takes a presentation as JSON, not a link
+  const visible = (el) => el && getComputedStyle(el).display !== 'none';
+
+  async function fill(key) {
+    const root = sr(); if (!root) return;
+
+    // A finished verification hides the paste box and swaps Verify for
+    // Verify Another, so filling now would write into an invisible field with
+    // no way to submit it. Put the card back first -- and before writing,
+    // since reset() clears the box.
+    const another = root.querySelector('#verifyAnotherBtn');
+    if (visible(another)) {
+      another.click();
+      await new Promise(r => setTimeout(r, 60));
+    }
+
+    const box = root.querySelector('#vc-paste'); if (!box) return;
+    let value = F[key] ?? '';
+    if (key === 'presentation') {
+      const btn = document.querySelector('[data-fx="presentation"]');
+      const label = btn.textContent; btn.textContent = 'fetching…'; btn.disabled = true;
+      try {
+        const vc = await (await fetch(F.valid)).json();
+        value = JSON.stringify({ '@context':['https://www.w3.org/ns/credentials/v2'],
+                                 type:['VerifiablePresentation'], verifiableCredential:[vc] });
+      } catch { value = '(could not fetch the credential to wrap — are you online?)'; }
+      btn.textContent = label; btn.disabled = false;
+    }
+    box.value = value;
+    box.dispatchEvent(new Event('input', { bubbles:true }));
+  }
+  document.querySelectorAll('[data-fx]').forEach(b =>
+    b.addEventListener('click', () => fill(b.dataset.fx)));
+
+  const body = document.getElementById('readout');
+  const verdict = document.getElementById('verdict');
+  const esc = (t) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+  let lastRender = null;
+
+  setInterval(() => {
+    const root = sr(); if (!root) return;
+    const vals = IDS.map(id => [id, (root.querySelector(id)?.textContent ?? '').trim()]);
+
+    const card = vals.filter(([id]) => CARD_IDS.includes(id));
+    const filled = card.filter(([,v]) => v);
+    // computed, not inline: the component's stylesheet hides this by default, so
+    // before the first verification there is no inline style at all and reading
+    // .style.display reported the card as showing while it was hidden. Harmless
+    // while every field is empty, wrong the moment one is not. `visible()` is
+    // the same helper the Verify Another check already uses.
+    const shown = visible(root.querySelector('#details-container'));
+
+    // a card field with text while the card is hidden is the defect; the same
+    // text while the card is on screen is just the credential
+    const isStale = (id, v) => Boolean(v) && CARD_IDS.includes(id) && !shown;
+
+    // only redraw when something actually changed: rebuilding every 300ms
+    // wipes any text the reader has selected, in the one table on the page
+    // whose whole point is being read
+    const signature = JSON.stringify([vals, shown]);
+    if (signature !== lastRender) {
+      lastRender = signature;
+      body.innerHTML = vals.map(([id,v]) => {
+        const stale = isStale(id, v);
+        const cls = !v ? 'empty'
+                  : stale ? 'stale'
+                  : ERROR_IDS.includes(id) ? 'err'
+                  : 'filled';
+        const flag = stale ? '<span class="flag">left over</span>' : '';
+        return `<tr class="${stale ? 'stale-row' : ''}"><td><code>${esc(id)}</code></td><td class="val ${cls}">${
+          v ? esc(v) : '(empty)'}${flag}</td></tr>`;
+      }).join('');
+    }
+
+    if (shown && filled.length) {
+      verdict.className = 'verdict ok';
+      verdict.textContent = 'Credential on screen — these values belong here.';
+    } else if (!filled.length) {
+      verdict.className = 'verdict ok';
+      verdict.textContent = '✓ Card is clean — all six fields cleared.';
+    } else {
+      verdict.className = 'verdict bad';
+      verdict.textContent = `✗ ${filled.length} field(s) still hold the previous credential while the card is hidden.`;
+    }
+  }, 300);
+</script>
+</body>
+</html>
