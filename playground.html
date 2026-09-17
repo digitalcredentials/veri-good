@@ -50,7 +50,8 @@
     .empty  { color:#9e9e9e; }
     .filled { color:var(--ink); font-weight:500; }
     .err    { color:var(--bad); font-weight:500; }
-    .stale  { color:var(--bad); font-weight:700; background:var(--bad-bg); }
+    .stale  { color:var(--bad); font-weight:700; }
+    tr.stale-row td { background:var(--bad-bg); }
     .flag   { display:inline-block; margin-left:.5rem; padding:.05em .4em;
               border-radius:3px; background:var(--bad); color:#fff;
               font-family:system-ui,sans-serif; font-size:.72rem;
@@ -253,7 +254,12 @@
 
     const card = vals.filter(([id]) => CARD_IDS.includes(id));
     const filled = card.filter(([,v]) => v);
-    const shown = root.querySelector('#details-container')?.style.display !== 'none';
+    // computed, not inline: the component's stylesheet hides this by default, so
+    // before the first verification there is no inline style at all and reading
+    // .style.display reported the card as showing while it was hidden. Harmless
+    // while every field is empty, wrong the moment one is not. `visible()` is
+    // the same helper the Verify Another check already uses.
+    const shown = visible(root.querySelector('#details-container'));
 
     // a card field with text while the card is hidden is the defect; the same
     // text while the card is on screen is just the credential
@@ -272,7 +278,7 @@
                   : ERROR_IDS.includes(id) ? 'err'
                   : 'filled';
         const flag = stale ? '<span class="flag">left over</span>' : '';
-        return `<tr><td><code>${esc(id)}</code></td><td class="val ${cls}">${
+        return `<tr class="${stale ? 'stale-row' : ''}"><td><code>${esc(id)}</code></td><td class="val ${cls}">${
           v ? esc(v) : '(empty)'}${flag}</td></tr>`;
       }).join('');
     }
