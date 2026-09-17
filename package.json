@@ -8,9 +8,9 @@
   "scripts": {
     "start": "http-server -c-1 -p 8080",
     "start-wp": "webpack serve --open",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "playwright test --project=Chromium",
     "build": "webpack",
-    "test:playwright:unit-ui": "playwright test --grep @unit-ui --workers=4 --reporter=html"
+    "postinstall": "node scripts/install-browsers.mjs"
   },
   "repository": {
     "type": "git",
