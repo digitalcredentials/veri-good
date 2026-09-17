@@ -2,7 +2,7 @@ import verify from './verify.js'
 import displayResults from './displayResults.js'
 import resolveVC from './resolveVC.js'
 import {showVerifyingSpinner, hideVerifyingSpinner, setSpinnerMessage} from './verifyingSpinner.js'
-import { sleep, displayError, reset } from './displayUtils.js'
+import { sleep, displayInputError, reset } from './displayUtils.js'
 
 const processCredential = async (credential) => {
 
@@ -16,8 +16,10 @@ const processCredential = async (credential) => {
       sleep()
     ]);
 
+    // resolveVC failed, so nothing was parsed or nothing was fetched -- the
+    // user can fix this by editing what they pasted, so keep them on the input
     if (error) {
-      displayError(error)
+      displayInputError(error, credential)
       return
     }
 

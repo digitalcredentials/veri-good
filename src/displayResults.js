@@ -44,7 +44,17 @@ const displayStepResults = async (result) => {
          const message = ! result.signature.valid ? 
             result.signature.message :
             result.issuer.message
-        displayError(message)
+        // Do not claim a cause we have not established. A false signature check
+        // is reached by a tampered credential, an issuer DID that will not
+        // resolve, and any other verification error alike -- verify.js returns
+        // the same shape for all of them -- so "signature doesn't match" would
+        // accuse an issuer of tampering when their DID was merely unreachable.
+        // The issuer branch is different: lookupIssuer has positively
+        // determined the DID is not a known one, so name it.
+        const title = ! result.signature.valid ?
+            "Couldn't verify this credential" :
+            "Issuer isn't recognised"
+        displayError(message, title)
         return
      }  
      

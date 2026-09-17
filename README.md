@@ -179,13 +179,33 @@ older "was awarded a".)
 ### Tests
 
 ```bash
-npm start                              # serves the demo page on :8080
-npx playwright test --project=Chromium # in another terminal
+npm ci      # also installs the Chromium build Playwright needs
+npm test
 ```
+
+`npm test` runs the whole suite against Chromium and starts and stops its own
+web server, so there is nothing to run in a second terminal.
 
 The Playwright suite drives the demo page through pasted and fetched
 credentials — valid, tampered, expired, revoked, and wallet-exported
 VerifiablePresentation envelopes (`tests/fixtures/`).
+
+The demo page loads the **committed** `dist/bundle.js` and never `src/`, so run
+`npm run build` and commit the result after changing the source. Skip it and the
+suite passes against the previous bundle (#16).
+
+To run the other browsers, or to pass reporter and worker flags, call Playwright
+directly:
+
+```bash
+npx playwright test --reporter=html
+npx playwright install                  # WebKit and Firefox, once
+npx playwright test                     # then all three browsers
+```
+
+`postinstall` installs only Chromium, which is what `npm test` runs. The WebKit
+and Firefox projects abort with "Executable doesn't exist" until you install
+them.
 
 ### disable-pauses
 
