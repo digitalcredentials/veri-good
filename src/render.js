@@ -67,11 +67,11 @@ const render = x => `
         <div class='error-lines'>Be sure that you are pasting in a valid Verifiable Credential or a link to
             a valid Verifiable Credential.</div>
         </div>
-        <div id="error-message" class="to-clear hide-on-reset"></div>
+        <div id="error-message" class="to-clear hide-on-reset" role="alert"></div>
     </div>
 
     <div id="result-container" class="hide-on-reset hide-on-reset">
-        <div id="result-list">
+        <div id="result-list" role="status" aria-live="polite" aria-atomic="false">
             <div id="sigCheck" class="resultLine">
                 <div class="circle-loader">
                     <div class="checkmark draw"></div>
