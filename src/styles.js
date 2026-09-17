@@ -23,8 +23,19 @@ const componentStyles = `
     color: ${defaultTextColor};
     background: ${dccBlue};
     border-radius: var(--default-radius);
+    /* max-width rather than a bare width so the card can shrink into a
+       narrow viewport instead of forcing the page to scroll sideways
+       (WCAG 2.1 SC 1.4.10 Reflow) */
     width: 380px;
-    height: 450px;
+    max-width: 100%;
+    box-sizing: border-box;
+    /* min-height, not height: the card has to grow with its content. As a
+       fixed 450px the bottom gap was simply whatever was left over, so a
+       longer error message squeezed the button against the edge -- 11px
+       below the CTA on the failure screen against 24-28px everywhere else
+       -- and anything taller still overflowed, since overflow is visible. */
+    min-height: 450px;
+    padding-bottom: 1.5em;
     text-align: center;
     box-shadow: 0 0 var(--default-depth) rgba(0,0,0,.5);
   }
@@ -87,7 +98,10 @@ const componentStyles = `
     display: none;
     flex-direction: row;
     justify-content: left;
-    padding: 0 4em .5em 4em;
+    /* percentage-capped so the row still fits once the card shrinks: a fixed
+       4em each side leaves nothing for the message on a narrow card, and
+       contain: content clips the overflow rather than wrapping it */
+    padding: 0 min(4em, 9%) .5em;
     font-weight: 500;
     align-items: center;
 }
@@ -169,9 +183,18 @@ textarea::placeholder {
     align-items: center; 
   }
 
+  .message {
+    /* flex items default to min-width:auto, so the message refuses to shrink
+       below its longest word and overflows instead of wrapping. The interim
+       "Checking expiration..." is longer than any result, so this clipped
+       during verification even where the final text fit. */
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
   #result-list {
     height: 100px;
-    padding-left:2em;
+    padding-left: min(2em, 5%);
     font: 400 14px 'Varela Round', sans-serif;
     display: flex;
     flex-direction: column;
@@ -183,7 +206,7 @@ textarea::placeholder {
 const verifyingStyles = `
 
 .circle-loader {
-  margin-right: 2em;
+  margin-right: min(2em, 7%);
   border: 3px solid rgba(0, 0, 0, 0.2);
   border-left-color: #5cb85c;
   animation: loader-spin 1.2s infinite linear;
