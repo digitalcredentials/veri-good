@@ -36,7 +36,12 @@
     th { color:var(--ink-faint); font-weight:600; font-size:.76rem;
          text-transform:uppercase; letter-spacing:.06em; }
     td.val { font-family:ui-monospace,Menlo,monospace; word-break:break-word; }
-    .empty { color:#9e9e9e; } .filled { color:var(--bad); font-weight:600; }
+    /* Having a value is not a problem, so a value is not red. Red is kept for
+       the one thing that IS a problem: a card field still holding text while
+       the card is hidden, which is issue #15 and is invisible on screen. */
+    .empty  { color:#9e9e9e; }
+    .filled { color:var(--ink); font-weight:500; }
+    .stale  { color:var(--bad); font-weight:600; }
     .verdict { padding:.65rem .9rem; border-radius:6px; font-weight:600;
                margin-bottom:.8rem; font-size:.92rem; }
     .ok { background:var(--ok-bg); color:var(--ok); border:1px solid #a5d6a7; }
@@ -124,7 +129,11 @@
         <thead><tr><th style="width:11em">element</th><th>current text</th></tr></thead>
         <tbody id="readout"></tbody>
       </table>
-      <p class="note" style="margin-top:.7rem">All nine are read live from the component's
+      <p class="note" style="margin-top:.7rem"><b>Red means a problem, not a value.</b>
+      Values in plain text are simply what the component is holding. A value turns
+      red only when a card field still has text while the card is hidden &mdash;
+      which is the bug, and is invisible on screen.</p>
+      <p class="note">All nine are read live from the component's
       shadow root. They matter because you <em>can't</em> see them: each sits in a wrapper that
       <code>reset()</code> hides, so text left behind by a previous verification is invisible
       on screen and identical in a screenshot. This table is the only way to tell.</p>
@@ -224,20 +233,26 @@
     const root = sr(); if (!root) return;
     const vals = IDS.map(id => [id, (root.querySelector(id)?.textContent ?? '').trim()]);
 
-    // only redraw when something actually changed: rebuilding every 300ms
-    // wipes any text the reader has selected, in the one table on the page
-    // whose whole point is being read
-    const signature = JSON.stringify(vals);
-    if (signature !== lastRender) {
-      lastRender = signature;
-      body.innerHTML = vals.map(([id,v]) =>
-        `<tr><td><code>${esc(id)}</code></td><td class="val ${v?'filled':'empty'}">${
-          v ? esc(v) : '(empty)'}</td></tr>`).join('');
-    }
-
     const card = vals.filter(([id]) => CARD_IDS.includes(id));
     const filled = card.filter(([,v]) => v);
     const shown = root.querySelector('#details-container')?.style.display !== 'none';
+
+    // a card field with text while the card is hidden is the defect; the same
+    // text while the card is on screen is just the credential
+    const isStale = (id, v) => Boolean(v) && CARD_IDS.includes(id) && !shown;
+
+    // only redraw when something actually changed: rebuilding every 300ms
+    // wipes any text the reader has selected, in the one table on the page
+    // whose whole point is being read
+    const signature = JSON.stringify([vals, shown]);
+    if (signature !== lastRender) {
+      lastRender = signature;
+      body.innerHTML = vals.map(([id,v]) => {
+        const cls = !v ? 'empty' : isStale(id, v) ? 'stale' : 'filled';
+        return `<tr><td><code>${esc(id)}</code></td><td class="val ${cls}">${
+          v ? esc(v) : '(empty)'}</td></tr>`;
+      }).join('');
+    }
 
     if (shown && filled.length) {
       verdict.className = 'verdict ok';
